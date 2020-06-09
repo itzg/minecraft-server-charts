@@ -41,18 +41,16 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         readinessProbe:
-          exec:
-            command: 
-{{ toYaml .Values.readinessProbe.command | indent 14 }}
+          tcpSocket:
+            port: 25565
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
         livenessProbe:
-          exec:
-            command:
-{{ toYaml .Values.livenessProbe.command | indent 14 }}
+          tcpSocket:
+            port: 25565
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
