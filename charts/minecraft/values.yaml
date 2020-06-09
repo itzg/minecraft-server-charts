@@ -26,13 +26,13 @@ securityContext:
 # Most of these map to environment variables. See Minecraft for details:
 # https://hub.docker.com/r/itzg/minecraft-server/
 livenessProbe:
-  initialDelaySeconds: 60
+  initialDelaySeconds: 30
   periodSeconds: 5
   failureThreshold: 10
   successThreshold: 1
   timeoutSeconds: 1
 readinessProbe:
-  initialDelaySeconds: 60
+  initialDelaySeconds: 30
   periodSeconds: 5
   failureThreshold: 10
   successThreshold: 1
@@ -164,7 +164,7 @@ persistence:
   # storageClass: "-"
   dataDir:
     # Set this to false if you don't care to persist state between restarts.
-    enabled: true
+    enabled: false
     # existingClaim: nil
     Size: 1Gi
 
