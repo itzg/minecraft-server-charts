@@ -37,7 +37,7 @@ minecraftServer:
   # Max connected players.
   maxPlayers: 20
   # The world is ticked this many chunks away from any player.
-  tickDistance : 4
+  tickDistance: 4
   # Max view distance (in chunks).
   viewDistance: 10
   # The "level-name" value is used as the world name and its folder name. The player may also copy their saved game folder here, and change the name to the same as that folder's to load it instead.
