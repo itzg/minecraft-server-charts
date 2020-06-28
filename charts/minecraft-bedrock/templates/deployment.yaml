@@ -82,8 +82,6 @@ spec:
           value: {{ .Values.minecraftServer.gameMode | quote }}
         - name: LEVEL_TYPE
           value: {{ .Values.minecraftServer.levelType | quote }}
-        - name: GENERATOR_SETTINGS
-          value: {{ default "" .Values.minecraftServer.generatorSettings | quote }}
         - name: LEVEL_NAME
           value: {{ .Values.minecraftServer.levelName | quote }}
         - name: LEVEL_SEED
