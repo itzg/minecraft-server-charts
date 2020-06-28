@@ -64,16 +64,17 @@ you can change the values.yaml to disable persistence under the sub-sections und
 
 > *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
 
-## Backups - WIP
+## Backups
 
 You can backup the state of your minecraft server to your local machine via the `kubectl cp` command.  
 
 ```shell
 NAMESPACE=default
 POD_ID=lionhope-387ff8d-sdis9
-kubectl attach --namespace ${NAMESPACE} ${POD_ID} 
+kubectl attach --namespace ${NAMESPACE} ${POD_ID} -it
 save hold
 save query
+save resume
+^P + ^Q (CtrlP and CtrlQ)
 kubectl cp ${NAMESPACE}/${POD_ID}:/data .
-kubectl attach --namespace ${NAMESPACE} ${POD_ID} save resume
 ```
