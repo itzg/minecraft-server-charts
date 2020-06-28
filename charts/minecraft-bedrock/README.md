@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This chart creates a single Minecraft Pod, plus Services for the Minecraft server and RCON.
+This chart creates a single [Minecraft Bedrock Server](https://www.minecraft.net/en-us/download/server/bedrock/) Pod, plus Services for the Minecraft server.
 
 ## Prerequisites
 
