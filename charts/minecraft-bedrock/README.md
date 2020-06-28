@@ -74,7 +74,9 @@ POD_ID=lionhope-387ff8d-sdis9
 kubectl attach --namespace ${NAMESPACE} ${POD_ID} -it
 save hold
 save query
-save resume
 ^P + ^Q (CtrlP and CtrlQ)
 kubectl cp ${NAMESPACE}/${POD_ID}:/data .
+kubectl attach --namespace ${NAMESPACE} ${POD_ID} -it
+save resume
+^P + ^Q (CtrlP and CtrlQ)
 ```
