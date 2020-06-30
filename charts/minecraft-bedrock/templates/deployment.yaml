@@ -94,10 +94,6 @@ spec:
           value: {{ .Values.minecraftServer.texturepackRequired | quote }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}
-        - name: VIEW_DISTANCE
-          value: {{ .Values.minecraftServer.viewDistance | quote }}
-        - name: TICK_DISTANCE
-          value: {{ .Values.minecraftServer.tickDistance | quote }}
         {{- range $key, $value := .Values.extraEnv }}
         - name: {{ $key }}
           value: {{ $value }}
