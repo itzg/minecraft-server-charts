@@ -64,10 +64,6 @@ minecraftServer:
   cheats: false
   # Determines the type of map that is generated (DEFAULT, FLAT, LEGACY)
   levelType: DEFAULT
-  # The maximum allowed view distance in number of chunks
-  viewDistance: 10
-  # The world is ticked this many chunks away from any player
-  tickDistance: 4
   # type of kubernetes service to use
   serviceType: ClusterIP
   loadBalancerIP:
