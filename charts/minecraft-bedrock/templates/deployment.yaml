@@ -1,0 +1,138 @@
+{{- if ne (printf "%s" .Values.minecraftServer.eula) "FALSE" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "minecraft.fullname" . }}
+  {{- if .Values.deploymentAnnotations }}
+  annotations:
+    {{- range $key, $value := .Values.deploymentAnnotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  labels:
+    app: {{ template "minecraft.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  strategy:
+    type: {{ .Values.strategyType }}
+  selector:
+    matchLabels:
+      app: {{ template "minecraft.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "minecraft.fullname" . }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- range $key, $value := .Values.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
+    spec:
+      containers:
+      - name: {{ template "minecraft.fullname" . }}
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+        imagePullPolicy: Always
+        stdin: true
+        tty: true
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        readinessProbe:
+          exec:
+              command:
+                - mc-monitor
+                - status-bedrock
+                - --host
+                # force health check against IPv4 port
+                - 127.0.0.1
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+        livenessProbe:
+          exec:
+              command:
+                - mc-monitor
+                - status-bedrock
+                - --host
+                # force health check against IPv4 port
+                - 127.0.0.1
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+        env:
+        - name: EULA
+          value: {{ .Values.minecraftServer.eula | quote }}
+        - name: VERSION
+          value: {{ .Values.minecraftServer.version | quote }}
+        - name: DIFFICULTY
+          value: {{ .Values.minecraftServer.difficulty | quote }}
+        - name: SERVER_NAME
+          value: {{ .Values.minecraftServer.serverName | quote }}
+        - name: WHITE_LIST
+          value: {{ default "" .Values.minecraftServer.whitelist | quote }}
+        - name: ALLOW_CHEATS
+          value: {{ .Values.minecraftServer.cheats | quote }}
+        - name: MAX_PLAYERS
+          value: {{ .Values.minecraftServer.maxPlayers | quote }}
+        - name: VIEW_DISTANCE
+          value: {{ .Values.minecraftServer.viewDistance | quote }}
+        - name: TICK_DISTANCE
+          value: {{ .Values.minecraftServer.tickDistance | quote }}
+        - name: PLAYER_IDLE_TIMEOUT
+          value: {{ .Values.minecraftServer.playerIdleTimeout | quote }}
+        - name: MAX_THREADS
+          value: {{ .Values.minecraftServer.maxThreads | quote }}
+        - name: GAMEMODE
+          value: {{ .Values.minecraftServer.gameMode | quote }}
+        - name: LEVEL_TYPE
+          value: {{ .Values.minecraftServer.levelType | quote }}
+        - name: LEVEL_NAME
+          value: {{ .Values.minecraftServer.levelName | quote }}
+        - name: LEVEL_SEED
+          value: {{ default "" .Values.minecraftServer.levelSeed | quote }}
+        - name: DEFAULT_PLAYER_PERMISSION_LEVEL
+          value: {{ .Values.minecraftServer.defaultPermission | quote }}
+        - name: TEXTUREPACK_REQUIRED
+          value: {{ .Values.minecraftServer.texturepackRequired | quote }}
+        - name: ONLINE_MODE
+          value: {{ .Values.minecraftServer.onlineMode | quote }}
+
+
+      
+
+        {{- range $key, $value := .Values.extraEnv }}
+        - name: {{ $key }}
+          value: {{ $value }}
+        {{- end }}
+
+        ports:
+        - name: minecraft
+          containerPort: 19132
+          protocol: UDP
+
+        volumeMounts:
+        - name: datadir
+          mountPath: /data
+      volumes:
+      - name: datadir
+      {{- if .Values.persistence.dataDir.enabled }}
+        persistentVolumeClaim:
+        {{- if .Values.persistence.dataDir.existingClaim }}
+          claimName: {{ .Values.persistence.dataDir.existingClaim }}
+        {{- else }}
+          claimName: {{ template "minecraft.fullname" . }}-datadir
+        {{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
+    {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+    {{- end }}
+    {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+    {{- end }}
+{{ end }}
