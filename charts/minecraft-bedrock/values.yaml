@@ -62,8 +62,6 @@ minecraftServer:
   maxThreads: 8
   # Cheat like commands can be used.
   cheats: false
-  # Determines the type of map that is generated (DEFAULT, FLAT, LEGACY)
-  levelType: DEFAULT
   # type of kubernetes service to use
   serviceType: ClusterIP
   loadBalancerIP:
