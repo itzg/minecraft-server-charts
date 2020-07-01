@@ -16,8 +16,9 @@ helm repo add itzg https://itzg.github.io/minecraft-server-charts/
 You can then run `helm search repo itzg` to see the charts.
 
 ## Charts
-
-* [minecraft](https://itzg.github.io/minecraft-server-charts)
+tt
+* [minecraft](https://github.com/itzg/minecraft-server-charts/tree/master/charts/minecraft)
+* [minecraft-bedrock](https://github.com/itzg/minecraft-server-charts/tree/master/charts/minecraft-bedrock)
 
 ```bash
 helm install --name your-release itzg/minecraft

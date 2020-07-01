@@ -35,18 +35,18 @@ minecraftServer:
   # A comma-separated list of player names to whitelist.
   whitelist:
   # Max connected players.
-  maxPlayers: 20
+  maxPlayers: 10
   # The world is ticked this many chunks away from any player.
   tickDistance: 4
   # Max view distance (in chunks).
   viewDistance: 10
   # The "level-name" value is used as the world name and its folder name. The player may also copy their saved game folder here, and change the name to the same as that folder's to load it instead.
-  levelName: K8sLevel
+  levelName: level
   # Define this if you want a specific map generation seed.
   levelSeed:
   # One of: creative, survival, adventure, spectator
   gameMode: survival
-  # Permission level for new players joining for the first time.
+  # Permission level for new players joining for the first time (visitor, member, operator)
   defaultPermission: member
   # After a player has idled for this many minutes they get kicked.
   playerIdleTimeout: 30
@@ -54,12 +54,15 @@ minecraftServer:
   levelType: DEFAULT
   # Force clients to use texture packs in the current world
   texturepackRequired: false
-  # Used as the server name
-  serverName: K8sServer
+  # This is the server name shown in the in-game server list.
+  serverName: "Dedicated Server"
   # Check accounts against Minecraft account service.
   onlineMode: true
   # Maximum number of threads the server tries to use. If set to 0 or removed then it uses as many as possible.
   maxThreads: 8
+  # Cheat like commands can be used.
+  cheats: false
+  # type of kubernetes service to use
   serviceType: ClusterIP
   loadBalancerIP:
   # loadBalancerSourceRanges: []
