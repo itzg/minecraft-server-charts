@@ -126,6 +126,7 @@ minecraftServer:
   jvmOpts: ""
   # Options like -X that need to proceed general JVM options
   jvmXXOpts: ""
+  serviceAnnotations: {}
   serviceType: ClusterIP
   loadBalancerIP:
   # loadBalancerSourceRanges: []
