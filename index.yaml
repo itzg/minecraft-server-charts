@@ -124,6 +124,30 @@ entries:
   minecraft-bedrock:
   - apiVersion: v1
     appVersion: "1.16"
+    created: "2020-07-13T21:48:51.9397663Z"
+    description: Minecraft server
+    digest: 1c86defc45d321726765c2c3718c0853f7244c60d42db50b5aa6a530d7479207
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-bedrock
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    - https://hub.docker.com/r/itzg/minecraft-bedrock-server/~/dockerfile/
+    - https://github.com/itzg/dockerfiles
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-bedrock-1.1.2/minecraft-bedrock-1.1.2.tgz
+    version: 1.1.2
+  - apiVersion: v1
+    appVersion: "1.16"
     created: "2020-07-13T02:09:39.335186235Z"
     description: Minecraft server
     digest: 2b845897013e994284d77b8267dbb23f9071387d7b330d1a6847716bbd95ae3d
