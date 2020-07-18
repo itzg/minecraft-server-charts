@@ -7,7 +7,7 @@ This deployment will be incomplete until you read the Minecraft EULA linked
 in the README.md, then:
 
     helm upgrade {{ .Release.Name }} \
-        --set minecraftServer.eula=true stable/minecraft
+        --set minecraftServer.eula=true itzg/minecraft
 {{- else -}}
 
 Get the IP address of your Minecraft server by running these commands in the
