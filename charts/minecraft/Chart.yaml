@@ -10,7 +10,8 @@ keywords:
 sources:
 - https://github.com/itzg/minecraft-server-charts
 - https://hub.docker.com/r/itzg/minecraft-server/~/dockerfile/
-- https://github.com/itzg/dockerfiles
+- https://github.com/itzg/docker-minecraft-server
+- https://github.com/itzg/docker-minecraft-bedrock-server
 maintainers:
 - name: gtaylor
   email: gtaylor@gc-taylor.com
