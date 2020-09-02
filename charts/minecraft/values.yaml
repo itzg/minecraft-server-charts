@@ -132,6 +132,7 @@ minecraftServer:
   # loadBalancerSourceRanges: []
   ## Set the externalTrafficPolicy in the Service to either Cluster or Local
   # externalTrafficPolicy: Cluster
+  externalIPs: 
 
   rcon:
     # If you enable this, make SURE to change your password below.
