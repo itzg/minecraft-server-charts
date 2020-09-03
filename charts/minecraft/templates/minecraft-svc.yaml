@@ -32,3 +32,11 @@ spec:
     protocol: TCP
   selector:
     app: {{ template "minecraft.fullname" . }}
+  {{- if .Values.minecraftServer.externalIPs }}
+  externalIPs:
+    {{- with .Values.minecraftServer.externalIPs }}
+      {{- range . }}
+        - {{ . | quote }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
