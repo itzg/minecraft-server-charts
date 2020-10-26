@@ -68,6 +68,12 @@ spec:
           value: {{ .Values.minecraftServer.serverName | quote }}
         - name: WHITE_LIST
           value: {{ default "" .Values.minecraftServer.whitelist | quote }}
+        - name: OPS
+          value: {{ default "" .Values.minecraftServer.ops | quote }}
+        - name: MEMBERS
+          value: {{ default "" .Values.minecraftServer.members | quote }}
+        - name: VISITORS
+          value: {{ default "" .Values.minecraftServer.visitors | quote }}
         - name: ALLOW_CHEATS
           value: {{ .Values.minecraftServer.cheats | quote }}
         - name: MAX_PLAYERS
