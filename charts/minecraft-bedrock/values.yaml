@@ -35,6 +35,19 @@ minecraftServer:
   # A comma-separated list of player names to whitelist with no whitespace.
   # ex: whitelist: player1,player2,player3
   whitelist:
+  # A comma-seperated list of xuid's for operators on server with no
+  # whitespaces.
+  # The server logs will print xuids as players connect.
+  # ex: ops: "12345678,0987654"
+  ops:
+  # A comma-seperated list of xuid's for members on server with no
+  # whitespaces.
+  # ex: ops: "12345678,0987654"
+  members:
+  # A comma-seperated list of xuid's for visitors on server with no
+  # whitespaces.
+  # ex: ops: "12345678,0987654"
+  visitors:
   # Max connected players.
   maxPlayers: 10
   # The world is ticked this many chunks away from any player.
