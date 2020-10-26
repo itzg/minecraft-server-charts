@@ -32,7 +32,8 @@ minecraftServer:
   version: "LATEST"
   # One of: peaceful, easy, normal, and hard
   difficulty: easy
-  # A comma-separated list of player names to whitelist.
+  # A comma-separated list of player names to whitelist with no whitespace.
+  # ex: whitelist: player1,player2,player3
   whitelist:
   # Max connected players.
   maxPlayers: 10
