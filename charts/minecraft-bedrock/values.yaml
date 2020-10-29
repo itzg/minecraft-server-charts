@@ -32,9 +32,14 @@ minecraftServer:
   version: "LATEST"
   # One of: peaceful, easy, normal, and hard
   difficulty: easy
-  # A comma-separated list of player names to whitelist with no whitespace.
-  # ex: whitelist: player1,player2,player3
+  # A boolean to indicate if whitelist is enabled or not. If this is enabled
+  # and whitelistUsers is left blank, you will need to provide the whitelist.json
+  # file via the volume mounted in to the container. Setting whitelistUsers implies
+  # whitelist is true, so it is not necessary to set it.
   whitelist:
+  # A comma-separated list of player names to whitelist with no whitespace.
+  # ex: whitelistUsers: player1,player2,player3
+  whitelistUsers:
   # A comma-seperated list of xuid's for operators on server with no
   # whitespaces.
   # The server logs will print xuids as players connect.
