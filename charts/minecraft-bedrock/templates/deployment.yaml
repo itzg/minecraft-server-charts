@@ -68,6 +68,8 @@ spec:
           value: {{ .Values.minecraftServer.serverName | quote }}
         - name: WHITE_LIST
           value: {{ default "" .Values.minecraftServer.whitelist | quote }}
+        - name: WHITE_LIST_USERS
+          value: {{ default "" .Values.minecraftServer.whitelistUsers | quote }}
         - name: OPS
           value: {{ default "" .Values.minecraftServer.ops | quote }}
         - name: MEMBERS
