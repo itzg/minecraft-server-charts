@@ -161,6 +161,13 @@ spec:
         - name: JVM_XX_OPTS
           value: {{ .Values.minecraftServer.jvmXXOpts | quote }}
 
+
+        {{- if .Values.minecraftServer.monitor.enabled }}
+        - name: monitor
+          containerPort: {{ .Values.minecraftServer.monitor.port }}
+          protocol: TCP
+        {{- end }}
+
         {{- if .Values.minecraftServer.rcon.enabled }}
         - name: ENABLE_RCON
           value: "true"

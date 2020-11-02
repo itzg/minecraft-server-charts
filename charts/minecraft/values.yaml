@@ -134,6 +134,23 @@ minecraftServer:
   # externalTrafficPolicy: Cluster
   externalIPs:
 
+  monitor:
+    # If you enable this, make SURE to install Prometheus Exporter.
+    # and change plugin's config to listen on 0.0.0.0
+    # https://dev.bukkit.org/projects/prometheus-exporter
+    enabled: false
+    port: 9225
+    # If you enable this, make SURE to install Prometheus Operator.
+    # https://github.com/prometheus-operator/prometheus-operator
+    servicemonitor:
+      enabled: false
+      prometheusInstance: default
+      labels: {}
+      targetPort: 9225
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
+
   rcon:
     # If you enable this, make SURE to change your password below.
     enabled: false
