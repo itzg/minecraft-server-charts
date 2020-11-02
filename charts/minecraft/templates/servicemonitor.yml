@@ -33,4 +33,8 @@ spec:
     path: {{ .Values.minecraftServer.monitor.servicemonitor.path }}
     interval: {{ .Values.minecraftServer.monitor.servicemonitor.interval }}
     scrapeTimeout: {{ .Values.minecraftServer.monitor.servicemonitor.scrapeTimeout }}
+    relabelings:
+    - sourceLabels: ['__address__']
+      targetLabel: 'server_name'
+      replacement: '{{ template "minecraft.fullname" . }}'
 {{- end }}
