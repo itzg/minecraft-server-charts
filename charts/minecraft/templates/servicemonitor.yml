@@ -1,10 +1,10 @@
-{{- if and .Values.minecraftServer.monitor.enabled .Values.minecraftServer.monitor.servicemonitor.enabled }}
+{{- if .Values.servicemonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "minecraft.fullname" . }}
-{{- if .Values.minecraftServer.monitor.servicemonitor.namespace }}
-  namespace: {{ .Values.minecraftServer.monitor.servicemonitor.namespace }}
+{{- if .Values.servicemonitor.namespace }}
+  namespace: {{ .Values.servicemonitor.namespace }}
 {{- else }}
   namespace: {{ .Release.Namespace | quote }}
 {{- end }}
@@ -13,9 +13,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    prometheus: {{ .Values.minecraftServer.monitor.servicemonitor.prometheusInstance }}
-{{- if .Values.minecraftServer.monitor.servicemonitor.labels }}
-{{ toYaml .Values.minecraftServer.monitor.servicemonitor.labels | indent 4}}
+    prometheus: {{ .Values.servicemonitor.prometheusInstance }}
+{{- if .Values.servicemonitor.labels }}
+{{ toYaml .Values.servicemonitor.labels | indent 4}}
 {{- end }}
 spec:
   jobLabel: {{ template "minecraft.fullname" . }}
@@ -29,10 +29,10 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
-  - targetPort: {{ .Values.minecraftServer.monitor.servicemonitor.targetPort }}
-    path: {{ .Values.minecraftServer.monitor.servicemonitor.path }}
-    interval: {{ .Values.minecraftServer.monitor.servicemonitor.interval }}
-    scrapeTimeout: {{ .Values.minecraftServer.monitor.servicemonitor.scrapeTimeout }}
+  - targetPort: {{ .Values.servicemonitor.targetPort }}
+    path: {{ .Values.servicemonitor.path }}
+    interval: {{ .Values.servicemonitor.interval }}
+    scrapeTimeout: {{ .Values.servicemonitor.scrapeTimeout }}
     relabelings:
     - sourceLabels: ['__address__']
       targetLabel: 'server_name'

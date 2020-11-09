@@ -127,29 +127,17 @@ minecraftServer:
   # Options like -X that need to proceed general JVM options
   jvmXXOpts: ""
   serviceAnnotations: {}
+    # Routes Minecraft client connections to backend servers
+    # https://github.com/itzg/mc-router
+    # "mc-router.itzg.me/externalServerName": "mc-stable.example.com"
+    # Let External DNS auto create DNS record
+    # "external-dns.alpha.kubernetes.io/hostname": "mc-stable.example.com"
   serviceType: ClusterIP
   loadBalancerIP:
   # loadBalancerSourceRanges: []
   ## Set the externalTrafficPolicy in the Service to either Cluster or Local
   # externalTrafficPolicy: Cluster
   externalIPs:
-
-  monitor:
-    # If you enable this, make SURE to install Prometheus Exporter.
-    # and change plugin's config to listen on 0.0.0.0
-    # https://dev.bukkit.org/projects/prometheus-exporter
-    enabled: false
-    port: 9225
-    # If you enable this, make SURE to install Prometheus Operator.
-    # https://github.com/prometheus-operator/prometheus-operator
-    servicemonitor:
-      enabled: false
-      prometheusInstance: default
-      labels: {}
-      targetPort: 9225
-      path: /metrics
-      interval: 15s
-      scrapeTimeout: 10s
 
   rcon:
     # If you enable this, make SURE to change your password below.
@@ -167,6 +155,57 @@ minecraftServer:
     # If you enable this, your server will be "published" to Gamespy
     enabled: false
     port: 25565
+
+prometheus_exporter:
+  # If you enable this, make SURE to install Prometheus Exporter.
+  # Plugin for bukkit server
+  # and change plugin's config to listen on 0.0.0.0
+  # https://dev.bukkit.org/projects/prometheus-exporter
+  # Mod for Forge server
+  # https://www.curseforge.com/minecraft/mc-mods/prometheus-exporter
+  enabled: false
+  # Prometheus Exporter Plugin: 9225
+  # Prometheus Exporter Mod: 19125
+  port: 9225
+
+# If you enable this, make SURE to install Prometheus Operator.
+# https://github.com/prometheus-operator/prometheus-operator
+servicemonitor:
+  enabled: false
+  prometheusInstance: default
+  labels: {}
+  # Prometheus Exporter Plugin: 9225
+  # Prometheus Exporter Mod: 19125
+  targetPort: 9225
+  path: /metrics
+  interval: 15s
+  scrapeTimeout: 10s
+
+monitor:
+  enabled: false
+  image: itzg/mc-monitor
+  imageTag: latest
+  # Command: export-for-prometheus or gather-for-telegraf
+  command: export-for-prometheus
+  telegraf:
+    gather_interval: 10s
+    gather_telegraf_address: telegraf:8094
+  prometheus:
+    port: 9225
+    # List of Java edition servers
+    export_servers:
+    - localhost:25565
+    export_bedrock_servers: []
+    debug: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 200Mi
+    limits:
+      cpu: 300m
+      memory: 400Mi
+
+
 
 ## Additional minecraft container environment variables
 ##

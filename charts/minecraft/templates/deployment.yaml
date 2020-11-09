@@ -35,7 +35,57 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
       containers:
-      - name: {{ template "minecraft.fullname" . }}
+      {{- if .Values.monitor.enabled }}
+      - name: mc-monitor
+        image: "{{ .Values.monitor.image }}:{{ .Values.monitor.imageTag }}"
+        imagePullPolicy: Always
+        resources:
+{{ toYaml .Values.monitor.resources | indent 10 }}
+        args:
+        - {{ .Values.monitor.command }}
+        env:
+        {{- if eq .Values.monitor.command "gather-for-telegraf" }}
+        - name: GATHER_INTERVAL
+          value: {{ default "10s" .Values.monitor.gather_interval | quote }}
+
+        - name: GATHER_TELEGRAF_ADDRESS
+          value: {{ .Values.monitor.gather_telegraf_address }}
+
+        - name: GATHER_SERVERS
+          value: {{ default ":25565" .Values.monitor.gather_servers | quote }}
+        {{- end }}
+        {{- if eq .Values.monitor.command "export-for-prometheus" }}
+        - name: EXPORT_PORT
+          value: "9225"
+
+        - name: EXPORT_SERVERS
+          value: |-
+            {{ range $index, $host := .Values.monitor.prometheus.export_servers }}
+                {{- if $index }},{{ end }}{{ $host }}
+            {{- end }}
+
+        - name: EXPORT_BEDROCK_SERVERS
+          value: |-
+            {{ range $index, $host := .Values.monitor.prometheus.export_bedrock_servers }}
+                {{- if $index }},{{ end }}{{ $host }}
+            {{- end }}
+        - name: DEBUG
+          value: {{ default "false" .Values.monitor.prometheus.debug | quote }}
+        {{- end }}
+
+        {{- range $key, $value := .Values.monitor.extraEnv }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+
+        {{- if eq .Values.monitor.command "export-for-prometheus" }}
+        ports:
+        - name: monitor
+          containerPort: 9225
+          protocol: TCP
+        {{- end }}
+      {{- end }}
+      - name: minecraft-server
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: Always
         resources:
@@ -161,13 +211,6 @@ spec:
         - name: JVM_XX_OPTS
           value: {{ .Values.minecraftServer.jvmXXOpts | quote }}
 
-
-        {{- if .Values.minecraftServer.monitor.enabled }}
-        - name: monitor
-          containerPort: {{ .Values.minecraftServer.monitor.port }}
-          protocol: TCP
-        {{- end }}
-
         {{- if .Values.minecraftServer.rcon.enabled }}
         - name: ENABLE_RCON
           value: "true"
@@ -197,6 +240,11 @@ spec:
         {{- if .Values.minecraftServer.rcon.enabled }}
         - name: rcon
           containerPort: {{ .Values.minecraftServer.rcon.port }}
+          protocol: TCP
+        {{- end }}
+        {{- if .Values.prometheus_exporter.enabled }}
+        - name: monitor
+          containerPort: {{ .Values.prometheus_exporter.port }}
           protocol: TCP
         {{- end }}
         volumeMounts:
