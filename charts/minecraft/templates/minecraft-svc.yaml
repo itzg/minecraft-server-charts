@@ -29,6 +29,9 @@ spec:
   - name: minecraft
     port: 25565
     targetPort: minecraft
+    {{- if .Values.minecraftServer.nodePort }}
+    nodePort: {{ .Values.minecraftServer.nodePort }}
+    {{- end }}
     protocol: TCP
   selector:
     app: {{ template "minecraft.fullname" . }}

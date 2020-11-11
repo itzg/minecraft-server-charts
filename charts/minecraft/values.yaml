@@ -128,6 +128,8 @@ minecraftServer:
   jvmXXOpts: ""
   serviceAnnotations: {}
   serviceType: ClusterIP
+  ## Set the port used if the serviceType is NodePort
+  # nodePort:
   loadBalancerIP:
   # loadBalancerSourceRanges: []
   ## Set the externalTrafficPolicy in the Service to either Cluster or Local

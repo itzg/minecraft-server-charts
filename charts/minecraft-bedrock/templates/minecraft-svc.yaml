@@ -29,6 +29,9 @@ spec:
   - name: minecraft
     port: 19132
     targetPort: minecraft
+    {{- if .Values.minecraftServer.nodePort }}
+    nodePort: {{ .Values.minecraftServer.nodePort }}
+    {{- end }}
     protocol: UDP
   selector:
     app: {{ template "minecraft.fullname" . }}
