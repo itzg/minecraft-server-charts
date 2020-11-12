@@ -1,0 +1,40 @@
+{{- if .Values.servicemonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "minecraft.fullname" . }}
+{{- if .Values.servicemonitor.namespace }}
+  namespace: {{ .Values.servicemonitor.namespace }}
+{{- else }}
+  namespace: {{ .Release.Namespace | quote }}
+{{- end }}
+  labels:
+    app: {{ template "minecraft.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    prometheus: {{ .Values.servicemonitor.prometheusInstance }}
+{{- if .Values.servicemonitor.labels }}
+{{ toYaml .Values.servicemonitor.labels | indent 4}}
+{{- end }}
+spec:
+  jobLabel: {{ template "minecraft.fullname" . }}
+  selector:
+    matchLabels:
+      app: {{ template "minecraft.fullname" . }}
+      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+      release: "{{ .Release.Name }}"
+      heritage: "{{ .Release.Service }}"
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+  - targetPort: {{ .Values.servicemonitor.targetPort }}
+    path: {{ .Values.servicemonitor.path }}
+    interval: {{ .Values.servicemonitor.interval }}
+    scrapeTimeout: {{ .Values.servicemonitor.scrapeTimeout }}
+    relabelings:
+    - sourceLabels: ['__address__']
+      targetLabel: 'server_name'
+      replacement: '{{ template "minecraft.fullname" . }}'
+{{- end }}

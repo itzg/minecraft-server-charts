@@ -7,6 +7,8 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  annotations:
+{{ toYaml .Values.minecraftServer.serviceAnnotations | indent 4 }}
 spec:
 {{- if (or (eq .Values.minecraftServer.serviceType "ClusterIP") (empty .Values.minecraftServer.serviceType)) }}
   type: ClusterIP
