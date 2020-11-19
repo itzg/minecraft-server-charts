@@ -59,8 +59,8 @@ helm install --name minecraft -f values.yaml itzg/minecraft
 
 The [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/) image stores the saved games and mods under /data.
 
-By default a PersistentVolumeClaim is created and mounted for saves but not mods. In order to disable this functionality
-you can change the values.yaml to disable persistence under the sub-sections under `persistence`.
+When [persistence.dataDir.enabled in values.yaml](https://github.com/itzg/minecraft-server-charts/blob/master/charts/minecraft/values.yaml#L171) is set to true PersistentVolumeClaim is created and mounted for saves but not mods. In order to enable this functionality
+you can change the values.yaml to enable persistence under the sub-sections under `persistence`.
 
 > *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
 
