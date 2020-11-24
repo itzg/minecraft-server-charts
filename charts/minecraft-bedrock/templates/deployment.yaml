@@ -31,6 +31,10 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      {{- if .Values.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
+      {{- end }}
       containers:
       - name: {{ template "minecraft.fullname" . }}
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
