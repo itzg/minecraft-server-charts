@@ -173,8 +173,10 @@ spec:
             secretKeyRef:
               name: {{ template "minecraft.fullname" . }}
               key: rcon-password
+        {{- else }}
+        - name: ENABLE_RCON
+          value: "false"
         {{- end }}
-
         {{- if .Values.minecraftServer.query.enabled }}
         - name: ENABLE_QUERY
           value: "true"
