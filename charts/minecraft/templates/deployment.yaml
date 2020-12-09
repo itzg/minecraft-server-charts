@@ -44,6 +44,13 @@ spec:
         imagePullPolicy: Always
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+        {{- if .Values.startupProbe.enabled }}
+        startupProbe:
+          tcpSocket:
+            port: 25565
+          failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+        {{- end }}
         readinessProbe:
           tcpSocket:
             port: 25565

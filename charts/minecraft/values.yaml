@@ -38,6 +38,11 @@ readinessProbe:
   failureThreshold: 10
   successThreshold: 1
   timeoutSeconds: 1
+startupProbe:
+  enabled: false
+  failureThreshold: 30
+  periodSeconds: 10
+
 minecraftServer:
   # This must be overridden, since we can't accept this for the user.
   eula: "FALSE"
