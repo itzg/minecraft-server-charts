@@ -153,6 +153,33 @@ minecraftServer:
     ## Set the externalTrafficPolicy in the Service to either Cluster or Local
     # externalTrafficPolicy: Cluster
 
+  dynmap:
+    # Enabling any of these options will not install dynmap to your server, but
+    # opens up a service and possibly an ingress to access dynmap on your server.
+    # To install dynmap, see downloadModpackUrl
+
+    containerPort: 8123
+    service:
+      # Enable a service for dynmap
+      enabled: false
+      annotations: {}
+      type: ClusterIP
+      loadBalancerIP: ""
+      loadBalancerSourceRanges: []
+      # externalTrafficPolicy: Cluster
+      port: 8123
+    ingress:
+      enabled: false
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      hosts:
+        - name: dynmap.local
+          path: /
+      tls: []
+      #  - secretName: dynmap-tls
+      #    hosts:
+      #      - dynmap.local
 
   query:
     # If you enable this, your server will be "published" to Gamespy

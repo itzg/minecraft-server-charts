@@ -205,6 +205,11 @@ spec:
           containerPort: {{ .Values.minecraftServer.rcon.port }}
           protocol: TCP
         {{- end }}
+        {{- if .Values.minecraftServer.dynmap.service.enabled }}
+        - name: dynmap
+          containerPort: {{ .Values.minecraftServer.dynmap.containerPort }}
+          protocol: TCP
+        {{- end }}
         volumeMounts:
         - name: datadir
           mountPath: /data
