@@ -3,6 +3,31 @@ entries:
   minecraft:
   - apiVersion: v1
     appVersion: SeeValues
+    created: "2020-12-11T20:34:18.478240037Z"
+    description: Minecraft server
+    digest: 35dc87e8cbdbc0d354e77aeb412523066541d086bb55d392fcd23a50e73be134
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    - https://hub.docker.com/r/itzg/minecraft-server/~/dockerfile/
+    - https://github.com/itzg/docker-minecraft-server
+    - https://github.com/itzg/docker-minecraft-bedrock-server
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-2.1.0/minecraft-2.1.0.tgz
+    version: 2.1.0
+  - apiVersion: v1
+    appVersion: SeeValues
     created: "2020-12-09T02:40:25.215744606Z"
     description: Minecraft server
     digest: a10d3a6b7f15f896405af2e8062208b4ae3bad6d96dc6cefad97bb28491d85d3
