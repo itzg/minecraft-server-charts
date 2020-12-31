@@ -38,6 +38,10 @@ spec:
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if .Values.initContainers }}
+      initContainers:
+      {{- toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
       containers:
       - name: {{ template "minecraft.fullname" . }}
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
@@ -213,6 +217,9 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /data
+        {{- range .Values.extraVolumes }}
+        {{- toYaml .volumeMounts | nindent 8 }}
+        {{- end }}
       volumes:
       - name: datadir
       {{- if .Values.persistence.dataDir.enabled }}
@@ -224,6 +231,9 @@ spec:
         {{- end }}
       {{- else }}
         emptyDir: {}
+      {{- end }}
+      {{- range .Values.extraVolumes }}
+      {{- toYaml .volumes | nindent 6 }}
       {{- end }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
