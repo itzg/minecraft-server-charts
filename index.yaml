@@ -3,6 +3,31 @@ entries:
   minecraft:
   - apiVersion: v1
     appVersion: SeeValues
+    created: "2020-12-31T19:47:23.96903558Z"
+    description: Minecraft server
+    digest: a0a8a419bcd7d531deccfad922b2ca75ab0c1fe3de25091c953a5c180cb7aacb
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    - https://hub.docker.com/r/itzg/minecraft-server/~/dockerfile/
+    - https://github.com/itzg/docker-minecraft-server
+    - https://github.com/itzg/docker-minecraft-bedrock-server
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-2.1.1/minecraft-2.1.1.tgz
+    version: 2.1.1
+  - apiVersion: v1
+    appVersion: SeeValues
     created: "2020-12-11T20:34:18.478240037Z"
     description: Minecraft server
     digest: 35dc87e8cbdbc0d354e77aeb412523066541d086bb55d392fcd23a50e73be134
@@ -371,6 +396,30 @@ entries:
     - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-2.0.0/minecraft-2.0.0.tgz
     version: 2.0.0
   minecraft-bedrock:
+  - apiVersion: v1
+    appVersion: "1.16"
+    created: "2020-12-31T19:47:24.062044124Z"
+    description: Minecraft server
+    digest: de17934c10a28ebc2b144dcd8c66b750e85a422a480b393b47287c9a7546f4ca
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-bedrock
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    - https://hub.docker.com/r/itzg/minecraft-bedrock-server/~/dockerfile/
+    - https://github.com/itzg/dockerfiles
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-bedrock-1.1.7/minecraft-bedrock-1.1.7.tgz
+    version: 1.1.7
   - apiVersion: v1
     appVersion: "1.16"
     created: "2020-11-24T03:09:53.930521998Z"
