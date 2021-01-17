@@ -157,6 +157,7 @@ minecraftServer:
   jvmOpts: ""
   # Options like -X that need to proceed general JVM options
   jvmXXOpts: ""
+  # DEPRECATED use top-level serviceAnnotations
   serviceAnnotations: {}
   serviceType: ClusterIP
   ## Set the port used if the serviceType is NodePort
