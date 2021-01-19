@@ -139,3 +139,5 @@ persistence:
 podAnnotations: {}
 
 deploymentAnnotations: {}
+
+serviceAnnotations: {}
