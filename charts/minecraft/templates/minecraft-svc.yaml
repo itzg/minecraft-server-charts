@@ -8,7 +8,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
   annotations:
-    {{ toYaml .Values.serviceAnnotations | indent 4 }}
+{{ toYaml .Values.serviceAnnotations | indent 4 }}
 spec:
 {{- if (or (eq .Values.minecraftServer.serviceType "ClusterIP") (empty .Values.minecraftServer.serviceType)) }}
   type: ClusterIP

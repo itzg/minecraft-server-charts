@@ -4,8 +4,7 @@ kind: Service
 metadata:
   name: "{{ template "minecraft.fullname" . }}-rcon"
   annotations:
-    {{ toYaml .Values.minecraftServer.serviceAnnotations | indent 4 }}
-    {{ toYaml .Values.serviceAnnotations | indent 4 }}
+{{ toYaml .Values.rconServiceAnnotations | indent 4 }}
   labels:
     app: {{ template "minecraft.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
