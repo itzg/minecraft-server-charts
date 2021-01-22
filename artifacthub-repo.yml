@@ -1,0 +1,8 @@
+#repositoryID: The ID of the Artifact Hub repository where the packages will be published to (optional, but it enables verified publisher)
+owners:
+  - name: Geoff Bourne
+    email: itzgeoff@gmail.com
+  - name: Jeff Billimek
+    email: jeff@billimek.com
+  - name: Greg Taylor
+    email: gtaylor@gc-taylor.com
