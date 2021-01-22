@@ -1,6 +1,34 @@
 apiVersion: v1
 entries:
   minecraft:
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-server
+    apiVersion: v1
+    appVersion: SeeValues
+    created: "2021-01-22T21:06:31.207210023Z"
+    description: Minecraft server
+    digest: 7d063b12385a766bf816984918d520fe8748a15d51d7db0c17c17efa32d092fc
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-2.1.4/minecraft-2.1.4.tgz
+    version: 2.1.4
   - apiVersion: v1
     appVersion: SeeValues
     created: "2021-01-21T13:24:54.251990399Z"
@@ -446,6 +474,34 @@ entries:
     - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-2.0.0/minecraft-2.0.0.tgz
     version: 2.0.0
   minecraft-bedrock:
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-bedrock-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-bedrock-server
+    apiVersion: v1
+    appVersion: "1.16"
+    created: "2021-01-22T21:06:31.329658289Z"
+    description: Minecraft server
+    digest: c2324ac00ec0b1cd7481a719f2cdbfe67311cda0d505a8e7f4218e6d22a432c4
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-bedrock
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-bedrock-1.1.9/minecraft-bedrock-1.1.9.tgz
+    version: 1.1.9
   - apiVersion: v1
     appVersion: "1.16"
     created: "2021-01-19T02:33:09.178862426Z"
