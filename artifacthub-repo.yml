@@ -1,4 +1,4 @@
-#repositoryID: The ID of the Artifact Hub repository where the packages will be published to (optional, but it enables verified publisher)
+repositoryID: a2d3c3ee-e0f8-4898-86f2-f36518ace168
 owners:
   - name: Geoff Bourne
     email: itzgeoff@gmail.com
