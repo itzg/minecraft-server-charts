@@ -1,0 +1,38 @@
+{{- if default "" .Values.bungeeCord.rcon.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "bungee.fullname" . }}-rcon"
+  annotations:
+{{ toYaml .Values.rconServiceAnnotations | indent 4 }}
+  labels:
+    app: {{ template "bungee.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+{{- if (or (eq .Values.bungeeCord.rcon.serviceType "ClusterIP") (empty .Values.bungeeCord.rcon.serviceType)) }}
+  type: ClusterIP
+{{- else if eq .Values.bungeeCord.rcon.serviceType "LoadBalancer" }}
+  type: {{ .Values.bungeeCord.rcon.serviceType }}
+  {{- if .Values.bungeeCord.rcon.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.bungeeCord.rcon.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.bungeeCord.rcon.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml .Values.bungeeCord.rcon.loadBalancerSourceRanges | indent 4 }}
+  {{- end -}}
+{{- else }}
+  type: {{ .Values.bungeeCord.rcon.serviceType }}
+{{- end }}
+  {{- if .Values.bungeeCord.rcon.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.bungeeCord.rcon.externalTrafficPolicy }}
+  {{- end }}
+  ports:
+  - name: rcon
+    port: {{ .Values.bungeeCord.rcon.port }}
+    targetPort: rcon
+    protocol: TCP
+  selector:
+    app: {{ template "bungee.fullname" . }}
+{{- end }}

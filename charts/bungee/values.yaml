@@ -1,0 +1,190 @@
+# ref: https://hub.docker.com/r/itzg/docker-bungeecord/
+image: itzg/bungeecord
+imageTag: latest
+imagePullSecret: ""
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 500m
+
+securityContext:
+  # Security context settings
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 2000
+# Most of these map to environment variables. See Minecraft for details:
+# https://hub.docker.com/r/itzg/docker-bungeecord/
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  failureThreshold: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  failureThreshold: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+startupProbe:
+  enabled: false
+  failureThreshold: 30
+  periodSeconds: 10
+
+# initContainers:
+#   - name: do-something
+#     image: busybox
+#     command: ['do', 'something']
+#     volumesMounts:
+#       - name: nfs
+#         mountPath: /mnt/volume
+#         readOnly: true
+initContainers: []
+
+# extraVolumes:
+#   - volumeMounts:
+#       - name: nfs
+#         mountPath: /mnt/volume
+#         readOnly: true
+#     volumes:
+#       - name: nfs
+#         server: some.nfs.server.com
+#         path: /
+#         mountOptions:
+#           - port=2049
+#           - hard
+#           - vers=4
+extraVolumes: []
+
+bungeeCord:
+  # This can be one of "BUNGEECORD", "WATERFALL", "VELOCITY", "CUSTOM"
+  type: BUNGEECORD
+  # If type is set to BUNGEECORD or WATERFALL, this value overrides the base Jenkins URL
+  jenkinsBaseUrl:
+  # The Jenkins job ID of the artifact to download and run
+  jenkinsJobId: lastStableBuild
+  # If set, the job ID is arbitrarily incremented to force upgrade the proxy jar
+  jarRevision:
+  # This value can be set to a fully qualified URL to download a custom proxy jar
+  jarUrl:
+  # If set, this value specifies a custom proxy jar located inside the container
+  jarFile:
+  # If type is set to WATERFALL, use a specific Waterfall release stream
+  waterfallVersion: latest
+  # If type is set to WATERFALL, use a specific build of Waterfall within the specified version
+  waterfallBuildId: latest
+  # If type is set to VELOCITY, download and run this version of Velocity
+  velocityVersion: 1.1.0
+  # Check accounts against Minecraft account service.
+  onlineMode: true
+  # A list of .jar URLs to download into the plugins folder.
+  plugins: []
+  # If you adjust this, you may need to adjust resources.requests above to match.
+  memory: 512M
+  # General JVM options to be passed to the Minecraft server invocation
+  jvmOpts: ""
+  # Options like -X that need to proceed general JVM options
+  jvmXXOpts: ""
+  # DEPRECATED: use top-level rconServiceAnnotations instead
+  serviceAnnotations: {}
+  serviceType: ClusterIP
+  ## Set the port used if the serviceType is NodePort
+  # nodePort:
+  loadBalancerIP:
+  # loadBalancerSourceRanges: []
+  ## Set the externalTrafficPolicy in the Service to either Cluster or Local
+  # externalTrafficPolicy: Cluster
+  externalIPs:
+  # If set, this overrides the default config file path
+  configFilePath: /server/config.yml
+  # This can be set to the contents of your config file (only works with yaml currently)
+  # config: |
+  #  player_limit: -1
+  #  ip_forward: false
+  #  permissions:
+  #    default:
+  #    - bungeecord.command.server
+  #    - bungeecord.command.list
+  #    admin:
+  #    - bungeecord.command.alert
+  #    - bungeecord.command.end
+  #    - bungeecord.command.ip
+  #    - bungeecord.command.reload
+  #  timeout: 30000
+  #  log_pings: true
+  #  log_commands: false
+  #  online_mode: true
+  #  servers:
+  #    lobby:
+  #      motd: '&1Just another BungeeCord - Forced Host'
+  #      address: localhost:25565
+  #      restricted: false
+  #  listeners:
+  #  - query_port: 25577
+  #    motd: '&1Another Bungee server'
+  #    priorities:
+  #    - lobby
+  #    bind_local_address: true
+  #    tab_list: GLOBAL_PING
+  #    query_enabled: false
+  #    host: 0.0.0.0:25577
+  #    forced_hosts:
+  #      pvp.md-5.net: pvp
+  #    max_players: 1
+  #    tab_size: 60
+  #    ping_passthrough: false
+  #    force_default_server: false
+  #    proxy_protocol: false
+  #  disabled_commands:
+  #  - disabledcommandhere
+  #  network_compression_threshold: 256
+  #  groups:
+  #    md_5:
+  #    - admin
+  #  connection_throttle: 4000
+  #  connection_throttle_limit: 3
+  #  stats: f2876aa6-74d2-468c-90ee-1377111f1c9f
+  #  forge_support: false
+  #  inject_commands: false
+
+  rcon:
+    # If you enable this, make SURE to change your password below.
+    enabled: false
+    port: 25575
+    password: "CHANGEME!"
+    serviceType: LoadBalancer
+    loadBalancerIP:
+    # loadBalancerSourceRanges: []
+    ## Set the externalTrafficPolicy in the Service to either Cluster or Local
+    # externalTrafficPolicy: Cluster
+
+## Additional minecraft container environment variables
+##
+extraEnv: {}
+
+persistence:
+  ## minecraft data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  dataDir:
+    # Set this to false if you don't care to persist state between restarts.
+    enabled: false
+    # existingClaim: nil
+    Size: 1Gi
+
+podAnnotations: {}
+
+deploymentAnnotations: {}
+
+serviceAnnotations: {}
+
+rconServiceAnnotations: {}
