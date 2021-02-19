@@ -1,0 +1,37 @@
+Get the IP address of your {{ .Values.bungeeCord.type }} server by running these commands in the
+same shell:
+
+{{- if contains "NodePort" .Values.bungeeCord.serviceType }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} \
+    -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "bungee.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} \
+    -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "You'll need to expose this node through your security groups/firewall"
+  echo "for it to be world-accessible."
+  echo $NODE_IP:$NODE_PORT
+
+{{- else if contains "LoadBalancer" .Values.bungeeCord.serviceType }}
+
+!! NOTE: It may take a few minutes for the LoadBalancer IP to be available. !!
+
+You can watch for EXTERNAL-IP to populate by running:
+  kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "bungee.fullname" . }}
+
+{{- else if contains "ClusterIP" .Values.bungeeCord.serviceType }}
+  export POD_NAME=$(kubectl get pods \
+    --namespace {{ .Release.Namespace }} \
+    -l "component={{ template "bungee.fullname" . }}" \
+    -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward $POD_NAME 25565:25565
+  echo "Point your Minecraft client at 127.0.0.1:22565"
+
+{{- end }}
+
+{{- if not .Values.persistence.dataDir.enabled }}
+
+############################################################################
+###  WARNING: Persistence is disabled!!! You will lose your proxy state  ###
+###                 when the proxy pod is terminated.                    ###
+###      See values.yaml's persistence.dataDir.enabled directive.        ###
+############################################################################
+{{- end }}

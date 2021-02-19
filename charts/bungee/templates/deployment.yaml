@@ -1,0 +1,170 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "bungee.fullname" . }}
+  annotations: {{ toYaml .Values.deploymentAnnotations | nindent 4 }}
+  labels:
+    app: {{ template "bungee.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  strategy:
+    type: {{ .Values.strategyType }}
+  selector:
+    matchLabels:
+      app: {{ template "bungee.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "bungee.fullname" . }}
+      annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
+    spec:
+      {{- if .Values.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
+      {{- end }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      initContainers: {{- toYaml .Values.initContainers | nindent 8 }}
+      containers:
+      - name: {{ template "bungee.fullname" . }}
+        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+        imagePullPolicy: Always
+        resources: {{ toYaml .Values.resources | nindent 10 }}
+        {{- if .Values.startupProbe.enabled }}
+        startupProbe:
+          tcpSocket:
+            port: 25577
+          failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+        {{- end }}
+        readinessProbe:
+          tcpSocket:
+            port: 25577
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+        livenessProbe:
+          tcpSocket:
+            port: 25577
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+        env:
+        - name: UID
+          value: "1000"
+        - name: GID
+          value: "1000"
+        - name: TYPE
+          value: {{ default "" .Values.bungeeCord.type | quote }}
+        {{- if eq .Values.bungeeCord.type "WATERFALL" }}
+        - name: WATERFALL_VERSION
+          value: {{ .Values.bungeeCord.waterfallVersion | quote }}
+        - name: WATERFALL_BUILD_ID
+          value: {{ .Values.bungeeCord.waterfallBuildId | quote }}
+        {{- else if eq .Values.bungeeCord.type "VELOCITY" }}
+        - name: VELOCITY_VERSION
+          value: {{ .Values.bungeeCord.velocityVersion | quote }}
+        {{- end }}
+        {{- if .Values.bungeeCord.jarUrl }}
+        - name: BUNGEE_JAR_URL
+          value: {{ .Values.bungeeCord.jarUrl | quote }}
+        {{- else if .Values.bungeeCord.jarFile }}
+        - name: BUNGEE_JAR_FILE
+          value: {{ .Values.bungeeCord.jarFile | quote }}
+        {{- else }}
+        {{- if .Values.bungeeCord.jenkinsJobId }}
+        - name: BUNGEE_JOB_ID
+          value: {{ .Values.bungeeCord.jenkinsJobId }}
+        {{- end }}
+        {{- if .Values.bungeeCord.jenkinsBaseUrl }}
+        - name: BUNGEE_BASE_URL
+          value: {{ .Values.bungeeCord.jenkinsBaseUrl }}
+        {{- end }}
+        {{- if .Values.bungeeCord.jarRevision }}
+        - name: BUNGEE_JAR_REVISION
+          value: {{ .Values.bungeeCord.jarRevision }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.plugins }}
+        - name: PLUGINS
+          value: {{ include "helm-toolkit.utils.joinListWithComma" .Values.plugins }}
+        {{- end }}
+        - name: MEMORY
+          value: {{ .Values.bungeeCord.memory | quote }}
+        - name: JVM_OPTS
+          value: {{ .Values.bungeeCord.jvmOpts | quote }}
+
+        {{- if .Values.bungeeCord.rcon.enabled }}
+        - name: ENABLE_RCON
+          value: "true"
+        - name: RCON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "bungee.fullname" . }}
+              key: rcon-password
+        {{- else }}
+        - name: ENABLE_RCON
+          value: "false"
+        {{- end }}
+
+        {{- range $key, $value := .Values.extraEnv }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+
+        ports:
+        - name: bungee
+          containerPort: 25577
+          protocol: TCP
+        {{- if .Values.bungeeCord.rcon.enabled }}
+        - name: rcon
+          containerPort: 25575
+          protocol: TCP
+        {{- end }}
+        volumeMounts:
+        - name: datadir
+          mountPath: /server
+        {{- if .Values.bungeeCord.config }}
+        - name: config
+          mountPath: {{ .Values.bungeeCord.configFilePath }}
+          subPath: config.yml
+        {{- end }}
+        {{- range .Values.extraVolumes }}
+        {{- toYaml .volumeMounts | nindent 8 }}
+        {{- end }}
+      volumes:
+      - name: datadir
+      {{- if .Values.persistence.dataDir.enabled }}
+        persistentVolumeClaim:
+        {{- if .Values.persistence.dataDir.existingClaim }}
+          claimName: {{ .Values.persistence.dataDir.existingClaim }}
+        {{- else }}
+          claimName: {{ template "bungee.fullname" . }}-datadir
+        {{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.bungeeCord.config }}
+      - name: config
+        configMap:
+          name: {{ include "bungee.fullname" . }}-config
+      {{- end }}
+      {{- range .Values.extraVolumes }}
+      {{- toYaml .volumes | nindent 6 }}
+      {{- end }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
+    {{- end }}
+    {{- if .Values.affinity }}
+      affinity: {{ toYaml .Values.affinity | nindent 8 }}
+    {{- end }}
+    {{- if .Values.tolerations }}
+      tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
+    {{- end }}
