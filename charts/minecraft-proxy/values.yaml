@@ -60,7 +60,7 @@ initContainers: []
 #           - vers=4
 extraVolumes: []
 
-bungeeCord:
+minecraftProxy:
   # This can be one of "BUNGEECORD", "WATERFALL", "VELOCITY", "CUSTOM"
   type: BUNGEECORD
   # If type is set to BUNGEECORD or WATERFALL, this value overrides the base Jenkins URL

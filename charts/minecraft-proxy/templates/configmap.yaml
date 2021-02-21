@@ -1,14 +1,14 @@
-{{- if .Values.bungeeCord.config }}
+{{- if .Values.minecraftProxy.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "bungee.fullname" . }}-config
+  name: {{ include "proxy.fullname" . }}-config
   labels:
-    app: {{ template "bungee.fullname" . }}
+    app: {{ template "proxy.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 data:
   config.yml: |
-{{ toYaml .Values.bungeeCord.config | indent 4 }}
+{{ toYaml .Values.minecraftProxy.config | indent 4 }}
 {{- end }}

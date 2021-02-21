@@ -1,0 +1,38 @@
+{{- if default "" .Values.minecraftProxy.rcon.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "proxy.fullname" . }}-rcon"
+  annotations:
+{{ toYaml .Values.rconServiceAnnotations | indent 4 }}
+  labels:
+    app: {{ template "proxy.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+{{- if (or (eq .Values.minecraftProxy.rcon.serviceType "ClusterIP") (empty .Values.minecraftProxy.rcon.serviceType)) }}
+  type: ClusterIP
+{{- else if eq .Values.minecraftProxy.rcon.serviceType "LoadBalancer" }}
+  type: {{ .Values.minecraftProxy.rcon.serviceType }}
+  {{- if .Values.minecraftProxy.rcon.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.minecraftProxy.rcon.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.minecraftProxy.rcon.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml .Values.minecraftProxy.rcon.loadBalancerSourceRanges | indent 4 }}
+  {{- end -}}
+{{- else }}
+  type: {{ .Values.minecraftProxy.rcon.serviceType }}
+{{- end }}
+  {{- if .Values.minecraftProxy.rcon.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.minecraftProxy.rcon.externalTrafficPolicy }}
+  {{- end }}
+  ports:
+  - name: rcon
+    port: {{ .Values.minecraftProxy.rcon.port }}
+    targetPort: rcon
+    protocol: TCP
+  selector:
+    app: {{ template "proxy.fullname" . }}
+{{- end }}

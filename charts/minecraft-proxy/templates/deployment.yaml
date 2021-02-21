@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "bungee.fullname" . }}
+  name: {{ template "proxy.fullname" . }}
   annotations: {{ toYaml .Values.deploymentAnnotations | nindent 4 }}
   labels:
-    app: {{ template "bungee.fullname" . }}
+    app: {{ template "proxy.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -13,11 +13,11 @@ spec:
     type: {{ .Values.strategyType }}
   selector:
     matchLabels:
-      app: {{ template "bungee.fullname" . }}
+      app: {{ template "proxy.fullname" . }}
   template:
     metadata:
       labels:
-        app: {{ template "bungee.fullname" . }}
+        app: {{ template "proxy.fullname" . }}
       annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
     spec:
       {{- if .Values.imagePullSecret }}
@@ -29,7 +29,7 @@ spec:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       initContainers: {{- toYaml .Values.initContainers | nindent 8 }}
       containers:
-      - name: {{ template "bungee.fullname" . }}
+      - name: {{ template "proxy.fullname" . }}
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: Always
         resources: {{ toYaml .Values.resources | nindent 10 }}
@@ -62,34 +62,34 @@ spec:
         - name: GID
           value: "1000"
         - name: TYPE
-          value: {{ default "" .Values.bungeeCord.type | quote }}
-        {{- if eq .Values.bungeeCord.type "WATERFALL" }}
+          value: {{ default "" .Values.minecraftProxy.type | quote }}
+        {{- if eq .Values.minecraftProxy.type "WATERFALL" }}
         - name: WATERFALL_VERSION
-          value: {{ .Values.bungeeCord.waterfallVersion | quote }}
+          value: {{ .Values.minecraftProxy.waterfallVersion | quote }}
         - name: WATERFALL_BUILD_ID
-          value: {{ .Values.bungeeCord.waterfallBuildId | quote }}
-        {{- else if eq .Values.bungeeCord.type "VELOCITY" }}
+          value: {{ .Values.minecraftProxy.waterfallBuildId | quote }}
+        {{- else if eq .Values.minecraftProxy.type "VELOCITY" }}
         - name: VELOCITY_VERSION
-          value: {{ .Values.bungeeCord.velocityVersion | quote }}
+          value: {{ .Values.minecraftProxy.velocityVersion | quote }}
         {{- end }}
-        {{- if .Values.bungeeCord.jarUrl }}
+        {{- if .Values.minecraftProxy.jarUrl }}
         - name: BUNGEE_JAR_URL
-          value: {{ .Values.bungeeCord.jarUrl | quote }}
-        {{- else if .Values.bungeeCord.jarFile }}
+          value: {{ .Values.minecraftProxy.jarUrl | quote }}
+        {{- else if .Values.minecraftProxy.jarFile }}
         - name: BUNGEE_JAR_FILE
-          value: {{ .Values.bungeeCord.jarFile | quote }}
+          value: {{ .Values.minecraftProxy.jarFile | quote }}
         {{- else }}
-        {{- if .Values.bungeeCord.jenkinsJobId }}
+        {{- if .Values.minecraftProxy.jenkinsJobId }}
         - name: BUNGEE_JOB_ID
-          value: {{ .Values.bungeeCord.jenkinsJobId }}
+          value: {{ .Values.minecraftProxy.jenkinsJobId }}
         {{- end }}
-        {{- if .Values.bungeeCord.jenkinsBaseUrl }}
+        {{- if .Values.minecraftProxy.jenkinsBaseUrl }}
         - name: BUNGEE_BASE_URL
-          value: {{ .Values.bungeeCord.jenkinsBaseUrl }}
+          value: {{ .Values.minecraftProxy.jenkinsBaseUrl }}
         {{- end }}
-        {{- if .Values.bungeeCord.jarRevision }}
+        {{- if .Values.minecraftProxy.jarRevision }}
         - name: BUNGEE_JAR_REVISION
-          value: {{ .Values.bungeeCord.jarRevision }}
+          value: {{ .Values.minecraftProxy.jarRevision }}
         {{- end }}
         {{- end }}
         {{- if .Values.plugins }}
@@ -97,17 +97,17 @@ spec:
           value: {{ include "helm-toolkit.utils.joinListWithComma" .Values.plugins }}
         {{- end }}
         - name: MEMORY
-          value: {{ .Values.bungeeCord.memory | quote }}
+          value: {{ .Values.minecraftProxy.memory | quote }}
         - name: JVM_OPTS
-          value: {{ .Values.bungeeCord.jvmOpts | quote }}
+          value: {{ .Values.minecraftProxy.jvmOpts | quote }}
 
-        {{- if .Values.bungeeCord.rcon.enabled }}
+        {{- if .Values.minecraftProxy.rcon.enabled }}
         - name: ENABLE_RCON
           value: "true"
         - name: RCON_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "bungee.fullname" . }}
+              name: {{ template "proxy.fullname" . }}
               key: rcon-password
         {{- else }}
         - name: ENABLE_RCON
@@ -120,10 +120,10 @@ spec:
         {{- end }}
 
         ports:
-        - name: bungee
+        - name: proxy
           containerPort: 25577
           protocol: TCP
-        {{- if .Values.bungeeCord.rcon.enabled }}
+        {{- if .Values.minecraftProxy.rcon.enabled }}
         - name: rcon
           containerPort: 25575
           protocol: TCP
@@ -131,9 +131,9 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /server
-        {{- if .Values.bungeeCord.config }}
+        {{- if .Values.minecraftProxy.config }}
         - name: config
-          mountPath: {{ .Values.bungeeCord.configFilePath }}
+          mountPath: {{ .Values.minecraftProxy.configFilePath }}
           subPath: config.yml
         {{- end }}
         {{- range .Values.extraVolumes }}
@@ -146,15 +146,15 @@ spec:
         {{- if .Values.persistence.dataDir.existingClaim }}
           claimName: {{ .Values.persistence.dataDir.existingClaim }}
         {{- else }}
-          claimName: {{ template "bungee.fullname" . }}-datadir
+          claimName: {{ template "proxy.fullname" . }}-datadir
         {{- end }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-      {{- if .Values.bungeeCord.config }}
+      {{- if .Values.minecraftProxy.config }}
       - name: config
         configMap:
-          name: {{ include "bungee.fullname" . }}-config
+          name: {{ include "proxy.fullname" . }}-config
       {{- end }}
       {{- range .Values.extraVolumes }}
       {{- toYaml .volumes | nindent 6 }}

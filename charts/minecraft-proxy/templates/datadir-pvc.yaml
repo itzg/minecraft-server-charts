@@ -2,9 +2,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "bungee.fullname" . }}-datadir
+  name: {{ template "proxy.fullname" . }}-datadir
   labels:
-    app: {{ template "bungee.fullname" . }}
+    app: {{ template "proxy.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
