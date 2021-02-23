@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "proxy.fullname" . }}
+  labels:
+    app: {{ template "proxy.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+{{ toYaml .Values.serviceAnnotations | indent 4 }}
+spec:
+{{- if (or (eq .Values.minecraftProxy.serviceType "ClusterIP") (empty .Values.minecraftProxy.serviceType)) }}
+  type: ClusterIP
+{{- else if eq .Values.minecraftProxy.serviceType "LoadBalancer" }}
+  type: {{ .Values.minecraftProxy.serviceType }}
+  {{- if .Values.minecraftProxy.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.minecraftProxy.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.minecraftProxy.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml .Values.minecraftProxy.loadBalancerSourceRanges | indent 4 }}
+  {{- end -}}
+{{- else }}
+  type: {{ .Values.minecraftProxy.serviceType }}
+{{- end }}
+  {{- if .Values.minecraftProxy.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.minecraftProxy.externalTrafficPolicy }}
+  {{- end }}
+  ports:
+  - name: proxy
+    port: 25565
+    targetPort: proxy
+    {{- if .Values.minecraftProxy.nodePort }}
+    nodePort: {{ .Values.minecraftProxy.nodePort }}
+    {{- end }}
+    protocol: TCP
+  selector:
+    app: {{ template "proxy.fullname" . }}
+  {{- if .Values.minecraftProxy.externalIPs }}
+  externalIPs:
+    {{- with .Values.minecraftProxy.externalIPs }}
+      {{- range . }}
+        - {{ . | quote }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
