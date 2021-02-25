@@ -209,9 +209,9 @@ spec:
           containerPort: {{ .Values.minecraftServer.rcon.port }}
           protocol: TCP
         {{- end }}
-        {{- if .Values.minecraftServer.dynmap.service.enabled }}
-        - name: dynmap
-          containerPort: {{ .Values.minecraftServer.dynmap.containerPort }}
+        {{- if .Values.minecraftServer.extraPort.service.enabled }}
+        - name: extraPort
+          containerPort: {{ .Values.minecraftServer.extraPort.containerPort }}
           protocol: TCP
         {{- end }}
         volumeMounts:

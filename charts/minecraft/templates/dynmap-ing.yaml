@@ -1,24 +1,24 @@
-{{- if default "" .Values.minecraftServer.dynmap.ingress.enabled }}
+{{- if default "" .Values.minecraftServer.extraPort.ingress.enabled }}
 {{- $minecraftFullname := include "minecraft.fullname" . }}
-{{- $serviceName := printf "%s-dynmap" $minecraftFullname }}
-{{- $servicePort := .Values.minecraftServer.dynmap.service.port }}
+{{- $serviceName := printf "%s-extraPort" $minecraftFullname }}
+{{- $servicePort := .Values.minecraftServer.extraPort.service.port }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: "{{ $minecraftFullname }}-dynmap"
-  {{- if .Values.minecraftServer.dynmap.ingress.annotations }}
+  name: "{{ $minecraftFullname }}-extraPort"
+  {{- if .Values.minecraftServer.extraPort.ingress.annotations }}
   annotations:
-    {{- toYaml .Values.minecraftServer.dynmap.ingress.annotations | nindent 4 }}
+    {{- toYaml .Values.minecraftServer.extraPort.ingress.annotations | nindent 4 }}
   {{- end }}
   labels:
-    app: "{{ $minecraftFullname }}-dynmap"
+    app: "{{ $minecraftFullname }}-extraPort"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-{{- if .Values.minecraftServer.dynmap.ingress.tls }}
+{{- if .Values.minecraftServer.extraPort.ingress.tls }}
   tls:
-  {{- range .Values.minecraftServer.dynmap.ingress.tls }}
+  {{- range .Values.minecraftServer.extraPort.ingress.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
@@ -27,7 +27,7 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-  {{- range .Values.minecraftServer.dynmap.ingress.hosts }}
+  {{- range .Values.minecraftServer.extraPort.ingress.hosts }}
   - host: {{ .name }}
     http:
       paths:
