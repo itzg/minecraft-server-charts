@@ -9,6 +9,34 @@ entries:
           url: https://hub.docker.com/r/itzg/minecraft-server
     apiVersion: v1
     appVersion: SeeValues
+    created: "2021-02-25T22:26:07.109132065Z"
+    description: Minecraft server
+    digest: 16bfa3c6c0fed34fa84d6c22b5b9af61e62dec333834facf547f4284bb158f4d
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-3.0.1/minecraft-3.0.1.tgz
+    version: 3.0.1
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-server
+    apiVersion: v1
+    appVersion: SeeValues
     created: "2021-02-19T01:35:23.693401012Z"
     description: Minecraft server
     digest: a29734d6cdeae02f745c41c985e09eaef2a3a14b39d7c4de26dcde4d82c8856c
