@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ template "minecraft.fullname" . }}-extraPort"
+  name: "{{ template "minecraft.fullname" . }}-extraport"
   annotations:
     {{ toYaml .Values.minecraftServer.extraPort.service.annotations | indent 4 }}
   labels:

@@ -1,6 +1,6 @@
 {{- if default "" .Values.minecraftServer.extraPort.ingress.enabled }}
 {{- $minecraftFullname := include "minecraft.fullname" . }}
-{{- $serviceName := printf "%s-extraPort" $minecraftFullname }}
+{{- $serviceName := printf "%s-extraport" $minecraftFullname }}
 {{- $servicePort := .Values.minecraftServer.extraPort.service.port }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress

@@ -9,6 +9,9 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
   annotations:
+  {{- with .Values.persistence.annotations  }}
+  {{ toYaml . | nindent 4 }}
+  {{- end }}
   {{- if .Values.persistence.storageClass }}
     volume.beta.kubernetes.io/storage-class: {{ .Values.persistence.storageClass | quote }}
   {{- else }}
