@@ -14,3 +14,13 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{- define "minecraft.ingress.apiVersion" -}}
+{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else if semverCompare "<1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "networking.k8s.io/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1" -}}
+{{- end }}
+{{- end -}}
