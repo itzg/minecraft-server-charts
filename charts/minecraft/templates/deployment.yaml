@@ -210,7 +210,7 @@ spec:
           protocol: TCP
         {{- end }}
         {{- if .Values.minecraftServer.extraPort.service.enabled }}
-        - name: extraPort
+        - name: extraport
           containerPort: {{ .Values.minecraftServer.extraPort.containerPort }}
           protocol: TCP
         {{- end }}

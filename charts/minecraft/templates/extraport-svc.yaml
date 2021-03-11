@@ -29,9 +29,9 @@ spec:
   externalTrafficPolicy: {{ .Values.minecraftServer.extraPort.service.externalTrafficPolicy }}
   {{- end }}
   ports:
-  - name: extraPort
+  - name: extraport
     port: {{ .Values.minecraftServer.extraPort.service.port }}
-    targetPort: extraPort
+    targetPort: extraport
     protocol: TCP
   selector:
     app: {{ template "minecraft.fullname" . }}
