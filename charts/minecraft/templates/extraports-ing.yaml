@@ -9,8 +9,7 @@ kind: Ingress
 metadata:
   name: {{ $serviceName }}
   {{- if .ingress.annotations }}
-  annotations:
-    {{- toYaml .ingress.annotations | nindent 4 }}
+  annotations: {{- toYaml .ingress.annotations | nindent 4 }}
   {{- end }}
   labels:
     app: {{ $serviceName }}

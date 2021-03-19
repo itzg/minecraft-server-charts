@@ -7,8 +7,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $serviceName }}
-  annotations:
-{{ toYaml .service.annotations | indent 4 }}
+  annotations: {{ toYaml .service.annotations | nindent 4 }}
   labels:
     app: {{ $serviceName }}
     chart: "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
