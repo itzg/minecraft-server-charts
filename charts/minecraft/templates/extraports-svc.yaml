@@ -1,0 +1,42 @@
+{{- $minecraftFullname := include "minecraft.fullname" . }}
+{{- range .Values.minecraftServer.extraPorts }}
+{{- if default "" .service.enabled }}
+{{- $serviceName := printf "%s-%s" $minecraftFullname .name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $serviceName }}
+  annotations: {{ toYaml .service.annotations | nindent 4 }}
+  labels:
+    app: {{ $serviceName }}
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
+    release: "{{ $.Release.Name }}"
+    heritage: "{{ $.Release.Service }}"
+spec:
+{{- if (or (eq .service.type "ClusterIP") (empty .service.type)) }}
+  type: ClusterIP
+{{- else if eq .service.type "LoadBalancer" }}
+  type: {{ .service.type }}
+  {{- if .service.loadBalancerIP }}
+  loadBalancerIP: {{ .service.loadBalancerIP }}
+  {{- end }}
+  {{- if .service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml .service.loadBalancerSourceRanges | indent 4 }}
+  {{- end -}}
+{{- else }}
+  type: {{ .service.type }}
+{{- end }}
+  {{- if .service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .service.externalTrafficPolicy }}
+  {{- end }}
+  ports:
+  - name: {{ .name }}
+    port: {{ .service.port }}
+    targetPort: {{ .name }}
+    protocol: TCP
+  selector:
+    app: {{ $minecraftFullname }}
+{{- end }}
+{{- end }}

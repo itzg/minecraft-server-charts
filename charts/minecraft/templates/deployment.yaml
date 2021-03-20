@@ -209,10 +209,12 @@ spec:
           containerPort: {{ .Values.minecraftServer.rcon.port }}
           protocol: TCP
         {{- end }}
-        {{- if .Values.minecraftServer.extraPort.service.enabled }}
-        - name: extraport
-          containerPort: {{ .Values.minecraftServer.extraPort.containerPort }}
+        {{- range .Values.minecraftServer.extraPorts }}
+        {{- if .service.enabled }}
+        - name: {{ .name }}
+          containerPort: {{ .containerPort }}
           protocol: TCP
+        {{- end }}
         {{- end }}
         volumeMounts:
         - name: datadir

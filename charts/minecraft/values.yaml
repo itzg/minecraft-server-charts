@@ -179,31 +179,32 @@ minecraftServer:
     ## Set the externalTrafficPolicy in the Service to either Cluster or Local
     # externalTrafficPolicy: Cluster
 
-  extraPort:
+  extraPorts: []
     # These options allow you to expose another port from the Minecraft server, plugins such
     # as dynmap (8123) and bluemap (8100) will require this for access to their web interfaces
-    containerPort: 8123
-    service:
-      enabled: false
-      annotations: {}
-      type: ClusterIP
-      loadBalancerIP: ""
-      loadBalancerSourceRanges: []
-      # externalTrafficPolicy: Cluster
-      port: 8123
-    ingress:
-      enabled: false
-      annotations:
-        {}
-        # kubernetes.io/ingress.class: nginx
-        # kubernetes.io/tls-acme: "true"
-      hosts:
-        - name: map.local
-          path: /
-      tls: []
-      #  - secretName: map-tls
-      #    hosts:
-      #      - map.local
+    #
+    # - name: map
+    #   containerPort: 8123
+    #   service:
+    #     enabled: false
+    #     annotations: {}
+    #     type: ClusterIP
+    #     loadBalancerIP: ""
+    #     loadBalancerSourceRanges: []
+    #     externalTrafficPolicy: Cluster
+    #     port: 8123
+    #   ingress:
+    #     enabled: false
+    #     annotations:
+    #       kubernetes.io/ingress.class: nginx
+    #       kubernetes.io/tls-acme: "true"
+    #     hosts:
+    #       - name: map.local
+    #         path: /
+    #     tls:
+    #       - secretName: map-tls
+    #         hosts:
+    #           - map.local
 
   query:
     # If you enable this, your server will be "published" to Gamespy
