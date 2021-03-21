@@ -25,4 +25,4 @@ You can then run `helm search repo itzg` to see the charts.
 helm install --name your-release itzg/minecraft
 ```
 
-Also see [helm hub](https://hub.helm.sh/charts/itzg) for a complete list.
+Also see [artifact hub](https://artifacthub.io/packages/search?repo=minecraft-server-charts) for a complete list.
