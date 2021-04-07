@@ -9,6 +9,5 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 data:
-  config.yml: |
-{{ toYaml .Values.minecraftProxy.config | indent 4 }}
+  config.yml: {{ toYaml .Values.minecraftProxy.config | indent 2 }}
 {{- end }}
