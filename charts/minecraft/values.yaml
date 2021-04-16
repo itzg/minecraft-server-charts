@@ -173,6 +173,8 @@ minecraftServer:
     enabled: false
     port: 25575
     password: "CHANGEME!"
+    existingSecret:
+    secretKey: rcon-password
     serviceType: LoadBalancer
     loadBalancerIP:
     # loadBalancerSourceRanges: []
