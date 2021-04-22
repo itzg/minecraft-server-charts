@@ -29,7 +29,7 @@ spec:
   {{- end }}
   ports:
   - name: minecraft
-    port: 25565
+    port: {{ .Values.minecraftServer.servicePort | default 25565 }}
     targetPort: minecraft
     {{- if .Values.minecraftServer.nodePort }}
     nodePort: {{ .Values.minecraftServer.nodePort }}
