@@ -98,6 +98,11 @@ spec:
           value: {{ .Values.minecraftServer.ftbServerMod | quote }}
         - name: FTB_LEGACYJAVAFIXER
           value: {{ default false .Values.minecraftServer.ftbLegacyJavaFixer | quote }}
+        {{- else if eq .Values.minecraftServer.type "CURSEFORGE" }}
+        - name: CF_SERVER_MOD
+          value: {{ .Values.minecraftServer.cfServerMod | quote }}
+        - name: FTB_LEGACYJAVAFIXER
+          value: {{ default false .Values.minecraftServer.ftbLegacyJavaFixer | quote }}
         {{- end }}
         - name: VERSION
           value: {{ .Values.minecraftServer.version | quote }}
