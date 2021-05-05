@@ -1,82 +1,69 @@
-# Minecraft
+# minecraft-bedrock
 
-[Minecraft](https://minecraft.net/en/) is a game about placing blocks and going on adventures.
+![Version: 1.1.10](https://img.shields.io/badge/Version-1.1.10-informational?style=flat-square) ![AppVersion: 1.16](https://img.shields.io/badge/AppVersion-1.16-informational?style=flat-square)
 
-## Introduction
+Minecraft server
 
-This chart creates a single [Minecraft Bedrock Server](https://www.minecraft.net/en-us/download/server/bedrock/) Pod, plus Services for the Minecraft server.
+**Homepage:** <https://minecraft.net/>
 
-## Prerequisites
+## Maintainers
 
-- 512 MB of RAM
-- Kubernetes 1.4+ with Beta APIs enabled
-- PV provisioner support in the underlying infrastructure
+| Name | Email | Url |
+| ---- | ------ | --- |
+| gtaylor | gtaylor@gc-taylor.com |  |
+| billimek | jeff@billimek.com |  |
+| itzg | itzgeoff@gmail.com |  |
 
-## Installing the Chart
+## Source Code
 
-To install the chart with the release name `minecraft`, read the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula) run:
+* <https://github.com/itzg/minecraft-server-charts>
 
-```shell
-helm install minecraft-bedrock \
-  --set minecraftServer.eula=true itzg/minecraft
-```
+## Values
 
-This command deploys a Minecraft dedicated server with sensible defaults.
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| deploymentAnnotations | object | `{}` |  |
+| extraEnv | object | `{}` |  |
+| image | string | `"itzg/minecraft-bedrock-server"` |  |
+| imagePullSecret | string | `""` |  |
+| imageTag | string | `"latest"` |  |
+| initContainers | list | `[]` |  |
+| livenessProbe.initialDelaySeconds | int | `30` |  |
+| minecraftServer.cheats | bool | `false` |  |
+| minecraftServer.defaultPermission | string | `"member"` |  |
+| minecraftServer.difficulty | string | `"easy"` |  |
+| minecraftServer.eula | string | `"FALSE"` |  |
+| minecraftServer.gameMode | string | `"survival"` |  |
+| minecraftServer.levelName | string | `"level"` |  |
+| minecraftServer.levelSeed | string | `nil` |  |
+| minecraftServer.levelType | string | `"DEFAULT"` |  |
+| minecraftServer.loadBalancerIP | string | `nil` |  |
+| minecraftServer.maxPlayers | int | `10` |  |
+| minecraftServer.maxThreads | int | `8` |  |
+| minecraftServer.members | string | `nil` |  |
+| minecraftServer.onlineMode | bool | `true` |  |
+| minecraftServer.ops | string | `nil` |  |
+| minecraftServer.playerIdleTimeout | int | `30` |  |
+| minecraftServer.serverName | string | `"Dedicated Server"` |  |
+| minecraftServer.serviceType | string | `"ClusterIP"` |  |
+| minecraftServer.texturepackRequired | bool | `false` |  |
+| minecraftServer.tickDistance | int | `4` |  |
+| minecraftServer.version | string | `"LATEST"` |  |
+| minecraftServer.viewDistance | int | `10` |  |
+| minecraftServer.visitors | string | `nil` |  |
+| minecraftServer.whitelist | string | `nil` |  |
+| minecraftServer.whitelistUsers | string | `nil` |  |
+| nodeSelector | object | `{}` |  |
+| persistence.dataDir.Size | string | `"1Gi"` |  |
+| persistence.dataDir.enabled | bool | `false` |  |
+| podAnnotations | object | `{}` |  |
+| readinessProbe.initialDelaySeconds | int | `30` |  |
+| resources.requests.cpu | string | `"500m"` |  |
+| resources.requests.memory | string | `"512Mi"` |  |
+| serviceAnnotations | object | `{}` |  |
+| strategyType | string | `"Recreate"` |  |
+| tolerations | list | `[]` |  |
 
-> **Tip**: List all releases using `helm list`
-
-## Uninstalling the Chart
-
-To uninstall/delete the `minecraft-bedrock` deployment:
-
-```shell
-helm delete minecraft-bedrock
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-## Configuration
-
-Refer to [values.yaml](values.yaml) for the full run-down on defaults. These are a mixture of Kubernetes and Minecraft-related directives that map to environment variables in the [itzg/minecraft-bedrock-server](https://hub.docker.com/r/itzg/minecraft-bedrock-server/) Docker image.
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```shell
-helm install --name minecraft-bedrock \
-  --set minecraftServer.eula=true,minecraftServer.Difficulty=hard \
-  itzg/minecraft
-```
-
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
-
-```shell
-helm install --name minecraft -f values.yaml itzg/minecraft
-```
-
-> **Tip**: You can use the default [values.yaml](values.yaml)
-
-## Persistence
-
-The [itzg/minecraft-bedrock-server](https://hub.docker.com/r/itzg/minecraft-bedrock-server/) image stores the saved games and mods under /data.
-
-By default a PersistentVolumeClaim is created and mounted for saves but not mods. In order to disable this functionality
-you can change the values.yaml to disable persistence under the sub-sections under `persistence`.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-
-## Backups
-
-You can backup the state of your minecraft server to your local machine via the `kubectl cp` command.  
-
-```shell
-NAMESPACE=default
-POD_ID=lionhope-387ff8d-sdis9
-kubectl attach --namespace ${NAMESPACE} ${POD_ID} -it
-save hold
-save query
-^P + ^Q (CtrlP and CtrlQ)
-kubectl cp ${NAMESPACE}/${POD_ID}:/data .
-kubectl attach --namespace ${NAMESPACE} ${POD_ID} -it
-save resume
-^P + ^Q (CtrlP and CtrlQ)
-```
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)

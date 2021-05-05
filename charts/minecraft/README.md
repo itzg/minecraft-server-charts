@@ -1,78 +1,120 @@
-# Minecraft
+# minecraft
 
-[Minecraft](https://minecraft.net/en/) is a game about placing blocks and going on adventures.
+![Version: 3.1.7](https://img.shields.io/badge/Version-3.1.7-informational?style=flat-square) ![AppVersion: SeeValues](https://img.shields.io/badge/AppVersion-SeeValues-informational?style=flat-square)
 
-## Introduction
+Minecraft server
 
-This chart creates a single Minecraft Pod, plus Services for the Minecraft server and RCON.
+**Homepage:** <https://minecraft.net/>
 
-## Prerequisites
+## Maintainers
 
-- 512 MB of RAM
-- Kubernetes 1.4+ with Beta APIs enabled
-- PV provisioner support in the underlying infrastructure
+| Name | Email | Url |
+| ---- | ------ | --- |
+| gtaylor | gtaylor@gc-taylor.com |  |
+| billimek | jeff@billimek.com |  |
+| itzg | itzgeoff@gmail.com |  |
 
-## Installing the Chart
+## Source Code
 
-To install the chart with the release name `minecraft`, read the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula) run:
+* <https://github.com/itzg/minecraft-server-charts>
 
-```shell
-helm install minecraft \
-  --set minecraftServer.eula=true itzg/minecraft
-```
+## Values
 
-This command deploys a Minecraft dedicated server with sensible defaults.
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| deploymentAnnotations | object | `{}` |  |
+| extraEnv | object | `{}` |  |
+| image | string | `"itzg/minecraft-server"` |  |
+| imagePullSecret | string | `""` |  |
+| imageTag | string | `"latest"` |  |
+| initContainers | list | `[]` |  |
+| livenessProbe.failureThreshold | int | `10` |  |
+| livenessProbe.initialDelaySeconds | int | `30` |  |
+| livenessProbe.periodSeconds | int | `5` |  |
+| livenessProbe.successThreshold | int | `1` |  |
+| livenessProbe.timeoutSeconds | int | `1` |  |
+| minecraftServer.allowNether | bool | `true` |  |
+| minecraftServer.announcePlayerAchievements | bool | `true` |  |
+| minecraftServer.bukkitDownloadUrl | string | `nil` |  |
+| minecraftServer.cfServerMod | string | `nil` |  |
+| minecraftServer.difficulty | string | `"easy"` |  |
+| minecraftServer.downloadModpackUrl | string | `nil` |  |
+| minecraftServer.downloadWorldUrl | string | `nil` |  |
+| minecraftServer.enableCommandBlock | bool | `true` |  |
+| minecraftServer.eula | string | `"FALSE"` |  |
+| minecraftServer.externalIPs | string | `nil` |  |
+| minecraftServer.extraPorts | list | `[]` |  |
+| minecraftServer.forceReDownload | bool | `false` |  |
+| minecraftServer.forcegameMode | bool | `false` |  |
+| minecraftServer.forgeInstallerUrl | string | `nil` |  |
+| minecraftServer.forgeVersion | string | `nil` |  |
+| minecraftServer.ftbLegacyJavaFixer | bool | `false` |  |
+| minecraftServer.ftbServerMod | string | `nil` |  |
+| minecraftServer.gameMode | string | `"survival"` |  |
+| minecraftServer.generateStructures | bool | `true` |  |
+| minecraftServer.generatorSettings | string | `nil` |  |
+| minecraftServer.hardcore | bool | `false` |  |
+| minecraftServer.icon | string | `nil` |  |
+| minecraftServer.jvmOpts | string | `""` |  |
+| minecraftServer.jvmXXOpts | string | `""` |  |
+| minecraftServer.levelSeed | string | `nil` |  |
+| minecraftServer.levelType | string | `"DEFAULT"` |  |
+| minecraftServer.loadBalancerIP | string | `nil` |  |
+| minecraftServer.maxBuildHeight | int | `256` |  |
+| minecraftServer.maxPlayers | int | `20` |  |
+| minecraftServer.maxTickTime | int | `60000` |  |
+| minecraftServer.maxWorldSize | int | `10000` |  |
+| minecraftServer.memory | string | `"1024M"` |  |
+| minecraftServer.motd | string | `"Welcome to Minecraft on Kubernetes!"` |  |
+| minecraftServer.onlineMode | bool | `true` |  |
+| minecraftServer.ops | string | `nil` |  |
+| minecraftServer.paperDownloadUrl | string | `nil` |  |
+| minecraftServer.pvp | bool | `false` |  |
+| minecraftServer.query.enabled | bool | `false` |  |
+| minecraftServer.query.port | int | `25565` |  |
+| minecraftServer.rcon.enabled | bool | `false` |  |
+| minecraftServer.rcon.existingSecret | string | `nil` |  |
+| minecraftServer.rcon.loadBalancerIP | string | `nil` |  |
+| minecraftServer.rcon.password | string | `"CHANGEME!"` |  |
+| minecraftServer.rcon.port | int | `25575` |  |
+| minecraftServer.rcon.secretKey | string | `"rcon-password"` |  |
+| minecraftServer.rcon.serviceType | string | `"LoadBalancer"` |  |
+| minecraftServer.removeOldMods | bool | `false` |  |
+| minecraftServer.serviceAnnotations | object | `{}` |  |
+| minecraftServer.servicePort | int | `25565` |  |
+| minecraftServer.serviceType | string | `"ClusterIP"` |  |
+| minecraftServer.spawnAnimals | bool | `true` |  |
+| minecraftServer.spawnMonsters | bool | `true` |  |
+| minecraftServer.spawnNPCs | bool | `true` |  |
+| minecraftServer.spigotDownloadUrl | string | `nil` |  |
+| minecraftServer.spongeVersion | string | `nil` |  |
+| minecraftServer.type | string | `"VANILLA"` |  |
+| minecraftServer.version | string | `"LATEST"` |  |
+| minecraftServer.viewDistance | int | `10` |  |
+| minecraftServer.whitelist | string | `nil` |  |
+| minecraftServer.worldSaveName | string | `"world"` |  |
+| nodeSelector | object | `{}` |  |
+| persistence.annotations | object | `{}` |  |
+| persistence.dataDir.Size | string | `"1Gi"` |  |
+| persistence.dataDir.enabled | bool | `false` |  |
+| podAnnotations | object | `{}` |  |
+| rconServiceAnnotations | object | `{}` |  |
+| readinessProbe.failureThreshold | int | `10` |  |
+| readinessProbe.initialDelaySeconds | int | `30` |  |
+| readinessProbe.periodSeconds | int | `5` |  |
+| readinessProbe.successThreshold | int | `1` |  |
+| readinessProbe.timeoutSeconds | int | `1` |  |
+| resources.requests.cpu | string | `"500m"` |  |
+| resources.requests.memory | string | `"512Mi"` |  |
+| securityContext.fsGroup | int | `2000` |  |
+| securityContext.runAsUser | int | `1000` |  |
+| serviceAnnotations | object | `{}` |  |
+| startupProbe.enabled | bool | `false` |  |
+| startupProbe.failureThreshold | int | `30` |  |
+| startupProbe.periodSeconds | int | `10` |  |
+| strategyType | string | `"Recreate"` |  |
+| tolerations | list | `[]` |  |
 
-> **Tip**: List all releases using `helm list`
-
-## Uninstalling the Chart
-
-To uninstall/delete the `minecraft` deployment:
-
-```shell
-helm delete minecraft
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-## Configuration
-
-Refer to [values.yaml](values.yaml) for the full run-down on defaults. These are a mixture of Kubernetes and Minecraft-related directives that map to environment variables in the [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/) Docker image.
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```shell
-helm install --name minecraft \
-  --set minecraftServer.eula=true,minecraftServer.Difficulty=hard \
-  itzg/minecraft
-```
-
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
-
-```shell
-helm install --name minecraft -f values.yaml itzg/minecraft
-```
-
-> **Tip**: You can use the default [values.yaml](values.yaml)
-
-## Persistence
-
-The [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/) image stores the saved games and mods under /data.
-
-When [persistence.dataDir.enabled in values.yaml](https://github.com/itzg/minecraft-server-charts/blob/master/charts/minecraft/values.yaml#L171) is set to true PersistentVolumeClaim is created and mounted for saves but not mods. In order to enable this functionality
-you can change the values.yaml to enable persistence under the sub-sections under `persistence`.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-
-## Backups
-
-You can backup the state of your minecraft server to your local machine via the `kubectl cp` command.  
-
-```shell
-NAMESPACE=default
-POD_ID=lionhope-387ff8d-sdis9
-kubectl exec --namespace ${NAMESPACE} ${POD_ID} rcon-cli save-off
-kubectl exec --namespace ${NAMESPACE} ${POD_ID} rcon-cli save-all
-kubectl cp ${NAMESPACE}/${POD_ID}:/data .
-kubectl exec --namespace ${NAMESPACE} ${POD_ID} rcon-cli save-on
-```
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)

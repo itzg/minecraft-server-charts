@@ -2,3 +2,16 @@
 minecraftServer:
   eula: "TRUE"
 # fix in place and rebased
+extraVolumes:
+  - name: test
+    emptyDir: {}
+initContainers:
+  - name: test
+    image: busybox
+    command:
+      - touch
+    args:
+      - /test/hello
+    volumeMounts:
+      - name: test
+        mountPath: /test

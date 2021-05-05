@@ -1,37 +1,82 @@
-# Minecraft Proxy
+# minecraft-proxy
 
-[Minecraft](https://minecraft.net/en/) proxies allows for a single server to become a network of seamlessly integrated servers.
+![Version: 2.0.4](https://img.shields.io/badge/Version-2.0.4-informational?style=flat-square) ![AppVersion: SeeValues](https://img.shields.io/badge/AppVersion-SeeValues-informational?style=flat-square)
 
-[BungeeCord](https://www.spigotmc.org/wiki/about-bungeecord/) is the most well known solution in this arena, but [several](https://github.com/PaperMC/Waterfall) [other](https://github.com/PaperMC/Travertine) forks of BungeeCord and new projects such as [Velocity](https://velocitypowered.com/) have become popular choices.
+Minecraft proxy server (BungeeCord, Waterfall, Velocity, etc.)
 
-This chart relies on the [itzg/bungeecord](https://hub.docker.com/r/itzg/bungeecord) container which supports BungeeCord, Waterfall, and Velocity out of the box. It is also designed to allow the use of any other custom proxies with some additional configuration.
+**Homepage:** <https://github.com/itzg/minecraft-server-charts>
 
-## Introduction
+## Maintainers
 
-This chart creates a single Proxy Pod, Services for the BungeeCord, server and RCON.
+| Name | Email | Url |
+| ---- | ------ | --- |
+| chipwolf | hello@chipwolf.uk |  |
+| gtaylor | gtaylor@gc-taylor.com |  |
+| billimek | jeff@billimek.com |  |
+| itzg | itzgeoff@gmail.com |  |
 
-## Prerequisites
+## Source Code
 
-- 512 MB of RAM
-- Kubernetes 1.4+ with Beta APIs enabled
-- PV provisioner support in the underlying infrastructure
+* <https://github.com/itzg/minecraft-server-charts>
 
-## Configuration
+## Values
 
-Refer to [values.yaml](values.yaml) for the full run-down on defaults. These are a mixture of Kubernetes and BungeeCord-related directives that map to environment variables in the [itzg/bungeecord](https://hub.docker.com/r/itzg/bungeecord/) Docker image.
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| deploymentAnnotations | object | `{}` |  |
+| extraEnv | object | `{}` |  |
+| extraVolumes | list | `[]` |  |
+| image | string | `"itzg/bungeecord"` |  |
+| imagePullSecret | string | `""` |  |
+| imageTag | string | `"latest"` |  |
+| initContainers | list | `[]` |  |
+| livenessProbe.failureThreshold | int | `10` |  |
+| livenessProbe.initialDelaySeconds | int | `30` |  |
+| livenessProbe.periodSeconds | int | `5` |  |
+| livenessProbe.successThreshold | int | `1` |  |
+| livenessProbe.timeoutSeconds | int | `1` |  |
+| minecraftProxy.configFilePath | string | `"/server/config.yml"` |  |
+| minecraftProxy.externalIPs | string | `nil` |  |
+| minecraftProxy.jarFile | string | `nil` |  |
+| minecraftProxy.jarRevision | string | `nil` |  |
+| minecraftProxy.jarUrl | string | `nil` |  |
+| minecraftProxy.jenkinsBaseUrl | string | `nil` |  |
+| minecraftProxy.jenkinsJobId | string | `"lastStableBuild"` |  |
+| minecraftProxy.jvmOpts | string | `""` |  |
+| minecraftProxy.jvmXXOpts | string | `""` |  |
+| minecraftProxy.loadBalancerIP | string | `nil` |  |
+| minecraftProxy.memory | string | `"512M"` |  |
+| minecraftProxy.onlineMode | bool | `true` |  |
+| minecraftProxy.plugins | list | `[]` |  |
+| minecraftProxy.rcon.enabled | bool | `false` |  |
+| minecraftProxy.rcon.loadBalancerIP | string | `nil` |  |
+| minecraftProxy.rcon.password | string | `"CHANGEME!"` |  |
+| minecraftProxy.rcon.port | int | `25575` |  |
+| minecraftProxy.rcon.serviceType | string | `"LoadBalancer"` |  |
+| minecraftProxy.serviceAnnotations | object | `{}` |  |
+| minecraftProxy.serviceType | string | `"ClusterIP"` |  |
+| minecraftProxy.type | string | `"BUNGEECORD"` |  |
+| minecraftProxy.velocityVersion | string | `"1.1.0"` |  |
+| minecraftProxy.waterfallBuildId | string | `"latest"` |  |
+| minecraftProxy.waterfallVersion | string | `"latest"` |  |
+| persistence.dataDir.Size | string | `"1Gi"` |  |
+| persistence.dataDir.enabled | bool | `false` |  |
+| podAnnotations | object | `{}` |  |
+| rconServiceAnnotations | object | `{}` |  |
+| readinessProbe.failureThreshold | int | `10` |  |
+| readinessProbe.initialDelaySeconds | int | `30` |  |
+| readinessProbe.periodSeconds | int | `5` |  |
+| readinessProbe.successThreshold | int | `1` |  |
+| readinessProbe.timeoutSeconds | int | `1` |  |
+| resources.requests.cpu | string | `"500m"` |  |
+| resources.requests.memory | string | `"512Mi"` |  |
+| securityContext.fsGroup | int | `2000` |  |
+| securityContext.runAsGroup | int | `1000` |  |
+| securityContext.runAsUser | int | `1000` |  |
+| serviceAnnotations | object | `{}` |  |
+| startupProbe.enabled | bool | `false` |  |
+| startupProbe.failureThreshold | int | `30` |  |
+| startupProbe.periodSeconds | int | `10` |  |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. 
-
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart.
-
-> **Tip**: You can use the default [values.yaml](values.yaml)
-
-## Persistence
-
-The [itzg/bungeecord](https://hub.docker.com/r/itzg/bungeecord/) image stores config and state under `/server`.
-
-When [persistence.dataDir.enabled in values.yaml](https://github.com/ArchitectSMP/charts/blob/main/bungee/values.yaml#L180) is set to true PersistentVolumeClaim is created and mounted. In order to enable this functionality
-you can change the values.yaml to enable persistence under the sub-sections under `persistence`.
-The config file for the server can be added to the persistent volume manually, or optionally, you can set it by amending the config file path (if your proxy type has a different config path) and pasting your config under [bungeecord.configFilePath and bungeeCord.config in values.yaml](https://github.com/ArchitectSMP/charts/blob/main/bungee/values.yaml#L103).
-
-> *"If persistence is not enabled, an emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)

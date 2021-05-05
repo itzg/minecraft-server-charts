@@ -37,20 +37,18 @@ readinessProbe:
 #         readOnly: true
 initContainers: []
 
+# extraVolumeMounts:
+#   - name: nfs
+#     mountPath: /mnt/volume
+#     readOnly: true
 # extraVolumes:
-#   - volumeMounts:
-#       - name: nfs
-#         mountPath: /mnt/volume
-#         readOnly: true
-#     volumes:
-#       - name: nfs
-#         server: some.nfs.server.com
-#         path: /
-#         mountOptions:
-#           - port=2049
-#           - hard
-#           - vers=4
-extraVolumes: []
+#   - name: nfs
+#     server: some.nfs.server.com
+#     path: /
+#     mountOptions:
+#       - port=2049
+#       - hard
+#       - vers=4
 
 minecraftServer:
   # This must be overridden, since we can't accept this for the user.
