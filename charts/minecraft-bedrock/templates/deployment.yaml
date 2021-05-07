@@ -123,8 +123,8 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /data
-        {{- range .Values.extraVolumes }}
-        {{- toYaml .volumeMounts | nindent 8 }}
+        {{- if .Values.extraVolumeMounts }}
+        {{- toYaml .Values.extraVolumeMounts | nindent 8 }}
         {{- end }}
       volumes:
       - name: datadir
@@ -138,8 +138,8 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
-      {{- range .Values.extraVolumes }}
-      {{- toYaml .volumes | nindent 6 }}
+      {{- if .Values.extraVolumes }}
+      {{- toYaml .Values.extraVolumes | nindent 6 }}
       {{- end }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
