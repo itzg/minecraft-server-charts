@@ -66,7 +66,7 @@ you can change the values.yaml to enable persistence under the sub-sections unde
 
 ## Backups
 
-You can backup the state of your minecraft server to your local machine via the `kubectl cp` command.  
+You can backup the state of your minecraft server to your local machine via the `kubectl cp` command.
 
 ```shell
 NAMESPACE=default
@@ -76,3 +76,11 @@ kubectl exec --namespace ${NAMESPACE} ${POD_ID} rcon-cli save-all
 kubectl cp ${NAMESPACE}/${POD_ID}:/data .
 kubectl exec --namespace ${NAMESPACE} ${POD_ID} rcon-cli save-on
 ```
+
+## Tutorials
+
+For a quickstart guide to setting up a Kubernetes cluster and deploying
+Minecraft servers using this Helm Chart see:
+
+[gilesknap/k3s-minecraft](https://github.com/gilesknap/k3s-minecraft)
+
