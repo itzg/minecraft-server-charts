@@ -128,6 +128,13 @@ spec:
           containerPort: 25575
           protocol: TCP
         {{- end }}
+        {{- range .Values.minecraftProxy.extraPorts }}
+        {{- if .service.enabled }}
+        - name: {{ .name }}
+          containerPort: {{ .containerPort }}
+          protocol: {{ .protocol }}
+        {{- end }}
+        {{- end }}
         volumeMounts:
         - name: datadir
           mountPath: /server
