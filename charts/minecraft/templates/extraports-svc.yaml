@@ -35,7 +35,7 @@ spec:
   - name: {{ .name }}
     port: {{ .service.port }}
     targetPort: {{ .name }}
-    protocol: TCP
+    protocol: {{ .protocol }}
   selector:
     app: {{ $minecraftFullname }}
 {{- end }}
