@@ -193,6 +193,7 @@ minecraftServer:
     #
     # - name: map
     #   containerPort: 8123
+    #   protocol: TCP
     #   service:
     #     enabled: false
     #     annotations: {}
