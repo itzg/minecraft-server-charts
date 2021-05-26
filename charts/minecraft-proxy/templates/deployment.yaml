@@ -132,7 +132,11 @@ spec:
         {{- if .service.enabled }}
         - name: {{ .name }}
           containerPort: {{ .containerPort }}
+          {{- if .protocol }}
           protocol: {{ .protocol }}
+          {{- else }}
+          protocol: TCP
+          {{- end }}
         {{- end }}
         {{- end }}
         volumeMounts:
