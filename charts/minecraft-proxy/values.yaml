@@ -162,6 +162,34 @@ minecraftProxy:
     ## Set the externalTrafficPolicy in the Service to either Cluster or Local
     # externalTrafficPolicy: Cluster
 
+  extraPorts: []
+    # These options allow you to expose another port from the Minecraft proxy, plugins such
+    # as NuVotifier (8192) will require this for incoming webhooks
+    #
+    # - name: vote
+    #   containerPort: 8192
+    #   protocol: TCP
+    #   service:
+    #     enabled: false
+    #     annotations: {}
+    #     type: ClusterIP
+    #     loadBalancerIP: ""
+    #     loadBalancerSourceRanges: []
+    #     externalTrafficPolicy: Cluster
+    #     port: 8192
+    #   ingress:
+    #     enabled: false
+    #     annotations:
+    #       kubernetes.io/ingress.class: nginx
+    #       kubernetes.io/tls-acme: "true"
+    #     hosts:
+    #       - name: vote.local
+    #         path: /
+    #     tls:
+    #       - secretName: vote-tls
+    #         hosts:
+    #           - vote.local
+
 ## Additional minecraft container environment variables
 ##
 extraEnv: {}
