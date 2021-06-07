@@ -1,6 +1,6 @@
 {{- $proxyFullname := include "proxy.fullname" . }}
 {{- range .Values.minecraftProxy.extraPorts }}
-{{- if default "" .service.enabled }}
+{{- if and .service.enabled (not .service.embedded) }}
 {{- $serviceName := printf "%s-%s" $proxyFullname .name }}
 ---
 apiVersion: v1
