@@ -171,6 +171,7 @@ minecraftProxy:
     #   protocol: TCP
     #   service:
     #     enabled: false
+    #     embedded: false
     #     annotations: {}
     #     type: ClusterIP
     #     loadBalancerIP: ""

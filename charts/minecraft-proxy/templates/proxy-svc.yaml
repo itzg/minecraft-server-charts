@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -35,6 +36,18 @@ spec:
     nodePort: {{ .Values.minecraftProxy.nodePort }}
     {{- end }}
     protocol: TCP
+  {{- range .Values.minecraftProxy.extraPorts }}
+  {{- if and .service.enabled .service.embedded }}
+  - name: {{ .name }}
+    port: {{ .service.port }}
+    targetPort: {{ .name }}
+    {{- if .protocol }}
+    protocol: {{ .protocol }}
+    {{- else }}
+    protocol: TCP
+    {{- end }}
+  {{- end }}
+  {{- end }}
   selector:
     app: {{ template "proxy.fullname" . }}
   {{- if .Values.minecraftProxy.externalIPs }}
