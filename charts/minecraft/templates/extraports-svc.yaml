@@ -1,6 +1,6 @@
 {{- $minecraftFullname := include "minecraft.fullname" . }}
 {{- range .Values.minecraftServer.extraPorts }}
-{{- if default "" .service.enabled }}
+{{- if and .service.enabled (not .service.embedded) }}
 {{- $serviceName := printf "%s-%s" $minecraftFullname .name }}
 ---
 apiVersion: v1
