@@ -127,6 +127,8 @@ minecraftServer:
   spawnMonsters: true
   # Determines if villagers will be spawned.
   spawnNPCs: true
+  # Sets the area that non-ops can not edit (0 to disable)
+  spawnProtection: 16
   # Max view distance (in chunks).
   viewDistance: 10
   # Define this if you want a specific map generation seed.
