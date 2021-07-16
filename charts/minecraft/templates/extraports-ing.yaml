@@ -4,7 +4,7 @@
 {{- $servicePort := .service.port }}
 {{- $serviceName := printf "%s-%s" $minecraftFullname .name }}
 ---
-apiVersion: {{ include "minecraft.ingress.apiVersion" . }}
+apiVersion: {{ include "minecraft.ingress.apiVersion" $ }}
 kind: Ingress
 metadata:
   name: {{ $serviceName }}
