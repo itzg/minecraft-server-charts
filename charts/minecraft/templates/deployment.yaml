@@ -228,6 +228,9 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /data
+          {{- if (and .Values.persistence.dataDir.enabled .Values.persistence.dataDir.subPath) }}
+          subPath: {{ .Values.persistence.dataDir.subPath }}
+          {{- end }}
         {{- range .Values.extraVolumes }}
         {{- toYaml .volumeMounts | nindent 8 }}
         {{- end }}
