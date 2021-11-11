@@ -187,7 +187,8 @@ minecraftServer:
     ## Set the externalTrafficPolicy in the Service to either Cluster or Local
     # externalTrafficPolicy: Cluster
 
-  extraPorts: []
+  extraPorts:
+    []
     # These options allow you to expose another port from the Minecraft server, plugins such
     # as dynmap (8123) and bluemap (8100) will require this for access to their web interfaces
     #
@@ -222,8 +223,20 @@ minecraftServer:
     port: 25565
 
 ## Additional minecraft container environment variables
+## Values can be either variable values or `valueFrom` yaml
 ##
-extraEnv: {}
+extraEnv:
+  {}
+  # some_variable: some value
+  # another_variable:
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: status.hostIP
+
+## Additional environment variables to add to the minecraft container from
+## ConfigMaps and Secrets
+##
+envFrom: []
 
 persistence:
   annotations: {}
