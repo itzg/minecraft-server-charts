@@ -65,6 +65,11 @@ spec:
                 # force health check against IPv4 port
                 - 127.0.0.1
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+
+      {{- with .Values.envFrom }}
+        envFrom:
+          {{- . | toYaml | nindent 10 }}{{ end }}
+
         env:
         - name: EULA
           value: {{ .Values.minecraftServer.eula | quote }}
@@ -110,10 +115,19 @@ spec:
           value: {{ .Values.minecraftServer.texturepackRequired | quote }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}
-        {{- range $key, $value := .Values.extraEnv }}
+
+      {{- range $key, $value := .Values.extraEnv }}
+      {{-   if kindIs "map" $value }}
+      {{-     if hasKey $value "valueFrom" }}
         - name: {{ $key }}
-          value: {{ $value }}
-        {{- end }}
+          valueFrom:
+            {{- $value.valueFrom | toYaml | nindent 12 }}
+      {{-     end }}
+      {{-   else }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+      {{-   end }}
+      {{- end }}
 
         ports:
         - name: minecraft
