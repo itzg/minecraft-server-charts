@@ -9,6 +9,34 @@ entries:
           url: https://hub.docker.com/r/itzg/minecraft-server
     apiVersion: v1
     appVersion: SeeValues
+    created: "2021-11-22T23:57:06.799138291Z"
+    description: Minecraft server
+    digest: eb1011bb3935572ff2f3fbf8b227316f1f9ba4c19b884234891efe3e8259c095
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-3.6.0/minecraft-3.6.0.tgz
+    version: 3.6.0
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-server
+    apiVersion: v1
+    appVersion: SeeValues
     created: "2021-11-13T22:09:09.594829041Z"
     description: Minecraft server
     digest: 0875d82f0e1ea4cd8d51789496ed8ba59ae6df593ff56555a124ccb64a8142f5
@@ -1195,6 +1223,37 @@ entries:
     - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-bedrock-1.0.0/minecraft-bedrock-1.0.0.tgz
     version: 1.0.0
   minecraft-proxy:
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-bungeecord
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/bungeecord
+    apiVersion: v1
+    appVersion: SeeValues
+    created: "2021-11-22T23:57:06.919189292Z"
+    description: Minecraft proxy server (BungeeCord, Waterfall, Velocity, etc.)
+    digest: fb9f05b5ec32fbea552f0894598a68b79b8f900843f79765f2e13695c815786c
+    home: https://github.com/itzg/minecraft-server-charts
+    keywords:
+    - proxy
+    - game
+    - server
+    maintainers:
+    - email: hello@chipwolf.uk
+      name: chipwolf
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-proxy
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-proxy-2.3.0/minecraft-proxy-2.3.0.tgz
+    version: 2.3.0
   - annotations:
       artifacthub.io/links: |
         - name: Image source
