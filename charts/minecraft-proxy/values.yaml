@@ -179,9 +179,11 @@ minecraftProxy:
     #     externalTrafficPolicy: Cluster
     #     port: 8192
     #   ingress:
+    #     ingressClassName: nginx
     #     enabled: false
     #     annotations:
-    #       kubernetes.io/ingress.class: nginx
+    ## Deprecated way for specifying the ingressClass. Kube.version < 1.18
+    ##       kubernetes.io/ingress.class: nginx
     #       kubernetes.io/tls-acme: "true"
     #     hosts:
     #       - name: vote.local
