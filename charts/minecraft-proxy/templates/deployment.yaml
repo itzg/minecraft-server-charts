@@ -20,6 +20,9 @@ spec:
         app: {{ template "proxy.fullname" . }}
       annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
     spec:
+      {{- if .Values.serviceAcccoutName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
       {{- if .Values.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecret }}
