@@ -147,6 +147,8 @@ spec:
           value: {{ .Values.minecraftServer.spawnMonsters | quote }}
         - name: SPAWN_NPCS
           value: {{ .Values.minecraftServer.spawnNPCs | quote }}
+        - name: SPAWN_PROTECTION
+          value: {{ .Values.minecraftServer.spawnProtection | quote }}
         - name: VIEW_DISTANCE
           value: {{ .Values.minecraftServer.viewDistance | quote }}
         - name: SEED
