@@ -43,7 +43,7 @@ spec:
       {{- toYaml .Values.initContainers | nindent 8 }}
       {{- end }}
       containers:
-      {{- if .Values.mcbackup.enabled and .Values.minecraftServer.rcon.enabled }}
+      {{- if and .Values.mcbackup.enabled .Values.minecraftServer.rcon.enabled }}
       - name: {{ template "minecraft.fullname" . }}-mc-backup
         image: "{{ .Values.mcbackup.image }}:{{ .Values.mcbackup.imageTag }}"
         imagePullPolicy: Always
