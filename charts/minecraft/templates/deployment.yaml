@@ -333,7 +333,7 @@ spec:
       - name: backupdir
       {{- if and .Values.mcbackup.persistence.backupDir.enabled .Values.mcbackup.enabled }}
         persistentVolumeClaim:
-        {{- if .Values.mcbackup.mcbackup.persistence.backupDir.existingClaim }}
+        {{- if .Values.mcbackup.persistence.backupDir.existingClaim }}
           claimName: {{ .Values.mcbackup.persistence.backupDir.existingClaim }}
         {{- else }}
           claimName: {{ template "minecraft.fullname" . }}-backupDir
