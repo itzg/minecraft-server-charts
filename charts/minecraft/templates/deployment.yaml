@@ -312,7 +312,6 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /data
-        volumeMounts:
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
         {{- range .Values.extraVolumes }}
