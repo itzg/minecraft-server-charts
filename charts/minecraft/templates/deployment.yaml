@@ -43,6 +43,77 @@ spec:
       {{- toYaml .Values.initContainers | nindent 8 }}
       {{- end }}
       containers:
+      {{- if .Values.mcbackup.enabled and .Values.minecraftServer.rcon.enabled }}
+      - name: {{ template "minecraft.fullname" . }}-mc-backup
+        image: "{{ .Values.mcbackup.image }}:{{ .Values.mcbackup.imageTag }}"
+        imagePullPolicy: Always
+        resources:
+{{ toYaml .Values.mcbackup.resources | indent 10 }}
+        env:
+        - name: SRC_DIR
+          value: {{ default "/data" .Values.monitor.gather_interval | quote }}
+        - name: BACKUP_NAME
+          value: {{ default "world" .Values.monitor.gather_interval | quote }}
+        - name: INITIAL_DELAY
+          value: {{ default "2m" .Values.monitor.gather_interval | quote }}
+        - name: BACKUP_INTERVAL
+          value: {{ default "24h" .Values.monitor.gather_interval | quote }}
+        - name: PAUSE_IF_NO_PLAYERS
+          value: {{ default "false" .Values.monitor.gather_interval | quote }}
+        - name: SERVER_PORT
+          value: 25565
+        - name: RCON_HOST
+          value: "localhost"
+        - name: RCON_PORT
+          value: {{ .Values.minecraftServer.rcon.port }}
+        - name: RCON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.minecraftServer.rcon.existingSecret | default (include "minecraft.fullname" .) }}
+              key: {{ .Values.minecraftServer.rcon.secretKey | default "rcon-password" }}
+        - name: RCON_RETRIES
+          value: {{ default 5 .Values.monitor.gather_interval }}
+        - name: RCON_RETRY_INTERVAL
+          value: {{ default "10s" .Values.monitor.gather_interval | quote }}
+        - name: EXCLUDES
+          value: {{ default "*.jar,cache,logs" .Values.monitor.gather_interval | quote }}
+
+        {{- if eq .Values.mcbackup.backupMethod "tar" or "rclone" }}
+        - name: DEST_DIR
+          value: {{ default "10s" .Values.monitor.gather_interval | quote }}
+
+        - name: LINK_LATEST
+          value: {{ .Values.monitor.gather_telegraf_address }}
+
+        - name: TAR_COMPRESS_METHOD
+          value: {{ default ":25565" .Values.monitor.gather_servers | quote }}
+
+        - name: TAR_COMPRESS_METHOD
+          value: {{ default ":25565" .Values.monitor.gather_servers | quote }}
+
+        {{- if eq .Values.mcbackup.backupMethod "rclone" }}
+        - name: RCLONE_REMOTE
+          value: "9225"
+
+        - name: RCLONE_COMPRESS_METHOD
+          value: 
+        {{- end }}
+        {{- end }}
+
+        {{- if eq .Values.mcbackup.backupMethod "restic" }}
+        {{- range $key, $value := .Values.mcbackup.resticEnvs }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+
+
+        {{- range $key, $value := .Values.mcbackup.extraEnv }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+
+      {{- end }}
       - name: {{ template "minecraft.fullname" . }}
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: Always
