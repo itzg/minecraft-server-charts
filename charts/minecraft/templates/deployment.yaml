@@ -107,7 +107,7 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /data
-        volumeMounts:
+          readOnly: true
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
         {{- range .Values.extraVolumes }}
