@@ -53,7 +53,7 @@ spec:
         - name: SRC_DIR
           value: "/data"
         - name: BACKUP_NAME
-          value: {{ default "world" .Values.worldSaveName | quote }}
+          value: {{ default "world" .Values.minecraftServer.worldSaveName | quote }}
         - name: INITIAL_DELAY
           value: {{ default "2m" .Values.mcbackup.initialDelay | quote }}
         - name: BACKUP_INTERVAL
