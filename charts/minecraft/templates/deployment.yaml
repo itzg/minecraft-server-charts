@@ -77,7 +77,7 @@ spec:
           value: {{ default "10s" .Values.mcbackup.rconRetryInterval | quote }}
         - name: EXCLUDES
           value: {{ default "*.jar,cache,logs" .Values.mcbackup.excludes | quote }}
-        {{- if eq .Values.mcbackup.backupMethod "tar" or "rclone" }}
+        {{- if eq .Values.mcbackup.backupMethod "tar" or .Values.mcbackup.backupMethod "rclone" }}
         - name: DEST_DIR
           value: {{ default "/backups" .Values.mcbackup.destDir | quote }}
         - name: LINK_LATEST
