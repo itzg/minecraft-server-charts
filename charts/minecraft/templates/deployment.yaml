@@ -51,15 +51,15 @@ spec:
 {{ toYaml .Values.mcbackup.resources | indent 10 }}
         env:
         - name: SRC_DIR
-          value: {{ default "/data" .Values.monitor.gather_interval | quote }}
+          value: "/data"
         - name: BACKUP_NAME
-          value: {{ default "world" .Values.monitor.gather_interval | quote }}
+          value: {{ default "world" .Values.mcbackup.gather_interval | quote }}
         - name: INITIAL_DELAY
-          value: {{ default "2m" .Values.monitor.gather_interval | quote }}
+          value: {{ default "2m" .Values.mcbackup.initialDelay | quote }}
         - name: BACKUP_INTERVAL
-          value: {{ default "24h" .Values.monitor.gather_interval | quote }}
+          value: {{ default "24h" .Values.mcbackup.backupInterval | quote }}
         - name: PAUSE_IF_NO_PLAYERS
-          value: {{ default "false" .Values.monitor.gather_interval | quote }}
+          value: {{ default "false" .Values.mcbackup.pauseIfNoPlayers | quote }}
         - name: SERVER_PORT
           value: 25565
         - name: RCON_HOST
@@ -72,20 +72,20 @@ spec:
               name: {{ .Values.minecraftServer.rcon.existingSecret | default (include "minecraft.fullname" .) }}
               key: {{ .Values.minecraftServer.rcon.secretKey | default "rcon-password" }}
         - name: RCON_RETRIES
-          value: {{ default 5 .Values.monitor.gather_interval }}
+          value: {{ default 5 .Values.mcbackup.rconRetries }}
         - name: RCON_RETRY_INTERVAL
-          value: {{ default "10s" .Values.monitor.gather_interval | quote }}
+          value: {{ default "10s" .Values.mcbackup.rconRetryInterval | quote }}
         - name: EXCLUDES
-          value: {{ default "*.jar,cache,logs" .Values.monitor.gather_interval | quote }}
+          value: {{ default "*.jar,cache,logs" .Values.mcbackup.excludes | quote }}
         {{- if eq .Values.mcbackup.backupMethod "tar" or "rclone" }}
         - name: DEST_DIR
-          value: {{ default "10s" .Values.monitor.gather_interval | quote }}
+          value: {{ default "/backups" .Values.mcbackup.destDir | quote }}
         - name: LINK_LATEST
-          value: {{ .Values.monitor.gather_telegraf_address }}
+          value: {{ default "false" .Values.mcbackup.linkLatest }}
         - name: TAR_COMPRESS_METHOD
-          value: {{ default ":25565" .Values.monitor.gather_servers | quote }}
-        - name: TAR_COMPRESS_METHOD
-          value: {{ default ":25565" .Values.monitor.gather_servers | quote }}
+          value: {{ default "gzip" .Values.mcbackup.compressMethod | quote }}
+        - name: ZSTD_PARAMETERS
+          value: {{ default "-3 --long=25 --single-thread" .Values.mcbackup.zstdParameters | quote }}
         {{- if eq .Values.mcbackup.backupMethod "rclone" }}
         - name: RCLONE_REMOTE
           value: "9225"
