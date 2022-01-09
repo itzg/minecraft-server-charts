@@ -336,7 +336,7 @@ spec:
         {{- if .Values.mcbackup.persistence.backupDir.existingClaim }}
           claimName: {{ .Values.mcbackup.persistence.backupDir.existingClaim }}
         {{- else }}
-          claimName: {{ template "minecraft.fullname" . }}-backupDir
+          claimName: {{ template "minecraft.fullname" . }}-backupdir
         {{- end }}
       {{- else }}
         emptyDir: {}
