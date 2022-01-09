@@ -61,7 +61,7 @@ spec:
         - name: PAUSE_IF_NO_PLAYERS
           value: {{ default "false" .Values.mcbackup.pauseIfNoPlayers | quote }}
         - name: SERVER_PORT
-          value: 25565
+          value: "25565"
         - name: RCON_HOST
           value: "localhost"
         - name: RCON_PORT
