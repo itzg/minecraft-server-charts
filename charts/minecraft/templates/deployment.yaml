@@ -65,14 +65,14 @@ spec:
         - name: RCON_HOST
           value: "localhost"
         - name: RCON_PORT
-          value: {{ .Values.minecraftServer.rcon.port }}
+          value: {{ .Values.minecraftServer.rcon.port | quote }}
         - name: RCON_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ .Values.minecraftServer.rcon.existingSecret | default (include "minecraft.fullname" .) }}
               key: {{ .Values.minecraftServer.rcon.secretKey | default "rcon-password" }}
         - name: RCON_RETRIES
-          value: {{ default 5 .Values.mcbackup.rconRetries }}
+          value: {{ default 5 .Values.mcbackup.rconRetries | quote }}
         - name: RCON_RETRY_INTERVAL
           value: {{ default "10s" .Values.mcbackup.rconRetryInterval | quote }}
         - name: EXCLUDES
@@ -81,7 +81,7 @@ spec:
         - name: DEST_DIR
           value: {{ default "/backups" .Values.mcbackup.destDir | quote }}
         - name: LINK_LATEST
-          value: {{ default "false" .Values.mcbackup.linkLatest }}
+          value: {{ default "false" .Values.mcbackup.linkLatest | quote }}
         - name: TAR_COMPRESS_METHOD
           value: {{ default "gzip" .Values.mcbackup.compressMethod | quote }}
         - name: ZSTD_PARAMETERS
