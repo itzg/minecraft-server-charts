@@ -77,6 +77,8 @@ spec:
           value: {{ default "10s" .Values.mcbackup.rconRetryInterval | quote }}
         - name: EXCLUDES
           value: {{ default "*.jar,cache,logs" .Values.mcbackup.excludes | quote }}
+        -name: BACKUP_METHOD
+          value: {{ default "tar" .Values.mcbackup.backupMethod | quote }}
         {{- if or (eq .Values.mcbackup.backupMethod "tar") (eq .Values.mcbackup.backupMethod "rclone") }}
         - name: DEST_DIR
           value: {{ default "/backups" .Values.mcbackup.destDir | quote }}
@@ -99,7 +101,6 @@ spec:
           value: {{ $value | quote }}
         {{- end }}
         {{- end }}
-
         {{- range $key, $value := .Values.mcbackup.extraEnv }}
         - name: {{ $key }}
           value: {{ $value | quote }}
