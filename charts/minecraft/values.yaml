@@ -320,6 +320,7 @@ mcbackup:
   rcloneRemote:
   rcloneCompressMethod: gzip
 
+  # see https://rclone.org/ for details
   #this value is evaluated as a template
   rcloneConfig:
 
