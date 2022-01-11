@@ -295,8 +295,6 @@ mcbackup:
   # logs folder and cache (used by i.e. PaperMC server).
   excludes: "*.jar,cache,logs"
 
-
-
   # backup methods, see https://github.com/itzg/docker-mc-backup e.g. tar, rclone, restic
   backupMethod: tar
   # tar and rclone methods
