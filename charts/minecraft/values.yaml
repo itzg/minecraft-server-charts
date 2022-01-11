@@ -273,9 +273,6 @@ mcbackup:
   image: itzg/mc-backup
   imageTag: latest
 
-  # srcDir:
-  # backupName:
-
   #  wait 2 minutes before starting
   initialDelay: 2m
 
@@ -289,10 +286,6 @@ mcbackup:
 
   # is set to a positive number, it'll delete old .tgz backup files from DEST_DIR. By default deletes backups older than a week.
   pruneBackupsDays: 7
-  # serverPort:
-  # rconHost:
-  # rconPort:
-  # rconPassword:
 
   # Set to a negative value to retry indefinitely
   rconRetries: 5
@@ -302,8 +295,7 @@ mcbackup:
   # logs folder and cache (used by i.e. PaperMC server).
   excludes: "*.jar,cache,logs"
 
-  # Can be set to the timezone to use for logging
-  # tz:
+
 
   # backup methods, see https://github.com/itzg/docker-mc-backup e.g. tar, rclone, restic
   backupMethod: tar
@@ -335,6 +327,8 @@ mcbackup:
     # RESTIC_PASSWORD: restic-password
 
   extraEnvs: []
+    # Can be set to the timezone to use for logging
+    # tz:
 
   resources:
     requests:
