@@ -96,6 +96,12 @@ spec:
         {{- end }}
         {{- end }}
         {{- if eq .Values.mcbackup.backupMethod "restic" }}
+        - name: RESTIC_REPOSITORY
+          value: {{ .Values.mcbackup.resticRepository | quote }}
+        - name: RESTIC_ADDITIONAL_TAGS
+          value: {{ default "mc_backups" .Values.mcbackup.resticAdditionalTags | quote }}
+        - name: PRUNE_RESTIC_RETENTION
+          value: {{ default "--keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly" .Values.mcbackup.pruneResticRetention | quote }}
         {{- range $key, $value := .Values.mcbackup.resticEnvs }}
         - name: {{ $key }}
           value: {{ $value | quote }}
