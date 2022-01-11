@@ -335,7 +335,6 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
-      {{- if and .Values.mcbackup.enabled }}
       - name: backupdir
       {{- if and .Values.mcbackup.persistence.backupDir.enabled .Values.mcbackup.enabled }}
         persistentVolumeClaim:
@@ -354,7 +353,6 @@ spec:
             items:
             - key: rclone.conf
               path: rclone.conf
-      {{- end }}
       {{- end }}
       {{- range .Values.extraVolumes }}
       {{- toYaml .volumes | nindent 6 }}

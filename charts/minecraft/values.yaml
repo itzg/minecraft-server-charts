@@ -321,7 +321,7 @@ mcbackup:
   rcloneCompressMethod: gzip
 
   # see https://rclone.org/ for details
-  #this value is evaluated as a template
+  # this value is evaluated as a template
   rcloneConfig:
 
   resticRepository:
