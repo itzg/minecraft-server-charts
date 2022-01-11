@@ -293,7 +293,7 @@ mcbackup:
   # rconHost:
   # rconPort:
   # rconPassword:
-  
+
   # Set to a negative value to retry indefinitely
   rconRetries: 5
   rconRetryInterval: 10s
@@ -301,7 +301,7 @@ mcbackup:
   # is a comma-separated list of glob(3) patterns to exclude from backups. By default excludes all jar files (plugins, server files),
   # logs folder and cache (used by i.e. PaperMC server).
   excludes: "*.jar,cache,logs"
-  
+
   # Can be set to the timezone to use for logging
   # tz:
 
@@ -321,14 +321,14 @@ mcbackup:
   rcloneCompressMethod: gzip
 
   # rcloneConfig: |-
-  #  rclone.conf: 
- 
+  #  rclone.conf:
+
   resticRepository:
   # variable to define a space separated list of additional restic tags. see https://hub.docker.com/r/itzg/mc-backup
   resticAdditionalTags: "mc_backups"
   # see https://restic.readthedocs.io/en/latest/060_forget.html
   pruneResticRetention: "--keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
-  
+
   # At least one of RESTIC_PASSWORD* env variables need to be defined, see https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html
   resticEnvs: []
     # RESTIC_PASSWORD: restic-password
