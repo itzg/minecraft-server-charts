@@ -111,6 +111,10 @@ spec:
           readOnly: true
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
+        {{- if eq .Values.mcbackup.backupMethod "rclone" }}
+        - name: rclone-config
+          mountPath: /config/rclone
+        {{- end }}
         {{- range .Values.extraVolumes }}
         {{- toYaml .volumeMounts | nindent 8 }}
         {{- end }}
@@ -331,6 +335,7 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
+      {{- if and .Values.mcbackup.enabled }}
       - name: backupdir
       {{- if and .Values.mcbackup.persistence.backupDir.enabled .Values.mcbackup.enabled }}
         persistentVolumeClaim:
@@ -341,6 +346,15 @@ spec:
         {{- end }}
       {{- else }}
         emptyDir: {}
+      {{- end }}
+      {{- if eq .Values.mcbackup.backupMethod "rclone" }}
+        - name: rclone-config
+          configMap:
+            name: {{ template "minecraft.fullname" . }}-rclone-config
+            items:
+            - key: rclone.conf
+              path: rclone.conf
+      {{- end }}
       {{- end }}
       {{- range .Values.extraVolumes }}
       {{- toYaml .volumes | nindent 6 }}

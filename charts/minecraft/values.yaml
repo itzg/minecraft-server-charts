@@ -320,8 +320,8 @@ mcbackup:
   rcloneRemote:
   rcloneCompressMethod: gzip
 
-  # rcloneConfig: |-
-  #  rclone.conf:
+  #this value is evaluated as a template
+  rcloneConfig:
 
   resticRepository:
   # variable to define a space separated list of additional restic tags. see https://hub.docker.com/r/itzg/mc-backup
