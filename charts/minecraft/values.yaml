@@ -273,7 +273,7 @@ mcbackup:
   image: itzg/mc-backup
   imageTag: latest
 
-  # srcDir: 
+  # srcDir:
   # backupName:
 
   #  wait 2 minutes before starting
@@ -298,12 +298,12 @@ mcbackup:
   rconRetries: 5
   rconRetryInterval: 10s
 
-  # is a comma-separated list of glob(3) patterns to exclude from backups. By default excludes all jar files (plugins, server files), 
+  # is a comma-separated list of glob(3) patterns to exclude from backups. By default excludes all jar files (plugins, server files),
   # logs folder and cache (used by i.e. PaperMC server).
   excludes: "*.jar,cache,logs"
   
   # Can be set to the timezone to use for logging
-  # tz: 
+  # tz:
 
   # backup methods, see https://github.com/itzg/docker-mc-backup e.g. tar, rclone, restic
   backupMethod: tar
@@ -313,7 +313,7 @@ mcbackup:
   linkLatest: "false"
   # is the compression method used by tar. Valid value: gzip bzip2 zstd
   compressMethod: "gzip"
-  # sets the parameters for zstd compression. The --long parameter affects RAM requirements for both compression and decompression 
+  # sets the parameters for zstd compression. The --long parameter affects RAM requirements for both compression and decompression
   # (the default of 25 means 2^25 bytes = 32 MB).
   zstdParameters: "-3 --long=25 --single-thread"
   # the name of the remote you've configured in your rclone.conf

@@ -90,9 +90,9 @@ spec:
           value: {{ default "-3 --long=25 --single-thread" .Values.mcbackup.zstdParameters | quote }}
         {{- if eq .Values.mcbackup.backupMethod "rclone" }}
         - name: RCLONE_REMOTE
-          value: "9225"
+          value: {{ .Values.mcbackup.rcloneRemote | quote }}
         - name: RCLONE_COMPRESS_METHOD
-          value: 
+          value: {{ default "gzip" .Values.mcbackup.rcloneCompressMethod | quote }}
         {{- end }}
         {{- end }}
         {{- if eq .Values.mcbackup.backupMethod "restic" }}
@@ -315,6 +315,7 @@ spec:
           mountPath: /data
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
+          readOnly: true
         {{- range .Values.extraVolumes }}
         {{- toYaml .volumeMounts | nindent 8 }}
         {{- end }}
