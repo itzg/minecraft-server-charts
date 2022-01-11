@@ -347,12 +347,12 @@ spec:
         emptyDir: {}
       {{- end }}
       {{- if eq .Values.mcbackup.backupMethod "rclone" }}
-        - name: rclone-config
-          configMap:
-            name: {{ template "minecraft.fullname" . }}-rclone-config
-            items:
-            - key: rclone.conf
-              path: rclone.conf
+      - name: rclone-config
+        configMap:
+          name: {{ template "minecraft.fullname" . }}-rclone-config
+          items:
+          - key: rclone.conf
+            path: rclone.conf
       {{- end }}
       {{- range .Values.extraVolumes }}
       {{- toYaml .volumes | nindent 6 }}
