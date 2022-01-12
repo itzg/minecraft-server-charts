@@ -43,6 +43,88 @@ spec:
       {{- toYaml .Values.initContainers | nindent 8 }}
       {{- end }}
       containers:
+      {{- if and .Values.mcbackup.enabled .Values.minecraftServer.rcon.enabled }}
+      - name: {{ template "minecraft.fullname" . }}-mc-backup
+        image: "{{ .Values.mcbackup.image }}:{{ .Values.mcbackup.imageTag }}"
+        imagePullPolicy: Always
+        resources:
+{{ toYaml .Values.mcbackup.resources | indent 10 }}
+        env:
+        - name: SRC_DIR
+          value: "/data"
+        - name: BACKUP_NAME
+          value: {{ default "world" .Values.minecraftServer.worldSaveName | quote }}
+        - name: INITIAL_DELAY
+          value: {{ default "2m" .Values.mcbackup.initialDelay | quote }}
+        - name: BACKUP_INTERVAL
+          value: {{ default "24h" .Values.mcbackup.backupInterval | quote }}
+        - name: PAUSE_IF_NO_PLAYERS
+          value: {{ default "false" .Values.mcbackup.pauseIfNoPlayers | quote }}
+        - name: SERVER_PORT
+          value: "25565"
+        - name: RCON_HOST
+          value: "localhost"
+        - name: RCON_PORT
+          value: {{ .Values.minecraftServer.rcon.port | quote }}
+        - name: RCON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.minecraftServer.rcon.existingSecret | default (include "minecraft.fullname" .) }}
+              key: {{ .Values.minecraftServer.rcon.secretKey | default "rcon-password" }}
+        - name: RCON_RETRIES
+          value: {{ default 5 .Values.mcbackup.rconRetries | quote }}
+        - name: RCON_RETRY_INTERVAL
+          value: {{ default "10s" .Values.mcbackup.rconRetryInterval | quote }}
+        - name: EXCLUDES
+          value: {{ default "*.jar,cache,logs" .Values.mcbackup.excludes | quote }}
+        - name: BACKUP_METHOD
+          value: {{ default "tar" .Values.mcbackup.backupMethod | quote }}
+        {{- if or (eq .Values.mcbackup.backupMethod "tar") (eq .Values.mcbackup.backupMethod "rclone") }}
+        - name: DEST_DIR
+          value: {{ default "/backups" .Values.mcbackup.destDir | quote }}
+        - name: LINK_LATEST
+          value: {{ default "false" .Values.mcbackup.linkLatest | quote }}
+        - name: TAR_COMPRESS_METHOD
+          value: {{ default "gzip" .Values.mcbackup.compressMethod | quote }}
+        - name: ZSTD_PARAMETERS
+          value: {{ default "-3 --long=25 --single-thread" .Values.mcbackup.zstdParameters | quote }}
+        {{- if eq .Values.mcbackup.backupMethod "rclone" }}
+        - name: RCLONE_REMOTE
+          value: {{ .Values.mcbackup.rcloneRemote | quote }}
+        - name: RCLONE_COMPRESS_METHOD
+          value: {{ default "gzip" .Values.mcbackup.rcloneCompressMethod | quote }}
+        {{- end }}
+        {{- end }}
+        {{- if eq .Values.mcbackup.backupMethod "restic" }}
+        - name: RESTIC_REPOSITORY
+          value: {{ .Values.mcbackup.resticRepository | quote }}
+        - name: RESTIC_ADDITIONAL_TAGS
+          value: {{ default "mc_backups" .Values.mcbackup.resticAdditionalTags | quote }}
+        - name: PRUNE_RESTIC_RETENTION
+          value: {{ default "--keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly" .Values.mcbackup.pruneResticRetention | quote }}
+        {{- range $key, $value := .Values.mcbackup.resticEnvs }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+        {{- range $key, $value := .Values.mcbackup.extraEnv }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        volumeMounts:
+        - name: datadir
+          mountPath: /data
+          readOnly: true
+        - name: backupdir
+          mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
+        {{- if eq .Values.mcbackup.backupMethod "rclone" }}
+        - name: rclone-config
+          mountPath: /config/rclone
+        {{- end }}
+        {{- range .Values.extraVolumes }}
+        {{- toYaml .volumeMounts | nindent 8 }}
+        {{- end }}
+      {{- end }}
       - name: {{ template "minecraft.fullname" . }}
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: Always
@@ -241,6 +323,9 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /data
+        - name: backupdir
+          mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
+          readOnly: true
         {{- range .Values.extraVolumes }}
         {{- toYaml .volumeMounts | nindent 8 }}
         {{- end }}
@@ -255,6 +340,25 @@ spec:
         {{- end }}
       {{- else }}
         emptyDir: {}
+      {{- end }}
+      - name: backupdir
+      {{- if and .Values.mcbackup.persistence.backupDir.enabled .Values.mcbackup.enabled }}
+        persistentVolumeClaim:
+        {{- if .Values.mcbackup.persistence.backupDir.existingClaim }}
+          claimName: {{ .Values.mcbackup.persistence.backupDir.existingClaim }}
+        {{- else }}
+          claimName: {{ template "minecraft.fullname" . }}-backupdir
+        {{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      {{- if eq .Values.mcbackup.backupMethod "rclone" }}
+      - name: rclone-config
+        configMap:
+          name: {{ template "minecraft.fullname" . }}-rclone-config
+          items:
+          - key: rclone.conf
+            path: rclone.conf
       {{- end }}
       {{- range .Values.extraVolumes }}
       {{- toYaml .volumes | nindent 6 }}

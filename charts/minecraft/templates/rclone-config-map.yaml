@@ -1,0 +1,18 @@
+{{- if and .Values.mcbackup.enabled .Values.minecraftServer.rcon.enabled }}
+{{- if eq .Values.mcbackup.backupMethod "rclone" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "minecraft.fullname" . }}-rclone-config
+  labels:
+    app: {{ template "minecraft.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  rclone.conf: |-
+{{- if .Values.mcbackup.rcloneConfig }}
+{{ tpl .Values.mcbackup.rcloneConfig . | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -43,3 +43,4 @@ jobs:
           charts_repo_url: https://itzg.github.io/minecraft-server-charts
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          
