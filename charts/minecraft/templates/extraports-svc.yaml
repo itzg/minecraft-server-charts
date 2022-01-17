@@ -35,6 +35,8 @@ spec:
   - name: {{ .name }}
     port: {{ .service.port }}
     targetPort: {{ .name }}
+    {{- if .service.nodePort }}
+    nodePort: {{ .service.nodePort }}
     {{- if .protocol }}
     protocol: {{ .protocol }}
     {{- else }}
