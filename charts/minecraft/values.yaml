@@ -3,6 +3,9 @@ image: itzg/minecraft-server
 imageTag: latest
 imagePullSecret: ""
 
+# ### WARNING ###
+# Minecraft is not horizontally scalable, adjusting this will most likely break your setup.
+# ### WARNING ###
 replicaCount: 1
 
 ## Configure resource requests and limits
