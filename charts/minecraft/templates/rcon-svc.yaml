@@ -25,6 +25,9 @@ spec:
 {{- else }}
   type: {{ .Values.minecraftServer.rcon.serviceType }}
 {{- end }}
+{{- if .Values.minecraftServer.rcon.clusterIP }}
+  clusterIP: {{ .Values.minecraftServer.rcon.clusterIP }}
+{{- end }}
   {{- if .Values.minecraftServer.rcon.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.minecraftServer.rcon.externalTrafficPolicy }}
   {{- end }}
