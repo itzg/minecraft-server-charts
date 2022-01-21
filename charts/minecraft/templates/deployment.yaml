@@ -15,6 +15,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  replicas: {{ default 1 .Values.replicaCount }}
   strategy:
     type: {{ .Values.strategyType }}
   selector:
