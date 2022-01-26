@@ -24,6 +24,9 @@ spec:
 {{- else }}
   type: {{ .Values.minecraftServer.serviceType }}
 {{- end }}
+{{- if .Values.minecraftServer.clusterIP }}
+  clusterIP: {{ .Values.minecraftServer.clusterIP }}
+{{- end }}
   {{- if .Values.minecraftServer.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.minecraftServer.externalTrafficPolicy }}
   {{- end }}

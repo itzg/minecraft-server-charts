@@ -3,6 +3,11 @@ image: itzg/minecraft-server
 imageTag: latest
 imagePullSecret: ""
 
+# ### WARNING ###
+# Minecraft is not horizontally scalable, adjusting this will most likely break your setup.
+# ### WARNING ###
+replicaCount: 1
+
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
@@ -52,6 +57,16 @@ startupProbe:
 #         mountPath: /mnt/volume
 #         readOnly: true
 initContainers: []
+
+# sidecarContainers:
+#   - name: do-something
+#     image: busybox
+#     command: ['do', 'something']
+#     volumesMounts:
+#       - name: nfs
+#         mountPath: /mnt/volume
+#         readOnly: true
+sidecarContainers: []
 
 # extraVolumes:
 #   - volumeMounts:
@@ -161,6 +176,10 @@ minecraftServer:
   jvmOpts: ""
   # Options like -X that need to proceed general JVM options
   jvmXXOpts: ""
+  # By default, the server configuration will be created and set based on the following environment variables, but only the first time the server is started
+  # If you would like to override the server configuration each time the container starts up, you can set this to true
+  # see https://github.com/itzg/docker-minecraft-server#server-configuration
+  overrideServerProperties: false
   # DEPRECATED: use top-level rconServiceAnnotations instead
   serviceAnnotations: {}
   serviceType: ClusterIP
@@ -168,6 +187,7 @@ minecraftServer:
   nodePort:
   # Set the external port of the service, usefull when using the LoadBalancer service type
   servicePort: 25565
+  clusterIP:
   loadBalancerIP:
   # loadBalancerSourceRanges: []
   ## Set the externalTrafficPolicy in the Service to either Cluster or Local
@@ -184,6 +204,7 @@ minecraftServer:
     serviceType: ClusterIP
     ## Set the external port if the rcon serviceType is NodePort
     nodePort:
+    clusterIP:
     loadBalancerIP:
     # loadBalancerSourceRanges: []
     ## Set the externalTrafficPolicy in the Service to either Cluster or Local
