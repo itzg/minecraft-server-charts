@@ -333,7 +333,7 @@ spec:
         {{- toYaml .volumeMounts | nindent 8 }}
         {{- end }}
       {{- if .Values.sidecarContainers }}
-      {{- toYaml .Values.sidecarContainers | nindent 8 }}
+      {{- toYaml .Values.sidecarContainers | nindent 6 }}
       {{- end }}
       volumes:
       - name: datadir
