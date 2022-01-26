@@ -176,6 +176,10 @@ minecraftServer:
   jvmOpts: ""
   # Options like -X that need to proceed general JVM options
   jvmXXOpts: ""
+  # By default, the server configuration will be created and set based on the following environment variables, but only the first time the server is started
+  # If you would like to override the server configuration each time the container starts up, you can set this to true
+  # see https://github.com/itzg/docker-minecraft-server#server-configuration
+  overrideServerProperties: false
   # DEPRECATED: use top-level rconServiceAnnotations instead
   serviceAnnotations: {}
   serviceType: ClusterIP
