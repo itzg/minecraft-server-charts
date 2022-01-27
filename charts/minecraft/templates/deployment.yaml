@@ -358,8 +358,12 @@ spec:
       {{- end }}
       {{- if eq .Values.mcbackup.backupMethod "rclone" }}
       - name: rclone-config
-        configMap:
-          name: {{ template "minecraft.fullname" . }}-rclone-config
+        secret:
+        {{- if .Values.mcbackup.rcloneConfigExistingSecret }}
+          secretName: {{ .Values.mcbackup.rcloneConfigExistingSecret }}
+        {{- else }}
+          secretName: {{ template "minecraft.fullname" . }}-rclone-config
+        {{- end }}
           items:
           - key: rclone.conf
             path: rclone.conf
