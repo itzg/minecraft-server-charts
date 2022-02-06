@@ -331,6 +331,7 @@ mcbackup:
   zstdParameters: "-3 --long=25 --single-thread"
   # the name of the remote you've configured in your rclone.conf
   rcloneRemote:
+  rcloneDestDir:
   rcloneCompressMethod: gzip
 
   # see https://rclone.org/ for details
