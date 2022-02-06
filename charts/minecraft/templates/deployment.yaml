@@ -92,6 +92,8 @@ spec:
         {{- if eq .Values.mcbackup.backupMethod "rclone" }}
         - name: RCLONE_REMOTE
           value: {{ .Values.mcbackup.rcloneRemote | quote }}
+        - name: RCLONE_DEST_DIR
+          value: {{ .Values.mcbackup.rcloneDestDir | quote }}
         - name: RCLONE_COMPRESS_METHOD
           value: {{ default "gzip" .Values.mcbackup.rcloneCompressMethod | quote }}
         {{- end }}
