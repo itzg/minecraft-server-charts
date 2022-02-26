@@ -59,6 +59,8 @@ spec:
           value: {{ default "2m" .Values.mcbackup.initialDelay | quote }}
         - name: BACKUP_INTERVAL
           value: {{ default "24h" .Values.mcbackup.backupInterval | quote }}
+        - name: PRUNE_BACKUPS_DAYS
+          value: {{ default "7" .Values.mcbackup.pruneBackupsDays | quote }}
         - name: PAUSE_IF_NO_PLAYERS
           value: {{ default "false" .Values.mcbackup.pauseIfNoPlayers | quote }}
         - name: SERVER_PORT
