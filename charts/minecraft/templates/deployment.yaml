@@ -127,7 +127,9 @@ spec:
           mountPath: /config/rclone
         {{- end }}
         {{- range .Values.extraVolumes }}
-        {{- toYaml .volumeMounts | nindent 8 }}
+        {{-   if .volumeMounts }}
+        {{-     toYaml .volumeMounts | nindent 8 }}
+        {{-   end }}
         {{- end }}
       {{- end }}
       - name: {{ template "minecraft.fullname" . }}
@@ -334,7 +336,9 @@ spec:
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
           readOnly: true
         {{- range .Values.extraVolumes }}
-        {{- toYaml .volumeMounts | nindent 8 }}
+        {{-   if .volumeMounts }}
+        {{-     toYaml .volumeMounts | nindent 8 }}
+        {{-   end }}
         {{- end }}
       {{- if .Values.sidecarContainers }}
       {{- toYaml .Values.sidecarContainers | nindent 6 }}
