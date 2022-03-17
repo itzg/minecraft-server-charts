@@ -268,7 +268,7 @@ spec:
         {{- end }}
         {{- if .Values.minecraftServer.spigetResources }}
         - name: SPIGET_RESOURCES
-          value: {{ include "helm-toolkit.utils.joinListWithComma" .Values.minecraftServer.spigetResources }}
+          value: {{ join "," .Values.minecraftServer.spigetResources }}
         {{- end }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}

@@ -97,7 +97,7 @@ spec:
         {{- end }}
         {{- if .Values.plugins }}
         - name: PLUGINS
-          value: {{ include "helm-toolkit.utils.joinListWithComma" .Values.plugins }}
+          value: {{ join "," .Values.plugins }}
         {{- end }}
         - name: MEMORY
           value: {{ .Values.minecraftProxy.memory | quote }}
