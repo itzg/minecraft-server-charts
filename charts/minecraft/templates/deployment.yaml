@@ -266,6 +266,10 @@ spec:
           value: "TRUE"
         {{- end }}
         {{- end }}
+        {{- if .Values.minecraftServer.spigetResources }}
+        - name: SPIGET_RESOURCES
+          value: {{ include "helm-toolkit.utils.joinListWithComma" .Values.minecraftServer.spigetResources }}
+        {{- end }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}
         - name: MEMORY
