@@ -95,9 +95,9 @@ spec:
           value: {{ .Values.minecraftProxy.jarRevision }}
         {{- end }}
         {{- end }}
-        {{- if .Values.plugins }}
+        {{- if .Values.minecraftProxy.plugins }}
         - name: PLUGINS
-          value: {{ include "helm-toolkit.utils.joinListWithComma" .Values.plugins }}
+          value: {{ join "," .Values.minecraftProxy.plugins }}
         {{- end }}
         - name: MEMORY
           value: {{ .Values.minecraftProxy.memory | quote }}

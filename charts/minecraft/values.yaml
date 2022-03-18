@@ -194,6 +194,9 @@ minecraftServer:
   # externalTrafficPolicy: Cluster
   externalIPs:
 
+  # A list of Spigot resources/plugins IDs to download.
+  spigetResources: []
+
   rcon:
     # If you enable this, make SURE to change your password below.
     enabled: false
