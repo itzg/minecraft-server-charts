@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rcon-web-admin.fullname" . }}
+  labels:
+    {{- include "rcon-web-admin.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.service.wsPort }}
+      targetPort: ws
+      protocol: TCP
+      name: ws
+  selector:
+    {{- include "rcon-web-admin.selectorLabels" . | nindent 4 }}
