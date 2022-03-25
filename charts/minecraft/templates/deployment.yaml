@@ -185,11 +185,13 @@ spec:
         {{- else if eq .Values.minecraftServer.type "PAPER" }}
         - name: PAPER_DOWNLOAD_URL
           value: {{ .Values.minecraftServer.paperDownloadUrl | quote }}
-        {{- else if eq .Values.minecraftServer.type "FTB" }}
-        - name: FTB_SERVER_MOD
-          value: {{ .Values.minecraftServer.ftbServerMod | quote }}
-        - name: FTB_LEGACYJAVAFIXER
-          value: {{ default false .Values.minecraftServer.ftbLegacyJavaFixer | quote }}
+        {{- else if eq .Values.minecraftServer.type "FTBA" }}
+        - name: FTB_MODPACK_ID
+          value: {{ .Values.minecraftServer.ftbModpackId | quote }}
+        {{- if .Values.minecraftServer.ftbModpackVersionId }}
+        - name: FTB_MODPACK_VERSION_ID
+          value: {{ .Values.minecraftServer.ftbModpackVersionId | quote }}
+        {{- end }}
         {{- else if eq .Values.minecraftServer.type "CURSEFORGE" }}
         - name: CF_SERVER_MOD
           value: {{ .Values.minecraftServer.cfServerMod | quote }}
