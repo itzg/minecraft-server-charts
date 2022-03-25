@@ -1,0 +1,21 @@
+apiVersion: v2
+name: rcon-web-admin
+home: https://github.com/rcon-web-admin/rcon-web-admin
+description: RCon Web UI for managing game servers
+type: application
+version: 0.1.0
+appVersion: "0.14.1-1"
+keywords:
+  - game
+  - server
+sources:
+  - https://github.com/itzg/minecraft-server-charts
+maintainers:
+  - name: eaglesemanation
+    email: eaglesemanation@gmail.com
+annotations:
+  artifacthub.io/links: |
+    - name: Image source
+      url: https://github.com/itzg/docker-rcon-web-admin
+    - name: Image DockerHub
+      url: https://hub.docker.com/r/itzg/rcon
