@@ -1981,4 +1981,30 @@ entries:
     urls:
     - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-proxy-1.1/minecraft-proxy-1.1.tgz
     version: "1.1"
+  rcon-web-admin:
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-rcon-web-admin
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/rcon
+    apiVersion: v2
+    appVersion: 0.14.1-1
+    created: "2022-03-25T03:20:57.058824091Z"
+    description: RCon Web UI for managing game servers
+    digest: e90c88a33c634f1b5ca4e30aa226612de6a911eefb7044bc296f5e081b6afd09
+    home: https://github.com/rcon-web-admin/rcon-web-admin
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: eaglesemanation@gmail.com
+      name: eaglesemanation
+    name: rcon-web-admin
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    type: application
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/rcon-web-admin-0.1.0/rcon-web-admin-0.1.0.tgz
+    version: 0.1.0
 generated: "2020-06-10T23:31:07.189813819Z"
