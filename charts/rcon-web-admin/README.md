@@ -13,7 +13,7 @@ This chart creates a single RCON Web Admin Pod, plus Services for HTTP and WebSo
 ## Prerequisites
 
 - 512 MB of RAM
-- Kubernetes 1.4+ with Beta APIs enabled
+- Kubernetes 1.23+
 - Ingress Controller or Load Balancer available on Kubernetes cluster
 
 ## Installing the Chart
