@@ -1,0 +1,16 @@
+{{- if not .Values.ingress.enabled }}
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "rcon-web-admin.fullname" . }}
+  labels:
+    {{- include "rcon-web-admin.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "rcon-web-admin.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "rcon-web-admin.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}

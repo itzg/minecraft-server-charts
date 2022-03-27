@@ -385,7 +385,9 @@ spec:
             path: rclone.conf
       {{- end }}
       {{- range .Values.extraVolumes }}
-      {{- toYaml .volumes | nindent 6 }}
+      {{-   if .volumes }}
+      {{-     toYaml .volumes | nindent 6 }}
+      {{-   end }}
       {{- end }}
     {{- if .Values.nodeSelector }}
       nodeSelector:

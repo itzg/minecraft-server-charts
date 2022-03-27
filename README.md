@@ -20,6 +20,7 @@ You can then run `helm search repo itzg` to see the charts.
 * [minecraft](https://github.com/itzg/minecraft-server-charts/tree/master/charts/minecraft)
 * [minecraft-bedrock](https://github.com/itzg/minecraft-server-charts/tree/master/charts/minecraft-bedrock)
 * [minecraft-proxy](https://github.com/itzg/minecraft-server-charts/tree/master/charts/minecraft-proxy)
+* [rcon-web-admin](https://github.com/itzg/minecraft-server-charts/tree/master/charts/rcon-web-admin)
 
 ```bash
 helm install --name your-release itzg/minecraft

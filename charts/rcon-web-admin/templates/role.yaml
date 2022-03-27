@@ -1,0 +1,13 @@
+{{- if not .Values.ingress.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "rcon-web-admin.fullname" . }}
+  labels:
+    {{- include "rcon-web-admin.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["services"]
+    resourceNames: [{{ include "rcon-web-admin.fullname" . | quote }}]
+    verbs: ["get", "list", "watch"]
+{{- end }}
