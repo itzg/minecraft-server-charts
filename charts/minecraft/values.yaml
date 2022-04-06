@@ -102,8 +102,10 @@ minecraftServer:
   spigotDownloadUrl:
   # If type is set to PAPER, this sets the URL to download the PaperSpigot package
   paperDownloadUrl:
-  # If type is set to FTB, this sets the server mod to run. You can also provide the URL to download the FTB package
-  ftbServerMod:
+  # If type is set to FTBA, this sets the modpack to run
+  ftbModpackId:
+  # If type is set to FTBA and a modpack is set, this sets the version to run
+  ftbModpackVersionId:
   # If type is set to CURSEFORGE, this sets the server mod to run. Can also provide url to curseforge package.
   cfServerMod:
   # Set to true if running Feed The Beast and get an error like "unable to launch forgemodloader"
@@ -213,7 +215,8 @@ minecraftServer:
     ## Set the externalTrafficPolicy in the Service to either Cluster or Local
     # externalTrafficPolicy: Cluster
 
-  extraPorts: []
+  extraPorts:
+    []
 
     # These options allow you to expose another port from the Minecraft server, plugins such
     # as dynmap (8123) and bluemap (8100) will require this for access to their web interfaces
@@ -359,10 +362,12 @@ mcbackup:
   pruneResticRetention: "--keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
 
   # At least one of RESTIC_PASSWORD* env variables need to be defined, see https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html
-  resticEnvs: []
+  resticEnvs:
+    []
     # RESTIC_PASSWORD: restic-password
 
-  extraEnvs: []
+  extraEnvs:
+    []
     # Can be set to the timezone to use for logging
     # tz:
 
