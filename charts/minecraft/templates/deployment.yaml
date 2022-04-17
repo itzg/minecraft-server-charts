@@ -338,6 +338,9 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /data
+          {{- if (and .Values.persistence.dataDir.enabled .Values.persistence.dataDir.subPath) }}
+          subPath: {{ .Values.persistence.dataDir.subPath }}
+          {{- end }}
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
           readOnly: true
