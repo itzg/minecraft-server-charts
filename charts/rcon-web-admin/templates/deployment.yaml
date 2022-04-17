@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rcon-web-admin.fullname" . }}
+  labels:
+    {{- include "rcon-web-admin.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "rcon-web-admin.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "rcon-web-admin.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "rcon-web-admin.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: RWA_USERNAME
+              value: {{ .Values.rconWeb.username | default "admin" | quote }}
+            - name: RWA_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: {{ .Values.rconWeb.passwordExistingSecret | default (include "rcon-web-admin.fullname" .) }}
+                  key: {{ .Values.rconWeb.passwordKey | default "password" }}
+            - name: RWA_ADMIN
+              value: {{ .Values.rconWeb.isAdmin | default false | ternary "TRUE" "FALSE" | quote }}
+            - name: RWA_RCON_HOST
+              value: {{ .Values.rconWeb.rconHost | default "127.0.0.1" | quote }}
+            - name: RWA_RCON_PORT
+              value: {{ .Values.rconWeb.rconPort | default "25575" | quote }}
+            - name: RWA_GAME
+              value: {{ .Values.rconWeb.game | default "minecraft" | quote }}
+            - name: RWA_SERVER_NAME
+              value: {{ .Values.rconWeb.serverName | default .Values.rconWeb.game | quote }}
+            - name: RWA_RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.rconWeb.rconPasswordExistingSecret | default (include "rcon-web-admin.fullname" .) }}
+                  key: {{ .Values.rconWeb.rconPasswordKey | default "rcon-password" }}
+            - name: RWA_RESTRICT_COMMANDS
+              value: {{ join "," .Values.rconWeb.restrictCommands | quote }}
+            - name: RWA_RESTRICT_WIDGETS
+              value: {{ join "," .Values.rconWeb.restrictWidgets | quote }}
+            - name: RWA_READ_ONLY_WIDGET_OPTIONS
+              value: {{ .Values.rconWeb.immutableWidgetOptions | default false | ternary "TRUE" "FALSE" | quote }}
+            - name: RWA_WEB_RCON
+              value: {{ .Values.rconWeb.websocketRcon | default false | ternary "TRUE" "FALSE" | quote }}
+            {{- if .Values.ingress.enabled }}
+            {{ $wsUrl := print .Values.ingress.host (trimSuffix "/" .Values.ingress.path) "/websocket" }}
+            - name: RWA_WEBSOCKET_URL_SSL
+              value: {{ print "wss://" $wsUrl | quote }}
+            - name: RWA_WEBSOCKET_URL
+              value: {{ print "ws://" $wsUrl | quote }}
+            {{- end }}
+          {{- if not .Values.ingress.enabled }}
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |-
+              # Installing jq to parse k8s response
+              export DEBIAN_FRONTEND=noninteractive
+              apt-get -qq update >/dev/null && apt-get -qq install -y jq > /dev/null
+              # Configuring k8s API auth
+              APISERVER=https://kubernetes.default.svc
+              SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+              NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+              TOKEN=$(cat ${SERVICEACCOUNT}/token)
+              CACERT=${SERVICEACCOUNT}/ca.crt
+              # Querying for websocket service
+              WS_SERVICE="$(curl --silent --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/{{ .Release.Namespace }}/services/{{ include "rcon-web-admin.fullname" . }})"
+              {{- if contains "LoadBalancer" .Values.service.type }}
+              WS_IP="$(echo "$WS_SERVICE" | jq -r .status.loadBalancer.ingress[0].ip)"
+              WS_PORT="{{ .Values.service.wsPort }}"
+              {{- else }}
+              {{- fail "Selected service type is not supported"}}
+              {{- end }}
+              export RWA_WEBSOCKET_URL="ws://$WS_IP:$WS_PORT"
+              export RWA_WEBSOCKET_URL_SSL="wss://$WS_IP:$WS_PORT"
+              /usr/local/bin/node src/main.js start
+          {{- end}}
+          ports:
+            - name: http
+              containerPort: 4326
+              protocol: TCP
+            - name: ws
+              containerPort: 4327
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,33 @@
+{{- if and .Values.mcbackup.persistence.backupDir.enabled (not .Values.mcbackup.persistence.backupDir.existingClaim ) -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "minecraft.fullname" . }}-backupdir
+  labels:
+    app: {{ template "minecraft.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+  {{- with .Values.mcbackup.persistence.annotations  }}
+  {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if .Values.mcbackup.persistence.storageClass }}
+    volume.beta.kubernetes.io/storage-class: {{ .Values.mcbackup.persistence.storageClass | quote }}
+  {{- else }}
+    volume.alpha.kubernetes.io/storage-class: default
+  {{- end }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mcbackup.persistence.backupDir.Size | quote }}
+{{- if .Values.mcbackup.persistence.storageClass }}
+{{- if (eq "-" .Values.mcbackup.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.mcbackup.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end -}}

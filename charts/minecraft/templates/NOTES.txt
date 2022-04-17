@@ -35,7 +35,7 @@ You can watch for EXTERNAL-IP to populate by running:
     -l "component={{ template "minecraft.fullname" . }}" \
     -o jsonpath="{.items[0].metadata.name}")
   kubectl port-forward $POD_NAME 25565:{{ .Values.minecraftServer.servicePort | default 25565 }}
-  echo "Point your Minecraft client at 127.0.0.1:22565"
+  echo "Point your Minecraft client at 127.0.0.1:25565"
 
 {{- end }}
 

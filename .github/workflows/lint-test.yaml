@@ -38,5 +38,12 @@ jobs:
         uses: helm/kind-action@v1.2.0
         if: steps.list-changed.outputs.changed == 'true'
 
+      - name: Install LoadBalancer
+        run: |-
+          kubectl config use-context kind-chart-testing
+          kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
+          kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
+          kubectl apply -f .github/metallb-configmap.yaml
+
       - name: Run chart-testing (install)
         run: ct install
