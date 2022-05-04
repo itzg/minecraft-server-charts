@@ -47,7 +47,7 @@ spec:
       {{- if and .Values.mcbackup.enabled .Values.minecraftServer.rcon.enabled }}
       - name: {{ template "minecraft.fullname" . }}-mc-backup
         image: "{{ .Values.mcbackup.image.repository }}:{{ .Values.mcbackup.image.tag }}"
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.mcbackup.image.pullPolicy }}
         resources:
 {{ toYaml .Values.mcbackup.resources | indent 10 }}
         env:
@@ -134,7 +134,7 @@ spec:
       {{- end }}
       - name: {{ template "minecraft.fullname" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         {{- if .Values.startupProbe.enabled }}

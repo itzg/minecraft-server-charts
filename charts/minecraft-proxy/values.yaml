@@ -2,7 +2,9 @@
 image:
   repository: itzg/bungeecord
   tag: latest
-  pullSecret: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecret: ""
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
