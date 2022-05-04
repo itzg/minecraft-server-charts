@@ -1,7 +1,9 @@
 # ref: https://hub.docker.com/r/itzg/minecraft-server/
-image: itzg/minecraft-server
-imageTag: latest
-imagePullSecret: ""
+image:
+  repository: itzg/minecraft-server
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecret: ""
 
 # ### WARNING ###
 # Minecraft is not horizontally scalable, adjusting this will most likely break your setup.
@@ -301,8 +303,9 @@ rconServiceAnnotations: {}
 mcbackup:
   enabled: false
 
-  image: itzg/mc-backup
-  imageTag: latest
+  image:
+    repository: itzg/mc-backup
+    tag: latest
 
   #  wait 2 minutes before starting
   initialDelay: 2m

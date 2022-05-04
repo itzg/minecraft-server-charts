@@ -23,9 +23,9 @@ spec:
       {{- if .Values.serviceAcccoutName }}
       serviceAccountName: {{ .Values.serviceAccountName }}
       {{- end }}
-      {{- if .Values.imagePullSecret }}
+      {{- if .Values.image.pullSecret }}
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecret }}
+        - name: {{ .Values.image.pullSecret }}
       {{- end }}
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
@@ -33,7 +33,7 @@ spec:
       initContainers: {{- toYaml .Values.initContainers | nindent 8 }}
       containers:
       - name: {{ template "proxy.fullname" . }}
-        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
         resources: {{ toYaml .Values.resources | nindent 10 }}
         {{- if .Values.startupProbe.enabled }}

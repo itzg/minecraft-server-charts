@@ -1,7 +1,8 @@
 # ref: https://hub.docker.com/r/itzg/docker-bungeecord/
-image: itzg/bungeecord
-imageTag: latest
-imagePullSecret: ""
+image:
+  repository: itzg/bungeecord
+  tag: latest
+  pullSecret: ""
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
