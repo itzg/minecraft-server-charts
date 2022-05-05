@@ -31,9 +31,9 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      {{- if .Values.imagePullSecret }}
+      {{- if .Values.image.pullSecret }}
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecret }}
+        - name: {{ .Values.image.pullSecret }}
       {{- end }}
       {{- if .Values.initContainers }}
       initContainers:
@@ -41,8 +41,8 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "minecraft.fullname" . }}
-        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
-        imagePullPolicy: Always
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         stdin: true
         tty: true
         resources:

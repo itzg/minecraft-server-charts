@@ -32,9 +32,9 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      {{- if .Values.imagePullSecret }}
+      {{- if .Values.image.pullSecret }}
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecret }}
+        - name: {{ .Values.image.pullSecret }}
       {{- end }}
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
@@ -46,8 +46,8 @@ spec:
       containers:
       {{- if and .Values.mcbackup.enabled .Values.minecraftServer.rcon.enabled }}
       - name: {{ template "minecraft.fullname" . }}-mc-backup
-        image: "{{ .Values.mcbackup.image }}:{{ .Values.mcbackup.imageTag }}"
-        imagePullPolicy: Always
+        image: "{{ .Values.mcbackup.image.repository }}:{{ .Values.mcbackup.image.tag }}"
+        imagePullPolicy: {{ .Values.mcbackup.image.pullPolicy }}
         resources:
 {{ toYaml .Values.mcbackup.resources | indent 10 }}
         env:
@@ -133,8 +133,8 @@ spec:
         {{- end }}
       {{- end }}
       - name: {{ template "minecraft.fullname" . }}
-        image: "{{ .Values.image }}:{{ .Values.imageTag }}"
-        imagePullPolicy: Always
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         {{- if .Values.startupProbe.enabled }}

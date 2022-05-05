@@ -1,7 +1,9 @@
 # ref: https://hub.docker.com/r/itzg/minecraft-server/
-image: itzg/minecraft-bedrock-server
-imageTag: latest
-imagePullSecret: ""
+image:
+  repository: itzg/minecraft-bedrock-server
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecret: ""
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

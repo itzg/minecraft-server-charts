@@ -1,6 +1,9 @@
 # ref: https://hub.docker.com/r/itzg/docker-bungeecord/
-image: itzg/bungeecord
-imageTag: latest
+image:
+  repository: itzg/bungeecord
+  tag: latest
+  pullPolicy: IfNotPresent
+
 imagePullSecret: ""
 
 ## Configure resource requests and limits
