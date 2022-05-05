@@ -3,7 +3,7 @@ name: rcon-web-admin
 home: https://github.com/rcon-web-admin/rcon-web-admin
 description: RCon Web UI for managing game servers
 type: application
-version: 0.2.0
+version: 1.0.0
 appVersion: "0.14.1-1"
 keywords:
   - game
