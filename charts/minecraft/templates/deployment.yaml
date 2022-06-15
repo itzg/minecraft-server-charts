@@ -270,7 +270,7 @@ spec:
         {{- end }}
         {{- if .Values.minecraftServer.spigetResources }}
         - name: SPIGET_RESOURCES
-          value: {{ join "," .Values.minecraftServer.spigetResources }}
+          value: {{ join "," .Values.minecraftServer.spigetResources | quote }}
         {{- end }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}
