@@ -270,7 +270,23 @@ spec:
         {{- end }}
         {{- if .Values.minecraftServer.spigetResources }}
         - name: SPIGET_RESOURCES
-          value: {{ join "," .Values.minecraftServer.spigetResources }}
+          value: {{ join "," .Values.minecraftServer.spigetResources | quote }}
+        {{- end }}
+        {{- if .Values.minecraftServer.vanillaTweaksShareCodes }}
+        - name: VANILLATWEAKS_SHARECODE
+          value: {{ join "," .Values.minecraftServer.vanillaTweaksShareCodes | quote }}
+        {{- if .Values.minecraftServer.resourcePackUrl }}
+        - name: RESOURCE_PACK
+          value: {{ .Values.minecraftServer.resourcePackUrl | quote }}
+        {{- end }}
+        {{- if .Values.minecraftServer.resourcePackSha }}
+        - name: RESOURCE_PACK_SHA1
+          value: {{ .Values.minecraftServer.resourcePackSha | quote }}
+        {{- end }}
+        {{- if .Values.minecraftServer.resourcePackEnforce }}
+        - name: RESOURCE_PACK_ENFORCE
+          value: "TRUE"
+        {{- end }}
         {{- end }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}
