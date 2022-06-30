@@ -208,7 +208,7 @@ minecraftServer:
   externalIPs:
 
   # A list of Spigot resources/plugins IDs to download.
-  spigetResources: []
+  spigotResources: []
 
   rcon:
     # If you enable this, make SURE to change your password below.
