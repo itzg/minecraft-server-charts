@@ -275,6 +275,7 @@ spec:
         {{- if .Values.minecraftServer.vanillaTweaksShareCodes }}
         - name: VANILLATWEAKS_SHARECODE
           value: {{ join "," .Values.minecraftServer.vanillaTweaksShareCodes | quote }}
+        {{- end }}
         {{- if .Values.minecraftServer.resourcePackUrl }}
         - name: RESOURCE_PACK
           value: {{ .Values.minecraftServer.resourcePackUrl | quote }}
@@ -286,7 +287,6 @@ spec:
         {{- if .Values.minecraftServer.resourcePackEnforce }}
         - name: RESOURCE_PACK_ENFORCE
           value: "TRUE"
-        {{- end }}
         {{- end }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}
