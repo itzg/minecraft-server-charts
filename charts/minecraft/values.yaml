@@ -172,6 +172,15 @@ minecraftServer:
   downloadModpackUrl:
   # If true, old versions of downloaded mods will be replaced with new ones from downloadModpackUrl
   removeOldMods: false
+  # A list of VanillaTweaks Share Codes to download. (https://vanillatweaks.net/share#wUq1iz => "wUq1iz")
+  vanillaTweaksShareCodes: []
+  # Optional URI to a resource pack. The player may choose to use it.
+  resourcePackUrl:
+  # Optional SHA-1 digest of the resource pack, in lowercase hexadecimal.
+  # It is recommended to specify this, because it is used to verify the integrity of the resource pack.
+  resourcePackSha:
+  # When true, players will be prompted for a response and will be disconnected if they decline the required pack
+  resourcePackEnforce: false
   # Check accounts against Minecraft account service.
   onlineMode: true
   # If you adjust this, you may need to adjust resources.requests above to match.
