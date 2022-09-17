@@ -36,13 +36,13 @@ securityContext:
 livenessProbe:
   initialDelaySeconds: 30
   periodSeconds: 5
-  failureThreshold: 10
+  failureThreshold: 20
   successThreshold: 1
   timeoutSeconds: 1
 readinessProbe:
   initialDelaySeconds: 30
   periodSeconds: 5
-  failureThreshold: 10
+  failureThreshold: 20
   successThreshold: 1
   timeoutSeconds: 1
 startupProbe:

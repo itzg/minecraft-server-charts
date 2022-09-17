@@ -139,22 +139,25 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
         {{- if .Values.startupProbe.enabled }}
         startupProbe:
-          tcpSocket:
-            port: 25565
+          exec:
+            command:
+              - mc-health
           failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           periodSeconds: {{ .Values.startupProbe.periodSeconds }}
         {{- end }}
         readinessProbe:
-          tcpSocket:
-            port: 25565
+          exec:
+            command:
+              - mc-health
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
         livenessProbe:
-          tcpSocket:
-            port: 25565
+          exec:
+            command:
+              - mc-health
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
