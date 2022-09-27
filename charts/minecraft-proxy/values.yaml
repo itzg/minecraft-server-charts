@@ -48,6 +48,16 @@ startupProbe:
 #         readOnly: true
 initContainers: []
 
+# sidecarContainers:
+#   - name: do-something
+#     image: busybox
+#     command: ['do', 'something']
+#     volumesMounts:
+#       - name: nfs
+#         mountPath: /mnt/volume
+#         readOnly: true
+sidecarContainers: []
+
 # extraVolumes:
 #   - volumeMounts:
 #       - name: nfs
