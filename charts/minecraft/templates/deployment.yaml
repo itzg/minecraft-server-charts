@@ -141,14 +141,14 @@ spec:
         startupProbe:
           exec:
             command:
-              - mc-health
+            {{-  toYaml .Values.startupProbe.command | nindent 12 }}
           failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           periodSeconds: {{ .Values.startupProbe.periodSeconds }}
         {{- end }}
         readinessProbe:
           exec:
             command:
-              - mc-health
+            {{-  toYaml .Values.readinessProbe.command | nindent 12 }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
@@ -157,7 +157,7 @@ spec:
         livenessProbe:
           exec:
             command:
-              - mc-health
+            {{-  toYaml .Values.livenessProbe.command | nindent 12 }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
