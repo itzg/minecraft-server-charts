@@ -115,6 +115,10 @@ spec:
           value: {{ .Values.minecraftServer.texturepackRequired | quote }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}
+        - name: EMIT_SERVER_TELEMETRY
+          value: {{ .Values.minecraftServer.emitServerTelemetry | quote }}
+        - name: ENABLE_LAN_VISIBILITY
+          value: {{ .Values.minecraftServer.enableLanVisibility | quote }}
 
       {{- range $key, $value := .Values.extraEnv }}
       {{-   if kindIs "map" $value }}
