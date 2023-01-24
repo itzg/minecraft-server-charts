@@ -135,6 +135,8 @@ spec:
       - name: {{ template "minecraft.fullname" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        tty: true
+        stdin: true
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         {{- if .Values.startupProbe.enabled }}
