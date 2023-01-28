@@ -110,6 +110,10 @@ minecraftServer:
   maxThreads: 8
   # Cheat like commands can be used.
   cheats: false
+  # Enable emit server telemetry.
+  emitServerTelemetry: false
+  # Enable lan visibility.
+  enableLanVisibility: false
   # type of kubernetes service to use
   serviceType: ClusterIP
   ## Set the port used if the serviceType is NodePort
