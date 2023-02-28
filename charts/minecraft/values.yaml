@@ -387,10 +387,21 @@ mcbackup:
     []
     # RESTIC_PASSWORD: restic-password
 
-  extraEnvs:
-    []
-    # Can be set to the timezone to use for logging
-    # tz:
+  ## Additional minecraft container environment variables
+  ## Values can be either variable values or `valueFrom` yaml
+  ##
+  extraEnv:
+    {}
+    # some_variable: some value
+    # another_variable:
+    #   valueFrom:
+    #     fieldRef:
+    #       fieldPath: status.hostIP
+
+  ## Additional environment variables to add to the minecraft container from
+  ## ConfigMaps and Secrets
+  ##
+  envFrom: []
 
   resources:
     requests:

@@ -50,6 +50,9 @@ spec:
         imagePullPolicy: {{ .Values.mcbackup.image.pullPolicy }}
         resources:
 {{ toYaml .Values.mcbackup.resources | indent 10 }}
+      {{- with .Values.mcbackup.envFrom }}
+        envFrom:
+          {{- . | toYaml | nindent 10 }}{{ end }}
         env:
         - name: SRC_DIR
           value: "/data"
@@ -112,9 +115,18 @@ spec:
           value: {{ $value | quote }}
         {{- end }}
         {{- end }}
+
         {{- range $key, $value := .Values.mcbackup.extraEnv }}
+        {{-   if kindIs "map" $value }}
+        {{-     if hasKey $value "valueFrom" }}
+        - name: {{ $key }}
+          valueFrom:
+            {{- $value.valueFrom | toYaml | nindent 12 }}
+        {{-     end }}
+        {{-   else }}
         - name: {{ $key }}
           value: {{ $value | quote }}
+        {{-   end }}
         {{- end }}
         volumeMounts:
         - name: datadir
