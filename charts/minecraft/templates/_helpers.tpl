@@ -24,3 +24,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- print "networking.k8s.io/v1" -}}
 {{- end }}
 {{- end -}}
+
+{{- define "minecraft.envMap" }}
+{{- if index . 1 }}
+        - name: {{ index . 0 }}
+          value: {{ index . 1 | quote }}
+{{- end }}
+{{- end }}
