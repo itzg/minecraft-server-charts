@@ -221,7 +221,7 @@ minecraftServer:
 
   # A list of Spigot resources/plugins IDs to download.
   spigetResources: []
-  
+
   # A list of Modrinth project slugs with optional version after colon
   modrinth:
     projects: []
