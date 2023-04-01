@@ -189,6 +189,8 @@ minecraftServer:
   resourcePackEnforce: false
   # Check accounts against Minecraft account service.
   onlineMode: true
+  # Require public key to be signed by Mojang to join
+  enforceSecureProfile: true
   # If you adjust this, you may need to adjust resources.requests above to match.
   memory: 1024M
   # General JVM options to be passed to the Minecraft server invocation
@@ -213,8 +215,48 @@ minecraftServer:
   # externalTrafficPolicy: Cluster
   externalIPs:
 
+  # List with URLs and paths to jar files, additionally may be a directory with jars
+  # This works for both mods and plugins depending on server type
+  modUrls: []
+
   # A list of Spigot resources/plugins IDs to download.
   spigetResources: []
+
+  # A list of Modrinth project slugs with optional version after colon
+  modrinth:
+    projects: []
+    # Downloads Modrinth project dependencies marked as optional
+    optionalDependencies: false
+    # The version type is used to determine the newest version to use from each project. The allowed values are: release, beta, alpha
+    allowedVersionType: release
+
+  # Config for AUTO_CURSEFORGE server type
+  autoCurseForge:
+    # Link to modpack in general or a specific file
+    # NOTE: In case of specific file - do not point at server file
+    pageUrl: ""
+    # Unique id of modpack, can be used instead of url
+    slug: ""
+    # Id used to specify which exact modpack file needs to be downloaded
+    # NOTE: Do not use server file id
+    fileId: ""
+    # Less restrictive way of specifying modpack version, uses substring match
+    filenameMatcher: ""
+    # List of project slugs or IDs to be excluded from modpack, useful if mod is incorrectly marked as server side
+    excludeMods: []
+    # List of project slugs or IDs to be included in modpack, useful if mod is incorrectly marked as client side only
+    includeMods: []
+    # Path to file with rules for including and excluding mods. If null - use bundled file, if empty - disable it
+    excludeIncludeFile: null
+    # Reevaluate exclude and include rules
+    forceSynchronize: false
+    # Can be set to either WORLD_FILE or OVERRIDES to specify where to get LEVEL
+    setLevelFrom: ""
+    # Sets limit to how many mods can be downloaded in parallel
+    parallelDownloads: 4
+    # Set to skip files in modpack "overrides" folder that would replace existing files
+    # NOTE: World data is always skipped if present
+    overridesSkipExisting: false
 
   rcon:
     # If you enable this, make SURE to change your password below.
@@ -307,12 +349,16 @@ persistence:
     # subPath: /path/to/dataDir
 
 podAnnotations: {}
+podLabels: {}
 
 deploymentAnnotations: {}
+deploymentLabels: {}
 
 serviceAnnotations: {}
+serviceLabels: {}
 
 rconServiceAnnotations: {}
+rconServiceLabels: {}
 
 # PLEASE NOTE! rcon must be enabled above!  It does NOT require a nodePort or loadBalancerIP
 mcbackup:

@@ -14,6 +14,11 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- if .Values.deploymentLabels }}
+    {{- range $key, $value := .Values.deploymentLabels}}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   replicas: {{ default 1 .Values.replicaCount }}
   strategy:
@@ -25,6 +30,11 @@ spec:
     metadata:
       labels:
         app: {{ template "minecraft.fullname" . }}
+      {{- if .Values.podLabels }}
+        {{- range $key, $value := .Values.podLabels}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.podAnnotations }}
       annotations:
         {{- range $key, $value := .Values.podAnnotations }}
@@ -228,6 +238,19 @@ spec:
         {{- if .Values.minecraftServer.spigetResources }}
 {{- template "minecraft.envMap" list "SPIGET_RESOURCES" join "," .Values.minecraftServer.spigetResources  }}
         {{- end }}
+
+    {{- if  .Values.minecraftServer.modrinth }}
+    {{- with .Values.minecraftServer.modrinth }}
+        {{- if .projects }}
+{{- template "minecraft.envMap" list "MODRINTH_PROJECTS" join "," .projects }}
+        {{- end }}
+        {{- if .optionalDependencies }}
+{{- template "minecraft.envMap" list "MODRINTH_DOWNLOAD_OPTIONAL_DEPENDENCIES" "TRUE" }}
+        {{- end }}
+{{- template "minecraft.envMap" list "MODRINTH_ALLOWED_VERSION_TYPE" .allowedVersionType }}
+    {{- end }}
+    {{- end }}
+
         {{- if .Values.minecraftServer.vanillaTweaksShareCodes }}
 {{- template "minecraft.envMap" list "VANILLATWEAKS_SHARECODE" join "," .Values.minecraftServer.vanillaTweaksShareCodes  }}
         {{- end }}
@@ -242,6 +265,7 @@ spec:
           value: "TRUE"
         {{- end }}
 {{- template "minecraft.envMap" list "ONLINE_MODE" .Values.minecraftServer.onlineMode  }}
+{{- template "minecraft.envMap" list "ENFORCE_SECURE_PROFILE" .Values.minecraftServer.enforceSecureProfile  }}
 {{- template "minecraft.envMap" list "MEMORY" .Values.minecraftServer.memory  }}
 {{- template "minecraft.envMap" list "JVM_OPTS" .Values.minecraftServer.jvmOpts  }}
 {{- template "minecraft.envMap" list "JVM_XX_OPTS" .Values.minecraftServer.jvmXXOpts  }}
@@ -264,6 +288,33 @@ spec:
           value: "true"
 {{- template "minecraft.envMap" list "QUERY_PORT" .Values.minecraftServer.query.port  }}
         {{- end }}
+
+    {{- if and .Values.minecraftServer.autoCurseForge (eq "AUTO_CURSEFORGE" .Values.minecraftServer.type) }}
+    {{- with .Values.minecraftServer.autoCurseForge }}
+{{- template "minecraft.envMap" list "CF_PAGE_URL" .pageUrl }}
+{{- template "minecraft.envMap" list "CF_SLUG" .slug }}
+{{- template "minecraft.envMap" list "CF_FILE_ID" .fileId }}
+{{- template "minecraft.envMap" list "CF_FILENAME_MATCHER" .filenameMatcher }}
+        {{- if .excludeMods }}
+{{- template "minecraft.envMap" list "CF_EXCLUDE_MODS" .excludeMods }}
+        {{- end }}
+        {{- if .includeMods }}
+{{- template "minecraft.envMap" list "CF_FORCE_INCLUDE_MODS" .includeMods }}
+        {{- end }}
+        {{- if not (eq nil .excludeIncludeFile) }}
+{{- template "minecraft.envMap" list "CF_EXCLUDE_INCLUDE_FILE" .excludeIncludeFile }}
+        {{- end }}
+        {{- if .forceSynchronize }}
+{{- template "minecraft.envMap" list "CF_FORCE_SYNCHRONIZE" "true" }}
+        {{- end }}
+{{- template "minecraft.envMap" list "CF_SET_LEVEL_FROM" .setLevelFrom }}
+{{- template "minecraft.envMap" list "CF_PARALLEL_DOWNLOADS" .parallelDownloads }}
+        {{- if .overridesSkipExisting }}
+{{- template "minecraft.envMap" list "CF_OVERRIDES_SKIP_EXISTING" "true" }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+        
 
       {{- range $key, $value := .Values.extraEnv }}
       {{-   if kindIs "map" $value }}
