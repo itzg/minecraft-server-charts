@@ -14,6 +14,11 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- if .Values.deploymentLabels }}
+    {{- range $key, $value := .Values.deploymentLabels}}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   replicas: {{ default 1 .Values.replicaCount }}
   strategy:
@@ -25,6 +30,11 @@ spec:
     metadata:
       labels:
         app: {{ template "minecraft.fullname" . }}
+      {{- if .Values.podLabels }}
+        {{- range $key, $value := .Values.podLabels}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.podAnnotations }}
       annotations:
         {{- range $key, $value := .Values.podAnnotations }}
@@ -289,6 +299,16 @@ spec:
         - name: SPIGET_RESOURCES
           value: {{ join "," .Values.minecraftServer.spigetResources | quote }}
         {{- end }}
+        {{- if .Values.minecraftServer.modrinth.projects }}
+        - name: MODRINTH_PROJECTS
+          value: {{ join "," .Values.minecraftServer.modrinth.projects | quote }}
+        {{- end }}
+        {{- if .Values.minecraftServer.modrinth.optionalDependencies }}
+        - name: MODRINTH_DOWNLOAD_OPTIONAL_DEPENDENCIES
+          value: "TRUE"
+        {{- end }}
+        - name: MODRINTH_ALLOWED_VERSION_TYPE
+          value: {{ default "release" .Values.minecraftServer.modrinth.allowedVersionType | quote }}
         {{- if .Values.minecraftServer.vanillaTweaksShareCodes }}
         - name: VANILLATWEAKS_SHARECODE
           value: {{ join "," .Values.minecraftServer.vanillaTweaksShareCodes | quote }}
@@ -307,6 +327,8 @@ spec:
         {{- end }}
         - name: ONLINE_MODE
           value: {{ .Values.minecraftServer.onlineMode | quote }}
+        - name: ENFORCE_SECURE_PROFILE
+          value: {{ .Values.minecraftServer.enforceSecureProfile | quote }}
         - name: MEMORY
           value: {{ .Values.minecraftServer.memory | quote }}
         - name: JVM_OPTS
@@ -334,6 +356,44 @@ spec:
         - name: QUERY_PORT
           value: {{ .Values.minecraftServer.query.port | quote }}
         {{- end }}
+
+    {{- if and .Values.minecraftServer.autoCurseForge (eq "AUTO_CURSEFORGE" .Values.minecraftServer.type) }}
+    {{- with .Values.minecraftServer.autoCurseForge }}
+        - name: CF_PAGE_URL
+          value: {{ .pageUrl | quote }}
+        - name: CF_SLUG
+          value: {{ .slug | quote }}
+        - name: CF_FILE_ID
+          value: {{ .fileId }}
+        - name: CF_FILENAME_MATCHER
+          value: {{ .filenameMatcher }}
+        {{- if .excludeMods }}
+        - name: CF_EXCLUDE_MODS
+          value: {{ join "," .excludeMods | quote }}
+        {{- end }}
+        {{- if .includeMods }}
+        - name: CF_FORCE_INCLUDE_MODS
+          value: {{ join "," .includeMods | quote }}
+        {{- end }}
+        {{- if not eq nil .excludeIncludeFile }}
+        - name: CF_EXCLUDE_INCLUDE_FILE
+          value: {{ .excludeIncludeFile | quote }}
+        {{- end }}
+        {{- if .forceSynchronize }}
+        - name: CF_FORCE_SYNCHRONIZE
+          value: "true"
+        {{- end }}
+        - name: CF_SET_LEVEL_FROM
+          value: {{ .setLevelFrom | quote }}
+        - name: CF_PARALLEL_DOWNLOADS
+          value: {{ .parallelDownloads }}
+        {{- if .overridesSkipExisting }}
+        - name: CF_OVERRIDES_SKIP_EXISTING
+          value: "true"
+        {{- end }}
+    {{- end }}
+    {{- end }}
+        
 
       {{- range $key, $value := .Values.extraEnv }}
       {{-   if kindIs "map" $value }}

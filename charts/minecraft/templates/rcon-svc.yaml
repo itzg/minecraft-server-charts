@@ -10,6 +10,11 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- if .Values.rconServiceLabels }}
+    {{- range $key, $value := .Values.rconServiceLabels}}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
 {{- if (or (eq .Values.minecraftServer.rcon.serviceType "ClusterIP") (empty .Values.minecraftServer.rcon.serviceType)) }}
   type: ClusterIP

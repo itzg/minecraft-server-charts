@@ -1,0 +1,84 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "required": ["minecraftServer"],
+    "properties": {
+        "minecraftServer": {
+            "type": "object",
+            "properties": {
+                "modrinth": {
+                    "type": "object",
+                    "required": ["projects"],
+                    "properties": {
+                        "projects": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        },
+                        "optionalDependencies": {
+                            "type": "boolean"
+                        },
+                        "allowedVersionType": {
+                            "enum": ["release", "beta", "alpha"]
+                        }
+                    }
+                },
+                "modUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                },
+                "autoCurseForge": {
+                    "type": "object",
+                    "properties": {
+                        "pageUrl": {
+                            "type": "string"
+                        },
+                        "slug": {
+                            "type": "string"
+                        },
+                        "fileId": {
+                            "type": "string"
+                        },
+                        "filenameMatcher": {
+                            "type": "string"
+                        },
+                        "excludeMods": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        },
+                        "includeMods": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        },
+                        "excludeIncludeFile": {
+                            "type": ["string", "null"]
+                        },
+                        "forceSynchronize": {
+                            "type": "boolean"
+                        },
+                        "setLevelFrom": {
+                            "enum": ["", "WORLD_FILE", "OVERRIDES"]
+                        },
+                        "parallelDownloads": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "overridesSkipExisting": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
