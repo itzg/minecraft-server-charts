@@ -66,60 +66,40 @@ spec:
         env:
         - name: SRC_DIR
           value: "/data"
-        - name: BACKUP_NAME
-          value: {{ default "world" .Values.minecraftServer.worldSaveName | quote }}
-        - name: INITIAL_DELAY
-          value: {{ default "2m" .Values.mcbackup.initialDelay | quote }}
-        - name: BACKUP_INTERVAL
-          value: {{ default "24h" .Values.mcbackup.backupInterval | quote }}
-        - name: PRUNE_BACKUPS_DAYS
-          value: {{ default "7" .Values.mcbackup.pruneBackupsDays | quote }}
-        - name: PAUSE_IF_NO_PLAYERS
-          value: {{ default "false" .Values.mcbackup.pauseIfNoPlayers | quote }}
+{{- template "minecraft.envMap" list "BACKUP_NAME" .Values.minecraftServer.worldSaveName  }}
+{{- template "minecraft.envMap" list "INITIAL_DELAY" .Values.mcbackup.initialDelay  }}
+{{- template "minecraft.envMap" list "BACKUP_INTERVAL" .Values.mcbackup.backupInterval  }}
+{{- template "minecraft.envMap" list "PRUNE_BACKUPS_DAYS" .Values.mcbackup.pruneBackupsDays  }}
+{{- template "minecraft.envMap" list "PAUSE_IF_NO_PLAYERS" .Values.mcbackup.pauseIfNoPlayers  }}
         - name: SERVER_PORT
           value: "25565"
         - name: RCON_HOST
           value: "localhost"
-        - name: RCON_PORT
-          value: {{ .Values.minecraftServer.rcon.port | quote }}
+{{- template "minecraft.envMap" list "RCON_PORT" .Values.minecraftServer.rcon.port  }}
         - name: RCON_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ .Values.minecraftServer.rcon.existingSecret | default (include "minecraft.fullname" .) }}
               key: {{ .Values.minecraftServer.rcon.secretKey | default "rcon-password" }}
-        - name: RCON_RETRIES
-          value: {{ default 5 .Values.mcbackup.rconRetries | quote }}
-        - name: RCON_RETRY_INTERVAL
-          value: {{ default "10s" .Values.mcbackup.rconRetryInterval | quote }}
-        - name: EXCLUDES
-          value: {{ default "*.jar,cache,logs" .Values.mcbackup.excludes | quote }}
-        - name: BACKUP_METHOD
-          value: {{ default "tar" .Values.mcbackup.backupMethod | quote }}
+{{- template "minecraft.envMap" list "RCON_RETRIES" .Values.mcbackup.rconRetries  }}
+{{- template "minecraft.envMap" list "RCON_RETRY_INTERVAL" .Values.mcbackup.rconRetryInterval  }}
+{{- template "minecraft.envMap" list "EXCLUDES" .Values.mcbackup.excludes  }}
+{{- template "minecraft.envMap" list "BACKUP_METHOD" .Values.mcbackup.backupMethod  }}
         {{- if or (eq .Values.mcbackup.backupMethod "tar") (eq .Values.mcbackup.backupMethod "rclone") }}
-        - name: DEST_DIR
-          value: {{ default "/backups" .Values.mcbackup.destDir | quote }}
-        - name: LINK_LATEST
-          value: {{ default "false" .Values.mcbackup.linkLatest | quote }}
-        - name: TAR_COMPRESS_METHOD
-          value: {{ default "gzip" .Values.mcbackup.compressMethod | quote }}
-        - name: ZSTD_PARAMETERS
-          value: {{ default "-3 --long=25 --single-thread" .Values.mcbackup.zstdParameters | quote }}
+{{- template "minecraft.envMap" list "DEST_DIR" .Values.mcbackup.destDir  }}
+{{- template "minecraft.envMap" list "LINK_LATEST" .Values.mcbackup.linkLatest  }}
+{{- template "minecraft.envMap" list "TAR_COMPRESS_METHOD" .Values.mcbackup.compressMethod  }}
+{{- template "minecraft.envMap" list "ZSTD_PARAMETERS" .Values.mcbackup.zstdParameters  }}
         {{- if eq .Values.mcbackup.backupMethod "rclone" }}
-        - name: RCLONE_REMOTE
-          value: {{ .Values.mcbackup.rcloneRemote | quote }}
-        - name: RCLONE_DEST_DIR
-          value: {{ .Values.mcbackup.rcloneDestDir | quote }}
-        - name: RCLONE_COMPRESS_METHOD
-          value: {{ default "gzip" .Values.mcbackup.rcloneCompressMethod | quote }}
+{{- template "minecraft.envMap" list "RCLONE_REMOTE" .Values.mcbackup.rcloneRemote  }}
+{{- template "minecraft.envMap" list "RCLONE_DEST_DIR" .Values.mcbackup.rcloneDestDir  }}
+{{- template "minecraft.envMap" list "RCLONE_COMPRESS_METHOD" .Values.mcbackup.rcloneCompressMethod  }}
         {{- end }}
         {{- end }}
         {{- if eq .Values.mcbackup.backupMethod "restic" }}
-        - name: RESTIC_REPOSITORY
-          value: {{ .Values.mcbackup.resticRepository | quote }}
-        - name: RESTIC_ADDITIONAL_TAGS
-          value: {{ default "mc_backups" .Values.mcbackup.resticAdditionalTags | quote }}
-        - name: PRUNE_RESTIC_RETENTION
-          value: {{ default "--keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly" .Values.mcbackup.pruneResticRetention | quote }}
+{{- template "minecraft.envMap" list "RESTIC_REPOSITORY" .Values.mcbackup.resticRepository  }}
+{{- template "minecraft.envMap" list "RESTIC_ADDITIONAL_TAGS" .Values.mcbackup.resticAdditionalTags  }}
+{{- template "minecraft.envMap" list "PRUNE_RESTIC_RETENTION" .Values.mcbackup.pruneResticRetention  }}
         {{- range $key, $value := .Values.mcbackup.resticEnvs }}
         - name: {{ $key }}
           value: {{ $value | quote }}
@@ -191,113 +171,72 @@ spec:
         envFrom:
           {{- . | toYaml | nindent 10 }}{{ end }}
         env:
-        - name: EULA
-          value: {{ .Values.minecraftServer.eula | quote }}
-        - name: TYPE
-          value: {{ default "" .Values.minecraftServer.type | quote }}
+{{- template "minecraft.envMap" list "EULA" .Values.minecraftServer.eula  }}
+{{- template "minecraft.envMap" list "TYPE" .Values.minecraftServer.type  }}
         {{- if eq .Values.minecraftServer.type "FORGE" }}
         {{- if .Values.minecraftServer.forgeInstallerUrl }}
-        - name: FORGE_INSTALLER_URL
-          value: {{ .Values.minecraftServer.forgeInstallerUrl | quote }}
+{{- template "minecraft.envMap" list "FORGE_INSTALLER_URL" .Values.minecraftServer.forgeInstallerUrl  }}
         {{- else }}
-        - name: FORGEVERSION
-          value: {{ .Values.minecraftServer.forgeVersion | quote }}
+{{- template "minecraft.envMap" list "FORGEVERSION" .Values.minecraftServer.forgeVersion  }}
         {{- end }}
         {{- else if eq .Values.minecraftServer.type "SPIGOT" }}
-        - name: SPIGOT_DOWNLOAD_URL
-          value: {{ .Values.minecraftServer.spigotDownloadUrl | quote }}
+{{- template "minecraft.envMap" list "SPIGOT_DOWNLOAD_URL" .Values.minecraftServer.spigotDownloadUrl  }}
         {{- else if eq .Values.minecraftServer.type "BUKKIT" }}
-        - name: BUKKIT_DOWNLOAD_URL
-          value: {{ .Values.minecraftServer.bukkitDownloadUrl | quote }}
+{{- template "minecraft.envMap" list "BUKKIT_DOWNLOAD_URL" .Values.minecraftServer.bukkitDownloadUrl  }}
         {{- else if eq .Values.minecraftServer.type "PAPER" }}
-        - name: PAPER_DOWNLOAD_URL
-          value: {{ .Values.minecraftServer.paperDownloadUrl | quote }}
+{{- template "minecraft.envMap" list "PAPER_DOWNLOAD_URL" .Values.minecraftServer.paperDownloadUrl  }}
         {{- else if eq .Values.minecraftServer.type "FTBA" }}
-        - name: FTB_MODPACK_ID
-          value: {{ required "You must supply a minecraftserver.ftbModpackVersionID with type=FTBA" .Values.minecraftServer.ftbModpackId | quote }}
+{{- template "minecraft.envMap" list "FTB_MODPACK_ID" required "You must supply a minecraftserver.ftbModpackVersionID with type=FTBA" .Values.minecraftServer.ftbModpackId  }}
         {{- if .Values.minecraftServer.ftbModpackVersionId }}
-        - name: FTB_MODPACK_VERSION_ID
-          value: {{ .Values.minecraftServer.ftbModpackVersionId | quote }}
+{{- template "minecraft.envMap" list "FTB_MODPACK_VERSION_ID" .Values.minecraftServer.ftbModpackVersionId  }}
         {{- end }}
         {{- else if eq .Values.minecraftServer.type "CURSEFORGE" }}
-        - name: CF_SERVER_MOD
-          value: {{ .Values.minecraftServer.cfServerMod | quote }}
-        - name: FTB_LEGACYJAVAFIXER
-          value: {{ default false .Values.minecraftServer.ftbLegacyJavaFixer | quote }}
+{{- template "minecraft.envMap" list "CF_SERVER_MOD" .Values.minecraftServer.cfServerMod  }}
+{{- template "minecraft.envMap" list "FTB_LEGACYJAVAFIXER" .Values.minecraftServer.ftbLegacyJavaFixer  }}
         {{- end }}
-        - name: VERSION
-          value: {{ .Values.minecraftServer.version | quote }}
-        - name: DIFFICULTY
-          value: {{ .Values.minecraftServer.difficulty | quote }}
-        - name: WHITELIST
-          value: {{ default "" .Values.minecraftServer.whitelist | quote }}
-        - name: OPS
-          value: {{ default "" .Values.minecraftServer.ops | quote }}
-        - name: ICON
-          value: {{ default "" .Values.minecraftServer.icon | quote }}
-        - name: MAX_PLAYERS
-          value: {{ .Values.minecraftServer.maxPlayers | quote }}
-        - name: MAX_WORLD_SIZE
-          value: {{ .Values.minecraftServer.maxWorldSize | quote }}
-        - name: ALLOW_NETHER
-          value: {{ .Values.minecraftServer.allowNether | quote }}
-        - name: ANNOUNCE_PLAYER_ACHIEVEMENTS
-          value: {{ .Values.minecraftServer.announcePlayerAchievements | quote }}
-        - name: ENABLE_COMMAND_BLOCK
-          value: {{ .Values.minecraftServer.enableCommandBlock | quote }}
-        - name: FORCE_GAMEMODE
-          value: {{ .Values.minecraftServer.forcegameMode | quote }}
+{{- template "minecraft.envMap" list "VERSION" .Values.minecraftServer.version  }}
+{{- template "minecraft.envMap" list "DIFFICULTY" .Values.minecraftServer.difficulty  }}
+{{- template "minecraft.envMap" list "WHITELIST" .Values.minecraftServer.whitelist }}
+{{- template "minecraft.envMap" list "OPS" .Values.minecraftServer.ops  }}
+{{- template "minecraft.envMap" list "ICON" .Values.minecraftServer.icon  }}
+{{- template "minecraft.envMap" list "MAX_PLAYERS" .Values.minecraftServer.maxPlayers  }}
+{{- template "minecraft.envMap" list "MAX_WORLD_SIZE" .Values.minecraftServer.maxWorldSize  }}
+{{- template "minecraft.envMap" list "ALLOW_NETHER" .Values.minecraftServer.allowNether  }}
+{{- template "minecraft.envMap" list "ANNOUNCE_PLAYER_ACHIEVEMENTS" .Values.minecraftServer.announcePlayerAchievements  }}
+{{- template "minecraft.envMap" list "ENABLE_COMMAND_BLOCK" .Values.minecraftServer.enableCommandBlock  }}
+{{- template "minecraft.envMap" list "FORCE_GAMEMODE" .Values.minecraftServer.forcegameMode  }}
         {{- if .Values.minecraftServer.forceReDownload }}
         - name: FORCE_REDOWNLOAD
           value: "TRUE"
         {{- end }}
-        - name: GENERATE_STRUCTURES
-          value: {{ .Values.minecraftServer.generateStructures | quote }}
-        - name: HARDCORE
-          value: {{ .Values.minecraftServer.hardcore | quote }}
-        - name: MAX_BUILD_HEIGHT
-          value: {{ .Values.minecraftServer.maxBuildHeight | quote }}
-        - name: MAX_TICK_TIME
-          value: {{ .Values.minecraftServer.maxTickTime | quote }}
-        - name: SPAWN_ANIMALS
-          value: {{ .Values.minecraftServer.spawnAnimals | quote }}
-        - name: SPAWN_MONSTERS
-          value: {{ .Values.minecraftServer.spawnMonsters | quote }}
-        - name: SPAWN_NPCS
-          value: {{ .Values.minecraftServer.spawnNPCs | quote }}
-        - name: SPAWN_PROTECTION
-          value: {{ .Values.minecraftServer.spawnProtection | quote }}
-        - name: VIEW_DISTANCE
-          value: {{ .Values.minecraftServer.viewDistance | quote }}
-        - name: SEED
-          value: {{ default "" .Values.minecraftServer.levelSeed | quote }}
-        - name: MODE
-          value: {{ .Values.minecraftServer.gameMode | quote }}
-        - name: MOTD
-          value: {{ .Values.minecraftServer.motd | quote }}
-        - name: PVP
-          value: {{ .Values.minecraftServer.pvp | quote }}
-        - name: LEVEL_TYPE
-          value: {{ .Values.minecraftServer.levelType | quote }}
-        - name: GENERATOR_SETTINGS
-          value: {{ default "" .Values.minecraftServer.generatorSettings | quote }}
-        - name: LEVEL
-          value: {{ .Values.minecraftServer.worldSaveName | quote }}
+{{- template "minecraft.envMap" list "GENERATE_STRUCTURES" .Values.minecraftServer.generateStructures  }}
+{{- template "minecraft.envMap" list "HARDCORE" .Values.minecraftServer.hardcore  }}
+{{- template "minecraft.envMap" list "MAX_BUILD_HEIGHT" .Values.minecraftServer.maxBuildHeight  }}
+{{- template "minecraft.envMap" list "MAX_TICK_TIME" .Values.minecraftServer.maxTickTime  }}
+{{- template "minecraft.envMap" list "SPAWN_ANIMALS" .Values.minecraftServer.spawnAnimals  }}
+{{- template "minecraft.envMap" list "SPAWN_MONSTERS" .Values.minecraftServer.spawnMonsters  }}
+{{- template "minecraft.envMap" list "SPAWN_NPCS" .Values.minecraftServer.spawnNPCs  }}
+{{- template "minecraft.envMap" list "SPAWN_PROTECTION" .Values.minecraftServer.spawnProtection  }}
+{{- template "minecraft.envMap" list "VIEW_DISTANCE" .Values.minecraftServer.viewDistance  }}
+{{- template "minecraft.envMap" list "SEED" .Values.minecraftServer.levelSeed  }}
+{{- template "minecraft.envMap" list "MODE" .Values.minecraftServer.gameMode  }}
+{{- template "minecraft.envMap" list "MOTD" .Values.minecraftServer.motd  }}
+{{- template "minecraft.envMap" list "PVP" .Values.minecraftServer.pvp  }}
+{{- template "minecraft.envMap" list "LEVEL_TYPE" .Values.minecraftServer.levelType  }}
+{{- template "minecraft.envMap" list "GENERATOR_SETTINGS" .Values.minecraftServer.generatorSettings  }}
+{{- template "minecraft.envMap" list "LEVEL" .Values.minecraftServer.worldSaveName  }}
         {{- if .Values.minecraftServer.downloadWorldUrl }}
-        - name: WORLD
-          value: {{ .Values.minecraftServer.downloadWorldUrl | quote }}
+{{- template "minecraft.envMap" list "WORLD" .Values.minecraftServer.downloadWorldUrl  }}
         {{- end }}
         {{- if .Values.minecraftServer.downloadModpackUrl }}
-        - name: MODPACK
-          value: {{ .Values.minecraftServer.downloadModpackUrl | quote }}
+{{- template "minecraft.envMap" list "MODPACK" .Values.minecraftServer.downloadModpackUrl  }}
         {{- if .Values.minecraftServer.removeOldMods }}
         - name: REMOVE_OLD_MODS
           value: "TRUE"
         {{- end }}
         {{- end }}
         {{- if .Values.minecraftServer.spigetResources }}
-        - name: SPIGET_RESOURCES
-          value: {{ join "," .Values.minecraftServer.spigetResources | quote }}
+{{- template "minecraft.envMap" list "SPIGET_RESOURCES" join "," .Values.minecraftServer.spigetResources  }}
         {{- end }}
         {{- if .Values.minecraftServer.modrinth.projects }}
         - name: MODRINTH_PROJECTS
@@ -310,33 +249,24 @@ spec:
         - name: MODRINTH_ALLOWED_VERSION_TYPE
           value: {{ default "release" .Values.minecraftServer.modrinth.allowedVersionType | quote }}
         {{- if .Values.minecraftServer.vanillaTweaksShareCodes }}
-        - name: VANILLATWEAKS_SHARECODE
-          value: {{ join "," .Values.minecraftServer.vanillaTweaksShareCodes | quote }}
+{{- template "minecraft.envMap" list "VANILLATWEAKS_SHARECODE" join "," .Values.minecraftServer.vanillaTweaksShareCodes  }}
         {{- end }}
         {{- if .Values.minecraftServer.resourcePackUrl }}
-        - name: RESOURCE_PACK
-          value: {{ .Values.minecraftServer.resourcePackUrl | quote }}
+{{- template "minecraft.envMap" list "RESOURCE_PACK" .Values.minecraftServer.resourcePackUrl  }}
         {{- end }}
         {{- if .Values.minecraftServer.resourcePackSha }}
-        - name: RESOURCE_PACK_SHA1
-          value: {{ .Values.minecraftServer.resourcePackSha | quote }}
+{{- template "minecraft.envMap" list "RESOURCE_PACK_SHA1" .Values.minecraftServer.resourcePackSha  }}
         {{- end }}
         {{- if .Values.minecraftServer.resourcePackEnforce }}
         - name: RESOURCE_PACK_ENFORCE
           value: "TRUE"
         {{- end }}
-        - name: ONLINE_MODE
-          value: {{ .Values.minecraftServer.onlineMode | quote }}
-        - name: ENFORCE_SECURE_PROFILE
-          value: {{ .Values.minecraftServer.enforceSecureProfile | quote }}
-        - name: MEMORY
-          value: {{ .Values.minecraftServer.memory | quote }}
-        - name: JVM_OPTS
-          value: {{ .Values.minecraftServer.jvmOpts | quote }}
-        - name: JVM_XX_OPTS
-          value: {{ .Values.minecraftServer.jvmXXOpts | quote }}
-        - name: OVERRIDE_SERVER_PROPERTIES
-          value: {{ default false .Values.minecraftServer.overrideServerProperties | quote }}
+{{- template "minecraft.envMap" list "ONLINE_MODE" .Values.minecraftServer.onlineMode  }}
+{{- template "minecraft.envMap" list "ENFORCE_SECURE_PROFILE" .Values.minecraftServer.enforceSecureProfile  }}
+{{- template "minecraft.envMap" list "MEMORY" .Values.minecraftServer.memory  }}
+{{- template "minecraft.envMap" list "JVM_OPTS" .Values.minecraftServer.jvmOpts  }}
+{{- template "minecraft.envMap" list "JVM_XX_OPTS" .Values.minecraftServer.jvmXXOpts  }}
+{{- template "minecraft.envMap" list "OVERRIDE_SERVER_PROPERTIES" .Values.minecraftServer.overrideServerProperties  }}
 
         {{- if .Values.minecraftServer.rcon.enabled }}
         - name: ENABLE_RCON
@@ -353,8 +283,7 @@ spec:
         {{- if .Values.minecraftServer.query.enabled }}
         - name: ENABLE_QUERY
           value: "true"
-        - name: QUERY_PORT
-          value: {{ .Values.minecraftServer.query.port | quote }}
+{{- template "minecraft.envMap" list "QUERY_PORT" .Values.minecraftServer.query.port  }}
         {{- end }}
 
     {{- if and .Values.minecraftServer.autoCurseForge (eq "AUTO_CURSEFORGE" .Values.minecraftServer.type) }}
