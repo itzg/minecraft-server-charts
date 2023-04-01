@@ -364,9 +364,9 @@ spec:
         - name: CF_SLUG
           value: {{ .slug | quote }}
         - name: CF_FILE_ID
-          value: {{ .fileId }}
+          value: {{ .fileId | quote }}
         - name: CF_FILENAME_MATCHER
-          value: {{ .filenameMatcher }}
+          value: {{ .filenameMatcher | quote }}
         {{- if .excludeMods }}
         - name: CF_EXCLUDE_MODS
           value: {{ join "," .excludeMods | quote }}
@@ -375,7 +375,7 @@ spec:
         - name: CF_FORCE_INCLUDE_MODS
           value: {{ join "," .includeMods | quote }}
         {{- end }}
-        {{- if not eq nil .excludeIncludeFile }}
+        {{- if not (eq nil .excludeIncludeFile) }}
         - name: CF_EXCLUDE_INCLUDE_FILE
           value: {{ .excludeIncludeFile | quote }}
         {{- end }}
