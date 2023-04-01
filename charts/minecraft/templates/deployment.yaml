@@ -238,16 +238,19 @@ spec:
         {{- if .Values.minecraftServer.spigetResources }}
 {{- template "minecraft.envMap" list "SPIGET_RESOURCES" join "," .Values.minecraftServer.spigetResources  }}
         {{- end }}
-        {{- if .Values.minecraftServer.modrinth.projects }}
-        - name: MODRINTH_PROJECTS
-          value: {{ join "," .Values.minecraftServer.modrinth.projects | quote }}
+
+    {{- if  .Values.minecraftServer.modrinth }}
+    {{- with .Values.minecraftServer.modrinth }}
+        {{- if .projects }}
+{{- template "minecraft.envMap" list "MODRINTH_PROJECTS" join "," .projects }}
         {{- end }}
-        {{- if .Values.minecraftServer.modrinth.optionalDependencies }}
-        - name: MODRINTH_DOWNLOAD_OPTIONAL_DEPENDENCIES
-          value: "TRUE"
+        {{- if .optionalDependencies }}
+{{- template "minecraft.envMap" list "MODRINTH_DOWNLOAD_OPTIONAL_DEPENDENCIES" "TRUE" }}
         {{- end }}
-        - name: MODRINTH_ALLOWED_VERSION_TYPE
-          value: {{ default "release" .Values.minecraftServer.modrinth.allowedVersionType | quote }}
+{{- template "minecraft.envMap" list "MODRINTH_ALLOWED_VERSION_TYPE" .allowedVersionType }}
+    {{- end }}
+    {{- end }}
+
         {{- if .Values.minecraftServer.vanillaTweaksShareCodes }}
 {{- template "minecraft.envMap" list "VANILLATWEAKS_SHARECODE" join "," .Values.minecraftServer.vanillaTweaksShareCodes  }}
         {{- end }}
@@ -288,37 +291,26 @@ spec:
 
     {{- if and .Values.minecraftServer.autoCurseForge (eq "AUTO_CURSEFORGE" .Values.minecraftServer.type) }}
     {{- with .Values.minecraftServer.autoCurseForge }}
-        - name: CF_PAGE_URL
-          value: {{ .pageUrl | quote }}
-        - name: CF_SLUG
-          value: {{ .slug | quote }}
-        - name: CF_FILE_ID
-          value: {{ .fileId | quote }}
-        - name: CF_FILENAME_MATCHER
-          value: {{ .filenameMatcher | quote }}
+{{- template "minecraft.envMap" list "CF_PAGE_URL" .pageUrl }}
+{{- template "minecraft.envMap" list "CF_SLUG" .slug }}
+{{- template "minecraft.envMap" list "CF_FILE_ID" .fileId }}
+{{- template "minecraft.envMap" list "CF_FILENAME_MATCHER" .filenameMatcher }}
         {{- if .excludeMods }}
-        - name: CF_EXCLUDE_MODS
-          value: {{ join "," .excludeMods | quote }}
+{{- template "minecraft.envMap" list "CF_EXCLUDE_MODS" .excludeMods }}
         {{- end }}
         {{- if .includeMods }}
-        - name: CF_FORCE_INCLUDE_MODS
-          value: {{ join "," .includeMods | quote }}
+{{- template "minecraft.envMap" list "CF_FORCE_INCLUDE_MODS" .includeMods }}
         {{- end }}
         {{- if not (eq nil .excludeIncludeFile) }}
-        - name: CF_EXCLUDE_INCLUDE_FILE
-          value: {{ .excludeIncludeFile | quote }}
+{{- template "minecraft.envMap" list "CF_EXCLUDE_INCLUDE_FILE" .excludeIncludeFile }}
         {{- end }}
         {{- if .forceSynchronize }}
-        - name: CF_FORCE_SYNCHRONIZE
-          value: "true"
+{{- template "minecraft.envMap" list "CF_FORCE_SYNCHRONIZE" "true" }}
         {{- end }}
-        - name: CF_SET_LEVEL_FROM
-          value: {{ .setLevelFrom | quote }}
-        - name: CF_PARALLEL_DOWNLOADS
-          value: {{ .parallelDownloads }}
+{{- template "minecraft.envMap" list "CF_SET_LEVEL_FROM" .setLevelFrom }}
+{{- template "minecraft.envMap" list "CF_PARALLEL_DOWNLOADS" .parallelDownloads }}
         {{- if .overridesSkipExisting }}
-        - name: CF_OVERRIDES_SKIP_EXISTING
-          value: "true"
+{{- template "minecraft.envMap" list "CF_OVERRIDES_SKIP_EXISTING" "true" }}
         {{- end }}
     {{- end }}
     {{- end }}
