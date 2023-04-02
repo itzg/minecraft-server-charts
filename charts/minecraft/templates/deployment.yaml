@@ -236,13 +236,13 @@ spec:
         {{- end }}
         {{- end }}
         {{- if .Values.minecraftServer.spigetResources }}
-{{- template "minecraft.envMap" list "SPIGET_RESOURCES" join "," .Values.minecraftServer.spigetResources  }}
+{{- template "minecraft.envMap" list "SPIGET_RESOURCES" (join "," .Values.minecraftServer.spigetResources) }}
         {{- end }}
 
     {{- if  .Values.minecraftServer.modrinth }}
     {{- with .Values.minecraftServer.modrinth }}
         {{- if .projects }}
-{{- template "minecraft.envMap" list "MODRINTH_PROJECTS" join "," .projects }}
+{{- template "minecraft.envMap" list "MODRINTH_PROJECTS" (join "," .projects) }}
         {{- end }}
         {{- if .optionalDependencies }}
 {{- template "minecraft.envMap" list "MODRINTH_DOWNLOAD_OPTIONAL_DEPENDENCIES" "TRUE" }}
@@ -252,7 +252,7 @@ spec:
     {{- end }}
 
         {{- if .Values.minecraftServer.vanillaTweaksShareCodes }}
-{{- template "minecraft.envMap" list "VANILLATWEAKS_SHARECODE" join "," .Values.minecraftServer.vanillaTweaksShareCodes  }}
+{{- template "minecraft.envMap" list "VANILLATWEAKS_SHARECODE" (join "," .Values.minecraftServer.vanillaTweaksShareCodes) }}
         {{- end }}
         {{- if .Values.minecraftServer.resourcePackUrl }}
 {{- template "minecraft.envMap" list "RESOURCE_PACK" .Values.minecraftServer.resourcePackUrl  }}
