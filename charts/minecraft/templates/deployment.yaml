@@ -79,7 +79,7 @@ spec:
         - name: RCON_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.minecraftServer.rcon.existingSecret | default (include "minecraft.fullname" .) }}
+              name: {{ .Values.minecraftServer.rcon.existingSecret | default (printf "%s-rcon" (include "minecraft.fullname" .)) }}
               key: {{ .Values.minecraftServer.rcon.secretKey | default "rcon-password" }}
 {{- template "minecraft.envMap" list "RCON_RETRIES" .Values.mcbackup.rconRetries  }}
 {{- template "minecraft.envMap" list "RCON_RETRY_INTERVAL" .Values.mcbackup.rconRetryInterval  }}
@@ -236,13 +236,13 @@ spec:
         {{- end }}
         {{- end }}
         {{- if .Values.minecraftServer.spigetResources }}
-{{- template "minecraft.envMap" list "SPIGET_RESOURCES" join "," .Values.minecraftServer.spigetResources  }}
+{{- template "minecraft.envMap" list "SPIGET_RESOURCES" (join "," .Values.minecraftServer.spigetResources) }}
         {{- end }}
 
     {{- if  .Values.minecraftServer.modrinth }}
     {{- with .Values.minecraftServer.modrinth }}
         {{- if .projects }}
-{{- template "minecraft.envMap" list "MODRINTH_PROJECTS" join "," .projects }}
+{{- template "minecraft.envMap" list "MODRINTH_PROJECTS" (join "," .projects) }}
         {{- end }}
         {{- if .optionalDependencies }}
 {{- template "minecraft.envMap" list "MODRINTH_DOWNLOAD_OPTIONAL_DEPENDENCIES" "TRUE" }}
@@ -252,7 +252,7 @@ spec:
     {{- end }}
 
         {{- if .Values.minecraftServer.vanillaTweaksShareCodes }}
-{{- template "minecraft.envMap" list "VANILLATWEAKS_SHARECODE" join "," .Values.minecraftServer.vanillaTweaksShareCodes  }}
+{{- template "minecraft.envMap" list "VANILLATWEAKS_SHARECODE" (join "," .Values.minecraftServer.vanillaTweaksShareCodes) }}
         {{- end }}
         {{- if .Values.minecraftServer.resourcePackUrl }}
 {{- template "minecraft.envMap" list "RESOURCE_PACK" .Values.minecraftServer.resourcePackUrl  }}
@@ -277,7 +277,7 @@ spec:
         - name: RCON_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.minecraftServer.rcon.existingSecret | default (include "minecraft.fullname" .) }}
+              name: {{ .Values.minecraftServer.rcon.existingSecret | default (printf "%s-rcon" (include "minecraft.fullname" .)) }}
               key: {{ .Values.minecraftServer.rcon.secretKey | default "rcon-password" }}
         {{- else }}
         - name: ENABLE_RCON
@@ -291,6 +291,11 @@ spec:
 
     {{- if and .Values.minecraftServer.autoCurseForge (eq "AUTO_CURSEFORGE" .Values.minecraftServer.type) }}
     {{- with .Values.minecraftServer.autoCurseForge }}
+        - name: CF_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .apiKey.existingSecret | default (printf "%s-curseforge" (include "minecraft.fullname" $)) }}
+              key: {{ .apiKey.secretKey | default "cf-api-key" }}
 {{- template "minecraft.envMap" list "CF_PAGE_URL" .pageUrl }}
 {{- template "minecraft.envMap" list "CF_SLUG" .slug }}
 {{- template "minecraft.envMap" list "CF_FILE_ID" .fileId }}

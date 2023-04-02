@@ -34,6 +34,20 @@
                 "autoCurseForge": {
                     "type": "object",
                     "properties": {
+                        "apiKey": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "string"
+                                },
+                                "existingSecret": {
+                                    "type": "string"
+                                },
+                                "secretKey": {
+                                    "type": "string"
+                                }
+                            }
+                        },
                         "pageUrl": {
                             "type": "string"
                         },

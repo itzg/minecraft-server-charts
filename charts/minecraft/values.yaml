@@ -232,6 +232,11 @@ minecraftServer:
 
   # Config for AUTO_CURSEFORGE server type
   autoCurseForge:
+    # CurseForge API key obtained from developer console
+    apiKey:
+      key: "CHANGEME!"
+      existingSecret: ""
+      secretKey: cf-api-key
     # Link to modpack in general or a specific file
     # NOTE: In case of specific file - do not point at server file
     pageUrl: ""
