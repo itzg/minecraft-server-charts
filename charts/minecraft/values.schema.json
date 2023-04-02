@@ -24,6 +24,12 @@
                         }
                     }
                 },
+                "spigetResources": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "modUrls": {
                     "type": "array",
                     "items": {
@@ -63,14 +69,14 @@
                         "excludeMods": {
                             "type": "array",
                             "items": {
-                                "type": "string"
+                                "type": ["integer", "string"]
                             },
                             "uniqueItems": true
                         },
                         "includeMods": {
                             "type": "array",
                             "items": {
-                                "type": "string"
+                                "type": ["integer", "string"]
                             },
                             "uniqueItems": true
                         },
