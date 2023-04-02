@@ -230,10 +230,12 @@ spec:
         {{- end }}
         {{- if .Values.minecraftServer.downloadModpackUrl }}
 {{- template "minecraft.envMap" list "MODPACK" .Values.minecraftServer.downloadModpackUrl  }}
-        {{- if .Values.minecraftServer.removeOldMods }}
-        - name: REMOVE_OLD_MODS
-          value: "TRUE"
         {{- end }}
+        {{- if .Values.minecraftServer.removeOldMods }}
+{{- template "minecraft.envMap" list "REMOVE_OLD_MODS" "true" }}
+        {{- end }}
+        {{- if .Values.minecraftServer.modUrls }}
+{{- template "minecraft.envMap" list "MODS" (join "," .Values.minecraftServer.modUrls) }}
         {{- end }}
         {{- if .Values.minecraftServer.spigetResources }}
 {{- template "minecraft.envMap" list "SPIGET_RESOURCES" (join "," .Values.minecraftServer.spigetResources) }}
@@ -301,10 +303,10 @@ spec:
 {{- template "minecraft.envMap" list "CF_FILE_ID" .fileId }}
 {{- template "minecraft.envMap" list "CF_FILENAME_MATCHER" .filenameMatcher }}
         {{- if .excludeMods }}
-{{- template "minecraft.envMap" list "CF_EXCLUDE_MODS" .excludeMods }}
+{{- template "minecraft.envMap" list "CF_EXCLUDE_MODS" (join "," .excludeMods) }}
         {{- end }}
         {{- if .includeMods }}
-{{- template "minecraft.envMap" list "CF_FORCE_INCLUDE_MODS" .includeMods }}
+{{- template "minecraft.envMap" list "CF_FORCE_INCLUDE_MODS" (join "," .includeMods) }}
         {{- end }}
         {{- if not (eq nil .excludeIncludeFile) }}
 {{- template "minecraft.envMap" list "CF_EXCLUDE_INCLUDE_FILE" .excludeIncludeFile }}
