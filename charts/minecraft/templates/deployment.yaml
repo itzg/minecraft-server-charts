@@ -186,7 +186,7 @@ spec:
         {{- else if eq .Values.minecraftServer.type "PAPER" }}
 {{- template "minecraft.envMap" list "PAPER_DOWNLOAD_URL" .Values.minecraftServer.paperDownloadUrl  }}
         {{- else if eq .Values.minecraftServer.type "FTBA" }}
-{{- template "minecraft.envMap" list "FTB_MODPACK_ID" required "You must supply a minecraftserver.ftbModpackVersionID with type=FTBA" .Values.minecraftServer.ftbModpackId  }}
+{{- template "minecraft.envMap" list "FTB_MODPACK_ID" (required "You must supply a minecraftserver.ftbModpackVersionID with type=FTBA" .Values.minecraftServer.ftbModpackId)  }}
         {{- if .Values.minecraftServer.ftbModpackVersionId }}
 {{- template "minecraft.envMap" list "FTB_MODPACK_VERSION_ID" .Values.minecraftServer.ftbModpackVersionId  }}
         {{- end }}
