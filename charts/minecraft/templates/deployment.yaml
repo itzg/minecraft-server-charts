@@ -47,8 +47,7 @@ spec:
         - name: {{ .Values.image.pullSecret }}
       {{- end }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if .Values.initContainers }}
       initContainers:
       {{- toYaml .Values.initContainers | nindent 8 }}
@@ -119,6 +118,8 @@ spec:
         {{-   end }}
         {{- end }}
         volumeMounts:
+        - name: tmp
+          mountPath: /tmp
         - name: datadir
           mountPath: /data
           readOnly: true
@@ -133,6 +134,8 @@ spec:
         {{-     toYaml .volumeMounts | nindent 8 }}
         {{-   end }}
         {{- end }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
       {{- end }}
       - name: {{ template "minecraft.fullname" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -321,7 +324,7 @@ spec:
         {{- end }}
     {{- end }}
     {{- end }}
-        
+
 
       {{- range $key, $value := .Values.extraEnv }}
       {{-   if kindIs "map" $value }}
@@ -357,6 +360,8 @@ spec:
         {{- end }}
         {{- end }}
         volumeMounts:
+        - name: tmp
+          mountPath: /tmp
         - name: datadir
           mountPath: /data
           {{- if (and .Values.persistence.dataDir.enabled .Values.persistence.dataDir.subPath) }}
@@ -370,10 +375,14 @@ spec:
         {{-     toYaml .volumeMounts | nindent 8 }}
         {{-   end }}
         {{- end }}
+        securityContext:
+            {{- toYaml .Values.securityContext | nindent 10 }}
       {{- if .Values.sidecarContainers }}
       {{- toYaml .Values.sidecarContainers | nindent 6 }}
       {{- end }}
       volumes:
+      - name: tmp
+        emptyDir: {}
       - name: datadir
       {{- if .Values.persistence.dataDir.enabled }}
         persistentVolumeClaim:

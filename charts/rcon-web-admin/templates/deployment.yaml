@@ -25,6 +25,9 @@ spec:
       serviceAccountName: {{ include "rcon-web-admin.fullname" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: db
+          emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -35,7 +38,7 @@ spec:
             - name: RWA_USERNAME
               value: {{ .Values.rconWeb.username | default "admin" | quote }}
             - name: RWA_PASSWORD
-              valueFrom: 
+              valueFrom:
                 secretKeyRef:
                   name: {{ .Values.rconWeb.passwordExistingSecret | default (include "rcon-web-admin.fullname" .) }}
                   key: {{ .Values.rconWeb.passwordKey | default "password" }}
@@ -102,6 +105,9 @@ spec:
             - name: ws
               containerPort: 4327
               protocol: TCP
+          volumeMounts:
+            - name: db
+              mountPath: /opt/rcon-web-admin/db
           livenessProbe:
             httpGet:
               path: /
