@@ -14,11 +14,21 @@ resources:
     memory: 512Mi
     cpu: 500m
 
-securityContext:
-  # Security context settings
+podSecurityContext:
   runAsUser: 1000
-  runAsGroup: 1000
+  runAsGroup: 3000
+  runAsNonRoot: true
   fsGroup: 2000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+
 # Most of these map to environment variables. See Minecraft for details:
 # https://hub.docker.com/r/itzg/docker-bungeecord/
 livenessProbe:
@@ -176,37 +186,37 @@ minecraftProxy:
     # externalTrafficPolicy: Cluster
 
   extraPorts: []
-    # These options allow you to expose another port from the Minecraft proxy, plugins such
-    # as NuVotifier (8192) will require this for incoming webhooks
-    #
-    # - name: vote
-    #   containerPort: 8192
-    #   protocol: TCP
-    #   service:
-    #     enabled: false
-    #     embedded: false
-    #     annotations: {}
-    #     type: ClusterIP
-    #     ## Set the external port if the rcon serviceType is NodePort
-    ##     nodePort:
-    #     loadBalancerIP: ""
-    #     loadBalancerSourceRanges: []
-    #     externalTrafficPolicy: Cluster
-    #     port: 8192
-    #   ingress:
-    #     ingressClassName: nginx
-    #     enabled: false
-    #     annotations:
-    ## Deprecated way for specifying the ingressClass. Kube.version < 1.18
-    ##       kubernetes.io/ingress.class: nginx
-    #       kubernetes.io/tls-acme: "true"
-    #     hosts:
-    #       - name: vote.local
-    #         path: /
-    #     tls:
-    #       - secretName: vote-tls
-    #         hosts:
-    #           - vote.local
+  # These options allow you to expose another port from the Minecraft proxy, plugins such
+  # as NuVotifier (8192) will require this for incoming webhooks
+  #
+  # - name: vote
+  #   containerPort: 8192
+  #   protocol: TCP
+  #   service:
+  #     enabled: false
+  #     embedded: false
+  #     annotations: {}
+  #     type: ClusterIP
+  #     ## Set the external port if the rcon serviceType is NodePort
+  ##     nodePort:
+  #     loadBalancerIP: ""
+  #     loadBalancerSourceRanges: []
+  #     externalTrafficPolicy: Cluster
+  #     port: 8192
+  #   ingress:
+  #     ingressClassName: nginx
+  #     enabled: false
+  #     annotations:
+  ## Deprecated way for specifying the ingressClass. Kube.version < 1.18
+  ##       kubernetes.io/ingress.class: nginx
+  #       kubernetes.io/tls-acme: "true"
+  #     hosts:
+  #       - name: vote.local
+  #         path: /
+  #     tls:
+  #       - secretName: vote-tls
+  #         hosts:
+  #           - vote.local
 
 ## Additional minecraft container environment variables
 ## Values can be either variable values or `valueFrom` yaml
