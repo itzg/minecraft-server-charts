@@ -5,6 +5,36 @@
         "minecraftServer": {
             "type": "object",
             "properties": {
+                "eula": {
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": ["true", "TRUE", "false", "FALSE"]
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "version": {"type": "string",
+                    "default": "LATEST",
+                    "title": "Minecraft version for all server types",
+                    "description": "Such as LATEST, SNAPSHOT, or a specific version. Refer to https://docker-minecraft-server.readthedocs.io/en/latest/versions/minecraft/"
+                },
+                "type": {"type": "string",
+                    "default": "VANILLA",
+                    "title": "Server type",
+                    "description": "Refer to https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/"
+                },
+                "difficulty": {
+                    "type": "string"
+                },
+                "maxPlayers": {
+                    "type": "integer"
+                },
+                "maxWorldSize": {
+                    "type": "integer"
+                },
                 "modrinth": {
                     "type": "object",
                     "required": ["projects"],
@@ -97,8 +127,54 @@
                             "type": "boolean"
                         }
                     }
-                }
-            }
+                },
+                "pluginUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "maxBuildHeight": {
+                    "type": "integer"
+                },
+                "maxTickTime": {
+                    "type": "integer"
+                },
+                "spawnProtection": {
+                    "type": "integer"
+                },
+                "ftbLegacyJavaFixer": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "allowNether": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "announcePlayerAchievements": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "enableCommandBlock": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "forcegameMode": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "generateStructures": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "hardcore": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "spawnAnimals": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "spawnMonsters": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "spawnNPCs": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "pvp": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "onlineMode": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "enforceSecureProfile": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
+                "overrideServerProperties": {
+                    "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]}
+            },
+            "required": [
+                "eula"
+            ]
         }
     }
 }
