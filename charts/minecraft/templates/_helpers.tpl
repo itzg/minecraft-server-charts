@@ -31,3 +31,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
           value: {{ index . 1 | quote }}
 {{- end }}
 {{- end }}
+
+{{- define "minecraft.envBoolMap" }}
+{{- if ne (toString (index . 1)) "default" }}
+        - name: {{ index . 0 }}
+          value: {{ index . 1 | quote }}
+{{- end }}
+{{- end }}
