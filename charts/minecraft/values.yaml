@@ -19,8 +19,8 @@ resources:
     cpu: 500m
 
 lifecycle:
-  postStart: {}
-  preStop: {}
+  postStart: []
+  preStop: []
 
 # upgrade strategy type (e.g. Recreate or RollingUpdate)
 strategyType: Recreate
