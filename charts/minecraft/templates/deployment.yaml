@@ -142,6 +142,24 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         tty: true
         stdin: true
+        # Working here
+        {{- if or (.Values.lifecycle.postStart) (.Values.lifecycle.preStop)}}
+        lifecycle:
+          {{- if .Values.lifecycle.postStart }}
+          postStart:
+            exec:
+              command: {{- range .Values.lifecycle.postStart }}
+                - {{ . }}
+              {{- end }}
+          {{- end }}
+          {{- if .Values.lifecycle.preStop }}
+          preStop:
+            exec:
+              command: {{- range .Values.lifecycle.postStart }}
+                - {{ . }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         {{- if .Values.startupProbe.enabled }}
