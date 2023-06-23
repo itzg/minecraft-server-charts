@@ -142,7 +142,6 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         tty: true
         stdin: true
-        # Working here
         {{- if or (.Values.lifecycle.postStart) (.Values.lifecycle.preStop)}}
         lifecycle:
           {{- if .Values.lifecycle.postStart }}
