@@ -13,6 +13,9 @@ metadata:
     chart: "{{ $.Chart.Name }}-{{ $.Chart.Version }}"
     release: "{{ $.Release.Name }}"
     heritage: "{{ $.Release.Service }}"
+    app.kubernetes.io/name: "{{ .Chart.Name }}"
+    app.kubernetes.io/instance: {{ $minecraftFullname }}
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
 spec:
 {{- if (or (eq .service.type "ClusterIP") (empty .service.type)) }}
   type: ClusterIP

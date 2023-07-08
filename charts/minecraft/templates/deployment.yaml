@@ -14,6 +14,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+    app.kubernetes.io/name: "{{ .Chart.Name }}"
+    app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
+    app.kubernetes.io/version: "{{ .Chart.Version }}"
   {{- if .Values.deploymentLabels }}
     {{- range $key, $value := .Values.deploymentLabels}}
     {{ $key }}: {{ $value | quote }}
@@ -30,6 +33,9 @@ spec:
     metadata:
       labels:
         app: {{ template "minecraft.fullname" . }}
+        app.kubernetes.io/name: "{{ .Chart.Name }}"
+        app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
+        app.kubernetes.io/version: "{{ .Chart.Version }}"
       {{- if .Values.podLabels }}
         {{- range $key, $value := .Values.podLabels}}
         {{ $key }}: {{ $value | quote }}
