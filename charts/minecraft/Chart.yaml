@@ -1,21 +1,21 @@
 apiVersion: v1
 name: minecraft
-version: 4.9.1
+version: 4.9.2
 appVersion: SeeValues
 home: https://minecraft.net/
 description: Minecraft server
 keywords:
-- game
-- server
+  - game
+  - server
 sources:
-- https://github.com/itzg/minecraft-server-charts
+  - https://github.com/itzg/minecraft-server-charts
 maintainers:
-- name: gtaylor
-  email: gtaylor@gc-taylor.com
-- name: billimek
-  email: jeff@billimek.com
-- name: itzg
-  email: itzgeoff@gmail.com
+  - name: gtaylor
+    email: gtaylor@gc-taylor.com
+  - name: billimek
+    email: jeff@billimek.com
+  - name: itzg
+    email: itzgeoff@gmail.com
 annotations:
   artifacthub.io/links: |
     - name: Image source
