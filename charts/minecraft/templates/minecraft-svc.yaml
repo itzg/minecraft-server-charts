@@ -35,6 +35,13 @@ spec:
 {{- if .Values.minecraftServer.clusterIP }}
   clusterIP: {{ .Values.minecraftServer.clusterIP }}
 {{- end }}
+{{- if .Values.minecraftServer.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.minecraftServer.ipFamilyPolicy }}
+{{- end }}
+{{- if .Values.minecraftServer.ipFamilies }}
+  ipFamilies:
+{{ toYaml .Values.minecraftServer.ipFamilies | indent 4 }}
+{{- end }}
   {{- if .Values.minecraftServer.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.minecraftServer.externalTrafficPolicy }}
   {{- end }}
