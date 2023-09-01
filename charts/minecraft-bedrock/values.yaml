@@ -69,6 +69,10 @@ initContainers: []
 #           - vers=4
 extraVolumes: []
 
+## Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
 minecraftServer:
   # This must be overridden, since we can't accept this for the user.
   eula: "FALSE"
