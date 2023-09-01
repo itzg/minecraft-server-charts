@@ -71,6 +71,17 @@ extraVolumes: []
 
 ## Array of extra objects to deploy with the release
 ##
+# extraDeploy:
+#   - |
+#     apiVersion: v1
+#     kind: ConfigMap
+#     metadata:
+#       name: {{ template "minecraft.fullname" . }}-extra-cm
+#     data:
+#       key: |-
+#         {
+#           "key": "value"
+#         }
 extraDeploy: []
 
 minecraftServer:
