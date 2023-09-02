@@ -9,6 +9,34 @@ entries:
           url: https://hub.docker.com/r/itzg/minecraft-server
     apiVersion: v1
     appVersion: SeeValues
+    created: "2023-09-02T23:07:04.473820064Z"
+    description: Minecraft server
+    digest: 924cf364b93d2e99c961c6c6533cc78c7e23ec56f5acb4ab3cbdf17fe8a009d2
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-4.9.6/minecraft-4.9.6.tgz
+    version: 4.9.6
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-server
+    apiVersion: v1
+    appVersion: SeeValues
     created: "2023-08-22T14:53:54.362766411Z"
     description: Minecraft server
     digest: 36b0b038a1436451f6ba8c7d5aa17fcc1121e599813c3a28d632b9a91065dfda
@@ -1986,6 +2014,34 @@ entries:
     - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-2.0.0/minecraft-2.0.0.tgz
     version: 2.0.0
   minecraft-bedrock:
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-bedrock-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-bedrock-server
+    apiVersion: v1
+    appVersion: SeeValues
+    created: "2023-09-02T23:07:04.657881958Z"
+    description: Minecraft server
+    digest: ca97255ed3942624a27274afb45696ed432fd5986baf1f8df4e0f26c7bb9202d
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-bedrock
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-bedrock-2.1.2/minecraft-bedrock-2.1.2.tgz
+    version: 2.1.2
   - annotations:
       artifacthub.io/links: |
         - name: Image source
