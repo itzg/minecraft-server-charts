@@ -166,7 +166,7 @@ spec:
           {{- if .Values.lifecycle.preStop }}
           preStop:
             exec:
-              command: {{- range .Values.lifecycle.postStart }}
+              command: {{- range .Values.lifecycle.preStop }}
                 - {{ . }}
               {{- end }}
           {{- end }}

@@ -115,6 +115,22 @@ sidecarContainers: []
 #           - vers=4
 extraVolumes: []
 
+
+## Array of extra objects to deploy with the release
+##
+# extraDeploy:
+#   - |
+#     apiVersion: v1
+#     kind: ConfigMap
+#     metadata:
+#       name: {{ template "minecraft.fullname" . }}-extra-cm
+#     data:
+#       key: |-
+#         {
+#           "key": "value"
+#         }
+extraDeploy: []
+
 minecraftServer:
   # This must be overridden, since we can't accept this for the user.
   eula: "FALSE"
@@ -246,6 +262,9 @@ minecraftServer:
 
   # A list of Spigot resources/plugins IDs to download.
   spigetResources: []
+
+  # Additional service specs to be defined
+  extraServiceSpec: {}
 
   # A list of Modrinth project slugs with optional version after colon
   modrinth:

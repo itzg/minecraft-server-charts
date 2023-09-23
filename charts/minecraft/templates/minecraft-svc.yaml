@@ -71,3 +71,6 @@ spec:
       {{- end }}
     {{- end }}
   {{- end }}
+{{- if .Values.minecraftServer.extraServiceSpec }}
+{{ toYaml .Values.minecraftServer.extraServiceSpec | indent 2 }}
+{{- end }}
