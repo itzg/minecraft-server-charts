@@ -1,4 +1,4 @@
-{{- if and .Values.mcbackup.persistence.backupDir.enabled (not .Values.mcbackup.persistence.backupDir.existingClaim ) -}}
+{{- if and .Values.mcbackup.persistence.backupDir.enabled (not .Values.mcbackup.persistence.backupDir.existingClaim ) (not .Values.workloadAsStatefulSet) -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

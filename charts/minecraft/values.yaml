@@ -22,7 +22,16 @@ lifecycle:
   postStart: []
   preStop: []
 
-# upgrade strategy type (e.g. Recreate or RollingUpdate)
+# If true the workload is defined as a StatefulSet instead of a Deployment.
+# Make sure to also update the strategyType!
+# All configuration options for the Deployment (e.g. annotations) are used for the StatefulSet.
+# Regarding persistence: When an existing PVC is provided it will be shared between all Pods.
+# Otherwise the PVC configuration is used as a template to create PVCs for each replica.
+workloadAsStatefulSet: false
+
+# upgrade strategy type, depending on workload type:
+# - for Deployment sets strategy: Recreate or RollingUpdate
+# - for StatefulSet sets updateStrategy: OnDelete or RollingUpdate
 strategyType: Recreate
 
 nodeSelector: {}

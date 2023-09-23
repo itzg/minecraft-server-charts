@@ -1,6 +1,6 @@
 {{- if ne (printf "%s" .Values.minecraftServer.eula) "FALSE" }}
 apiVersion: apps/v1
-kind: Deployment
+kind: {{ ternary "StatefulSet" "Deployment" .Values.workloadAsStatefulSet }}
 metadata:
   name: {{ template "minecraft.fullname" . }}
   {{- if .Values.deploymentAnnotations }}
@@ -24,8 +24,14 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ default 1 .Values.replicaCount }}
+  {{- if .Values.workloadAsStatefulSet }}
+  serviceName: {{ template "minecraft.fullname" . }}
+  updateStrategy:
+    type: {{ .Values.strategyType }}
+  {{- else }}
   strategy:
     type: {{ .Values.strategyType }}
+  {{- end }}
   selector:
     matchLabels:
       app: {{ template "minecraft.fullname" . }}
@@ -411,26 +417,34 @@ spec:
       volumes:
       - name: tmp
         emptyDir: {}
-      - name: datadir
       {{- if .Values.persistence.dataDir.enabled }}
+      {{- if .Values.persistence.dataDir.existingClaim }}
+      - name: datadir
         persistentVolumeClaim:
-        {{- if .Values.persistence.dataDir.existingClaim }}
           claimName: {{ .Values.persistence.dataDir.existingClaim }}
-        {{- else }}
+      {{- else if (not .Values.workloadAsStatefulSet) }}
+      - name: datadir
+        persistentVolumeClaim:
           claimName: {{ template "minecraft.fullname" . }}-datadir
-        {{- end }}
+      {{- end -}}
+      {{/* if persistence enabled in stateful set without existing claim, a volume claim template will be defined */}}
       {{- else }}
+      - name: datadir
         emptyDir: {}
       {{- end }}
-      - name: backupdir
       {{- if and .Values.mcbackup.persistence.backupDir.enabled .Values.mcbackup.enabled }}
+      {{- if .Values.mcbackup.persistence.backupDir.existingClaim }}
+      - name: backupdir
         persistentVolumeClaim:
-        {{- if .Values.mcbackup.persistence.backupDir.existingClaim }}
           claimName: {{ .Values.mcbackup.persistence.backupDir.existingClaim }}
-        {{- else }}
+      {{- else if (not .Values.workloadAsStatefulSet) }}
+      - name: backupdir
+        persistentVolumeClaim:
           claimName: {{ template "minecraft.fullname" . }}-backupdir
-        {{- end }}
+      {{- end -}}
+      {{/* if persistence enabled in stateful set without existing claim, a volume claim template will be defined */}}
       {{- else }}
+      - name: backupdir
         emptyDir: {}
       {{- end }}
       {{- if eq .Values.mcbackup.backupMethod "rclone" }}
@@ -462,4 +476,75 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
     {{- end }}
+  {{- if .Values.workloadAsStatefulSet }}
+  volumeClaimTemplates:
+    {{- if and .Values.persistence.dataDir.enabled (not .Values.persistence.dataDir.existingClaim) }}
+    - metadata:
+        name: datadir   
+        labels:
+          app: {{ template "minecraft.fullname" . }}
+          chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+          release: "{{ .Release.Name }}"
+          heritage: "{{ .Release.Service }}"
+          app.kubernetes.io/name: "{{ .Chart.Name }}"
+          app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
+          app.kubernetes.io/version: "{{ .Chart.Version }}"  
+        annotations:
+        {{- with .Values.persistence.annotations  }}
+        {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- if .Values.persistence.storageClass }}
+          volume.beta.kubernetes.io/storage-class: {{ .Values.persistence.storageClass | quote }}
+        {{- else }}
+          volume.alpha.kubernetes.io/storage-class: default
+        {{- end }}
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ .Values.persistence.dataDir.Size | quote }}
+      {{- if .Values.persistence.storageClass }}
+      {{- if (eq "-" .Values.persistence.storageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: "{{ .Values.persistence.storageClass }}"
+      {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- if and .Values.mcbackup.persistence.backupDir.enabled (not .Values.mcbackup.persistence.backupDir.existingClaim) }}
+    - metadata:
+        name: backupdir
+        labels:
+          app: {{ template "minecraft.fullname" . }}
+          chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+          release: "{{ .Release.Name }}"
+          heritage: "{{ .Release.Service }}"
+          app.kubernetes.io/name: "{{ .Chart.Name }}"
+          app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
+          app.kubernetes.io/version: "{{ .Chart.Version }}"
+        annotations:
+        {{- with .Values.mcbackup.persistence.annotations  }}
+        {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- if .Values.mcbackup.persistence.storageClass }}
+          volume.beta.kubernetes.io/storage-class: {{ .Values.mcbackup.persistence.storageClass | quote }}
+        {{- else }}
+          volume.alpha.kubernetes.io/storage-class: default
+        {{- end }}
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ .Values.mcbackup.persistence.backupDir.Size | quote }}
+      {{- if .Values.mcbackup.persistence.storageClass }}
+      {{- if (eq "-" .Values.mcbackup.persistence.storageClass) }}
+        storageClassName: ""
+      {{- else }}
+        storageClassName: "{{ .Values.mcbackup.persistence.storageClass }}"
+      {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
 {{ end }}
