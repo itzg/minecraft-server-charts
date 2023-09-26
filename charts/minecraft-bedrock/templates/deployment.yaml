@@ -63,6 +63,8 @@ spec:
                 - --host
                 # force health check against IPv4 port
                 - 127.0.0.1
+                - --port
+                - {{ .Values.minecraftServer.serverPort | quote }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
         livenessProbe:
           exec:
@@ -72,6 +74,8 @@ spec:
                 - --host
                 # force health check against IPv4 port
                 - 127.0.0.1
+                - --port
+                - {{ .Values.minecraftServer.serverPort | quote }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
 
       {{- with .Values.envFrom }}
@@ -127,6 +131,8 @@ spec:
           value: {{ .Values.minecraftServer.emitServerTelemetry | quote }}
         - name: ENABLE_LAN_VISIBILITY
           value: {{ .Values.minecraftServer.enableLanVisibility | quote }}
+        - name: SERVER_PORT
+          value: {{ .Values.minecraftServer.serverPort | quote }}
 
       {{- range $key, $value := .Values.extraEnv }}
       {{-   if kindIs "map" $value }}
@@ -143,7 +149,7 @@ spec:
 
         ports:
         - name: minecraft
-          containerPort: 19132
+          containerPort: {{ .Values.minecraftServer.serverPort }}
           protocol: UDP
 
         volumeMounts:

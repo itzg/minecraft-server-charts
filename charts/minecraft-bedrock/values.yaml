@@ -153,6 +153,8 @@ minecraftServer:
   emitServerTelemetry: false
   # Enable lan visibility.
   enableLanVisibility: false
+  # IPv4 UDP port of server. If using a nodePort, set serverPort and nodePort to the same value (e.g. 30000) so ping time displays.
+  serverPort: 19132
   # type of kubernetes service to use
   serviceType: ClusterIP
   ## Set the port used if the serviceType is NodePort
