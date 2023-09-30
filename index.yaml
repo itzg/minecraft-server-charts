@@ -2050,6 +2050,34 @@ entries:
           url: https://hub.docker.com/r/itzg/minecraft-bedrock-server
     apiVersion: v1
     appVersion: SeeValues
+    created: "2023-09-30T03:54:50.226811404Z"
+    description: Minecraft server
+    digest: c276614e09caff09597010b88315fd642a0cb05de548cade457637195004078f
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-bedrock
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-bedrock-2.3.0/minecraft-bedrock-2.3.0.tgz
+    version: 2.3.0
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-bedrock-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-bedrock-server
+    apiVersion: v1
+    appVersion: SeeValues
     created: "2023-09-23T02:19:07.355487941Z"
     description: Minecraft server
     digest: 6ea8f6126974c55c1b867c029315570634daaac76ee83d6ac37036cff0d0f250
