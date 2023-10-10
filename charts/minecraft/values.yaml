@@ -384,6 +384,7 @@ extraEnv:
 envFrom: []
 
 persistence:
+  labels: {}
   annotations: {}
   ## minecraft data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
