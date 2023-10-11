@@ -11,6 +11,9 @@ metadata:
     app.kubernetes.io/name: "{{ .Chart.Name }}"
     app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
     app.kubernetes.io/version: "{{ .Chart.Version }}"
+  {{- with .Values.persistence.labels  }}
+  {{ toYaml . | nindent 4 }}
+  {{- end }}
   annotations:
   {{- with .Values.persistence.annotations  }}
   {{ toYaml . | nindent 4 }}
