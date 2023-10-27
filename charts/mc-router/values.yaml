@@ -102,3 +102,18 @@ minecraftRouter:
     # - externalHostname: ""
     #   host: ""
     #   port: 25565
+
+  metrics:
+    # Backend to use for metrics exposure/publishing: discard,expvar,influxdb
+    backend: influxdb
+
+    # InfluxDB settings. Required if backend is set to influxdb
+    influxdb:
+      address: ""
+      database: ""
+      interval: 1m0s
+      password: "" # TODO: Load password from Kubernetes Secret
+      username: "" # TODO: Load username from Kubernetes Secret
+      retentionPolicy: ""
+      # Extra tags to be included with all reported metrics
+      tags: ""

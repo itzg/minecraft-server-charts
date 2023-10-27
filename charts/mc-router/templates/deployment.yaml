@@ -61,6 +61,22 @@ spec:
               {{- end }}
 
               {{- include "mc-router.envMap" (list "MAPPING" (include "mc-router.formatMappings" .mappings)) | nindent 12 }}
+
+              {{- with .metrics }}
+                {{- include "mc-router.envMap" (list "METRICS_BACKEND" .backend) | nindent 12 }}
+
+                {{- if eq .backend "influxdb" }}
+                  {{- with .influxdb }}
+                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_ADDR" .address) | nindent 12 }}
+                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_DATABASE" .database) | nindent 12 }}
+                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_INTERVAL" .interval) | nindent 12 }}
+                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_PASSWORD" .password) | nindent 12 }}  # TODO: Read password from Kubernetes Secret
+                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_RETENTION_POLICY" .retentionPolicy) | nindent 12 }}
+                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_TAGS" .tags) | nindent 12 }}
+                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_USERNAME" .username) | nindent 12 }}  # TODO: Read username from Kubernetes Secret
+                  {{- end }}
+                {{- end }}
+              {{- end }}
             {{- end }}
           ports:
             - name: api
