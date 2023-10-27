@@ -81,3 +81,6 @@ minecraftRouter:
   # This requires Minecraft servers to be kind: StatefulSet
   autoScaleUp:
     enabled: false
+
+  # Max number of connections to allow per second
+  connectionRateLimit: 1
