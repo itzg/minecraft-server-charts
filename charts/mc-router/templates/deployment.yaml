@@ -45,8 +45,8 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args:
-            - --in-kube-cluster
+          env:
+            {{- template "mc-router.envBoolMap" list "IN_KUBE_CLUSTER" "true" }}
           # TODO: Add container ENV
           # TODO: Add Auto Scale Up support
           ports:
