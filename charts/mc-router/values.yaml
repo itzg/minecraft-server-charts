@@ -96,3 +96,9 @@ minecraftRouter:
   defaultServer: {}
     # host: ""
     # port: 25565
+
+  # Minecraft server mappings
+  mappings: []
+    # - externalHostname: ""
+    #   host: ""
+    #   port: 25565

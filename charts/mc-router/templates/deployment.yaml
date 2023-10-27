@@ -58,6 +58,7 @@ spec:
               {{- with .defaultServer }}
                 {{- include "mc-router.envMap" (list "DEFAULT" (printf "%s:%d" .host (.port | int))) | nindent 12 }}
               {{- end }}
+              {{- include "mc-router.envMap" (list "MAPPING" (include "mc-router.formatMappings" .mappings)) | nindent 12 }}
             {{- end }}
           ports:
             - name: api

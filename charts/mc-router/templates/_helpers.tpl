@@ -80,3 +80,14 @@ Helper function for boolean environment variables
   value: {{ index . 1 | quote }}
 {{- end }}
 {{- end }}
+
+{{/*
+Helper function for mappings formatting
+*/}}
+{{- define "mc-router.formatMappings" -}}
+{{- $list := list -}}
+{{- range . -}}
+{{- $list = append $list (printf "%s=%s:%d" .externalHostname .host (.port | int)) -}}
+{{- end -}}
+{{ join "," $list }}
+{{- end }}
