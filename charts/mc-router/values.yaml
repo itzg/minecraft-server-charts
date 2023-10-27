@@ -73,3 +73,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# "Wake up" any stopped Minecraft servers.
+# This requires Minecraft servers to be kind: StatefulSet
+autoScaleUp:
+  enabled: false
