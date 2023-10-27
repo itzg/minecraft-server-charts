@@ -46,9 +46,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{- include "mc-router.envBoolMap" (list "IN_KUBE_CLUSTER" "true") | nindent 12 }}
             {{- include "mc-router.envMap" (list "API_BINDING" (printf ":%d" (.Values.service.apiPort | int))) | nindent 12 }}
             {{- include "mc-router.envBoolMap" (list "AUTO_SCALE_UP" .Values.minecraftRouter.autoScaleUp.enabled) | nindent 12 }}
-            {{- include "mc-router.envBoolMap" (list "IN_KUBE_CLUSTER" "true") | nindent 12 }}
           # TODO: Add container ENV
           # TODO: Add Auto Scale Up support
           ports:
