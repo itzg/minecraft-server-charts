@@ -4,3 +4,8 @@
 
 nameOverride: ""
 fullnameOverride: ""
+
+service:
+  type: LoadBalancer
+  apiPort: 8080
+  minecraftPort: 25565
