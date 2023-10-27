@@ -1,7 +1,7 @@
 apiVersion: v1
 name: mc-router
 version: 0.1.0  # TODO: Update version number
-appVersion: SeeValues
+appVersion: SeeValues # TODO: Update App version number
 home: https://github.com/itzg/mc-router
 description: Routes Minecraft client connections to backend servers based upon the requested server address.
 keywords:
