@@ -54,6 +54,7 @@ spec:
               {{- include "mc-router.envBoolMap" (list "AUTO_SCALE_UP" .autoScaleUp.enabled) | nindent 12 }}
               {{- include "mc-router.envMap" (list "CONNECTION_RATE_LIMIT" .connectionRateLimit) | nindent 12 }}
               {{- include "mc-router.envMap" (list "CPU_PROFILE" .cpuProfilePath) | nindent 12 }} # TODO: Test this
+              {{- include "mc-router.envBoolMap" (list "DEBUG" .debug.enabled) | nindent 12 }}
             {{- end }}
           ports:
             - name: api

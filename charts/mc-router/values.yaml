@@ -87,3 +87,7 @@ minecraftRouter:
 
   # Write CPU profiling to given path
   cpuProfilePath: ""
+
+  # Enable debug logs
+  debug:
+    enabled: false
