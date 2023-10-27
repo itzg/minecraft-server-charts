@@ -49,7 +49,7 @@ spec:
             {{- include "mc-router.envBoolMap" (list "IN_KUBE_CLUSTER" "true") | nindent 12 }}
             {{- include "mc-router.envMap" (list "API_BINDING" (printf ":%d" (.Values.service.apiPort | int))) | nindent 12 }}
             {{- include "mc-router.envMap" (list "PORT" .Values.service.minecraftPort) | nindent 12 }}
-
+# TODO: Debug why templates with empty value output an empty line
             {{- with .Values.minecraftRouter }}
               {{- include "mc-router.envBoolMap" (list "AUTO_SCALE_UP" .autoScaleUp.enabled) | nindent 12 }}
               {{- include "mc-router.envMap" (list "CONNECTION_RATE_LIMIT" .connectionRateLimit) | nindent 12 }}
