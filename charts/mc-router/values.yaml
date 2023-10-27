@@ -91,3 +91,8 @@ minecraftRouter:
   # Enable debug logs
   debug:
     enabled: false
+
+  # Default Minecraft server to use when mapping not found
+  defaultServer: {}
+    # host: ""
+    # port: 25565
