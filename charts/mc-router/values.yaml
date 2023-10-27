@@ -50,7 +50,9 @@ securityContext: {}
 
 service:
   type: LoadBalancer
+  # The port bound for servicing API requests
   apiPort: 8080
+  # The port bound to listen for Minecraft client connections
   minecraftPort: 25565
 
 resources: {}
