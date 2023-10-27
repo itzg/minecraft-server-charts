@@ -84,3 +84,6 @@ minecraftRouter:
 
   # Max number of connections to allow per second
   connectionRateLimit: 1
+
+  # Write CPU profiling to given path
+  cpuProfilePath: ""
