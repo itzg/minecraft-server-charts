@@ -17,6 +17,7 @@ You can then run `helm search repo itzg` to see the charts.
 
 ## Charts
 
+* [mc-router](https://github.com/itzg/minecraft-server-charts/tree/master/charts/mc-router)
 * [minecraft](https://github.com/itzg/minecraft-server-charts/tree/master/charts/minecraft)
 * [minecraft-bedrock](https://github.com/itzg/minecraft-server-charts/tree/master/charts/minecraft-bedrock)
 * [minecraft-proxy](https://github.com/itzg/minecraft-server-charts/tree/master/charts/minecraft-proxy)
