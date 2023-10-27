@@ -31,6 +31,8 @@ deploymentStrategy:
   #   maxSurge: 0.25
   #   maxUnavailable: 0.25
 
+deploymentAnnotations: {}
+
 podAnnotations: {}
 podLabels: {}
 
