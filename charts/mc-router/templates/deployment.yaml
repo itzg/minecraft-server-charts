@@ -10,6 +10,11 @@ metadata:
   {{- end }}
   labels:
     {{- include "mc-router.labels" . | nindent 4 }}
+  {{- if .Values.deploymentLabels }}
+    {{- range $key, $value := .Values.deploymentLabels}}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

@@ -32,6 +32,7 @@ deploymentStrategy:
   #   maxUnavailable: 0.25
 
 deploymentAnnotations: {}
+deploymentLabels: {}
 
 podAnnotations: {}
 podLabels: {}
