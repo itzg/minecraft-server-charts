@@ -117,3 +117,6 @@ minecraftRouter:
       retentionPolicy: ""
       # Extra tags to be included with all reported metrics
       tags: ""
+
+  # If set, an ngrok tunnel will be established.
+  ngrokToken: "" # TODO: Load token from Kubernetes Secret

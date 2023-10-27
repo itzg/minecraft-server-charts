@@ -77,6 +77,8 @@ spec:
                   {{- end }}
                 {{- end }}
               {{- end }}
+
+              {{- include "mc-router.envMap" (list "NGROK_TOKEN" .ngrokToken) | nindent 12 }}  # TODO: Read token from Kubernetes Secret
             {{- end }}
           ports:
             - name: api
