@@ -120,3 +120,6 @@ minecraftRouter:
 
   # If set, an ngrok tunnel will be established.
   ngrokToken: "" # TODO: Load token from Kubernetes Secret
+
+  # Simplify fully qualified SRV records for mapping
+  simplifySrv: false
