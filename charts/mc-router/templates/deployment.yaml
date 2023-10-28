@@ -80,6 +80,7 @@ spec:
 
               {{- include "mc-router.envMap" (list "NGROK_TOKEN" .ngrokToken) | nindent 12 }}  # TODO: Read token from Kubernetes Secret
               {{- include "mc-router.envBoolMap" (list "SIMPLIFY_SRV" .simplifySrv) | nindent 12 }}
+              {{- include "mc-router.envBoolMap" (list "USE_PROXY_PROTOCOL" .useProxyProtocol) | nindent 12 }}
             {{- end }}
           ports:
             - name: api
