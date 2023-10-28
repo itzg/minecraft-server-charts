@@ -126,3 +126,6 @@ minecraftRouter:
 
   # Send PROXY protocol to backend servers
   useProxyProtocol: false
+
+  # Output version and exit
+  showVersion: false
