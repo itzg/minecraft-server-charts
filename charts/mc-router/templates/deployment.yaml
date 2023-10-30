@@ -60,7 +60,7 @@ spec:
                 {{- include "mc-router.envMap" (list "DEFAULT" (printf "%s:%d" .host (.port | int))) | nindent 12 }}  # TODO: Convert to ConfigMap
               {{- end }}
 
-              {{- include "mc-router.envMap" (list "MAPPING" (include "mc-router.formatMappings" .mappings)) | nindent 12 }}  # TODO: Convert to ConfigMap
+              {{- include "mc-router.envMultilineMap" (list "MAPPING" (include "mc-router.formatMappings" .mappings)) | nindent 12 }}
 
               {{- with .metrics }}
                 {{- include "mc-router.envMap" (list "METRICS_BACKEND" .backend) | nindent 12 }}

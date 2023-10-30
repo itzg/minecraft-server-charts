@@ -82,12 +82,21 @@ Helper function for boolean environment variables
 {{- end }}
 
 {{/*
+Helper function for multiline environment variables
+*/}}
+{{- define "mc-router.envMultilineMap" -}}
+{{- if index . 1 -}}
+- name: {{ index . 0 }}
+  value: |
+    {{- index . 1 }}
+{{- end }}
+{{- end }}
+
+{{/*
 Helper function for mappings formatting
 */}}
 {{- define "mc-router.formatMappings" -}}
-{{- $list := list -}}
 {{- range . -}}
-{{- $list = append $list (printf "%s=%s:%d" .externalHostname .host (.port | int)) -}}
+{{- printf "%s=%s:%d" .externalHostname .host (.port | int) | nindent 4 -}}
 {{- end -}}
-{{ join "," $list }}
 {{- end }}
