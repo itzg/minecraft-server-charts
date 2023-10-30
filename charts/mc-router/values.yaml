@@ -105,18 +105,18 @@ minecraftRouter:
 
   metrics:
     # Backend to use for metrics exposure/publishing: discard,expvar,influxdb
-    backend: influxdb
+    backend: discard
 
     # InfluxDB settings. Required if backend is set to influxdb
-    influxdb:
-      address: ""
-      database: ""
-      interval: 1m0s
-      password: "" # TODO: Load password from Kubernetes Secret
-      username: "" # TODO: Load username from Kubernetes Secret
-      retentionPolicy: ""
-      # Extra tags to be included with all reported metrics
-      tags: ""
+    # influxdb:
+    #   address: ""
+    #   database: ""
+    #   interval: 1m0s
+    #   password: "" # TODO: Load password from Kubernetes Secret
+    #   username: "" # TODO: Load username from Kubernetes Secret
+    #   retentionPolicy: ""
+    #   # Extra tags to be included with all reported metrics
+    #   tags: ""
 
   # If set, an ngrok tunnel will be established.
   ngrokToken: "" # TODO: Load token from Kubernetes Secret
