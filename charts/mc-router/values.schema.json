@@ -22,6 +22,11 @@
         "connectionRateLimit": {
           "type": "integer",
           "title": "Max number of connections to allow per second"
+        },
+
+        "cpuProfilePath": {
+          "type": "string",
+          "title": "Write CPU profiling to given path"
         }
       }
     }
