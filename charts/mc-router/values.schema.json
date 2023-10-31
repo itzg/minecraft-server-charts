@@ -73,6 +73,76 @@
               }
             }
           }
+        },
+
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "backend": {
+              "type": "string",
+              "title": "Backend to use for metrics exposure/publishing",
+              "enum": [
+                "discard",
+                "expvar",
+                "influxdb"
+              ]
+            }
+          },
+          "if": {
+            "properties": {
+              "backend": { "const": "influxdb" }
+            },
+            "required": ["backend"]
+          },
+          "then": {
+            "required": ["influxdb"],
+            "properties": {
+              "influxdb": {
+                "type": "object",
+                "title": "InfluxDB settings",
+                "description": "Required if backend is set to influxdb",
+                "additionalProperties": false,
+                "minProperties": 6,
+                "properties": {
+                  "address": {
+                    "type": "string"
+                  },
+                  "database": {
+                    "type": "string"
+                  },
+                  "interval": {
+                    "type": "string"
+                  },
+                  "credentials": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 3,
+                    "properties": {
+                      "existingSecret": {
+                        "type": "string",
+                        "title": "The name of an existing secret containing the database credentials"
+                      },
+                      "usernameKey": {
+                        "type": "string",
+                        "title": "The key in the existing secret containing the username"
+                      },
+                      "passwordKey": {
+                        "type": "string",
+                        "title": "The key in the existing secret containing the password"
+                      }
+                    }
+                  },
+                  "retentionPolicy": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "string",
+                    "title": "Extra tags to be included with all reported metrics"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
