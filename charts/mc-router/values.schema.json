@@ -81,11 +81,7 @@
             "backend": {
               "type": "string",
               "title": "Backend to use for metrics exposure/publishing",
-              "enum": [
-                "discard",
-                "expvar",
-                "influxdb"
-              ]
+              "enum": ["discard", "expvar", "influxdb"]
             }
           },
           "if": {
