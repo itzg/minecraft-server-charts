@@ -70,10 +70,12 @@ spec:
                     {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_ADDR" .address) | nindent 12 }}
                     {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_DATABASE" .database) | nindent 12 }}
                     {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_INTERVAL" .interval) | nindent 12 }}
-                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_PASSWORD" .password) | nindent 12 }}  # TODO: Read password from Kubernetes Secret
                     {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_RETENTION_POLICY" .retentionPolicy) | nindent 12 }}
                     {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_TAGS" .tags) | nindent 12 }}
-                    {{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_USERNAME" .username) | nindent 12 }}  # TODO: Read username from Kubernetes Secret
+                    {{- with .credentials }}
+                      {{- include "mc-router.envSecretMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_USERNAME" .existingSecret .usernameKey) | nindent 12 }}
+                      {{- include "mc-router.envSecretMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_PASSWORD" .existingSecret .passwordKey) | nindent 12 }}
+                    {{- end }}
                   {{- end }}
                 {{- end }}
               {{- end }}

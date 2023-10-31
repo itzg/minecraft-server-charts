@@ -107,13 +107,19 @@ minecraftRouter:
     # Backend to use for metrics exposure/publishing: discard,expvar,influxdb
     backend: discard
 
+    # TODO: Add values validation when backend == influxdb
     # InfluxDB settings. Required if backend is set to influxdb
     # influxdb:
     #   address: ""
     #   database: ""
     #   interval: 1m0s
-    #   password: "" # TODO: Load password from Kubernetes Secret
-    #   username: "" # TODO: Load username from Kubernetes Secret
+    #   credentials:
+    #     # The name of an existing secret containing the database credentials
+    #     existingSecret: ""
+    #     # The key in the existing secret containing the username
+    #     usernameKey: "username"
+    #     # The key in the existing secret containing the password
+    #     passwordKey: "password"
     #   retentionPolicy: ""
     #   # Extra tags to be included with all reported metrics
     #   tags: ""
