@@ -93,6 +93,19 @@ Helper function for multiline environment variables
 {{- end }}
 
 {{/*
+Helper function for secret environment variables
+*/}}
+{{- define "mc-router.envSecretMap" -}}
+{{- if index . 1 -}}
+- name: {{ index . 0 }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ index . 1 }}
+      key: {{ index . 2 }}
+{{- end }}
+{{- end }}
+
+{{/*
 Helper function for mappings formatting
 */}}
 {{- define "mc-router.formatMappings" -}}

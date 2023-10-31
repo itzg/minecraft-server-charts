@@ -119,7 +119,11 @@ minecraftRouter:
     #   tags: ""
 
   # If set, an ngrok tunnel will be established.
-  ngrokToken: "" # TODO: Load token from Kubernetes Secret
+  ngrokToken:
+    # The name of an existing secret containing the token
+    existingSecret: ""
+    # The key in the existing secret containing the token
+    tokenKey: "token"
 
   # Simplify fully qualified SRV records for mapping
   simplifySrv: false
