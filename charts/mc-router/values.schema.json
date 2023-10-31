@@ -53,6 +53,26 @@
               "type": "integer"
             }
           }
+        },
+
+        "mappings": {
+          "type": "array",
+          "title": "Minecraft server mappings",
+          "items": {
+            "type": "object",
+            "uniqueItems": true,
+            "properties": {
+              "externalHostname": {
+                "type": "string"
+              },
+              "host": {
+                "type": "string"
+              },
+              "port": {
+                "type": "integer"
+              }
+            }
+          }
         }
       }
     }
