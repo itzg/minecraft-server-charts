@@ -27,6 +27,19 @@
         "cpuProfilePath": {
           "type": "string",
           "title": "Write CPU profiling to given path"
+        },
+
+        "debug": {
+          "type": "object",
+          "title": "Enable debug logs",
+          "properties": {
+            "enabled": {
+              "anyOf": [
+                { "type": "string", "enum": ["default"] },
+                { "type": "boolean" }
+              ]
+            }
+          }
         }
       }
     }
