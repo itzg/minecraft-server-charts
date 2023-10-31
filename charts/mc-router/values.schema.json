@@ -143,6 +143,21 @@
               }
             }
           }
+        },
+
+        "ngrokToken": {
+          "type": "object",
+          "title": "If set, an ngrok tunnel will be established.",
+          "properties": {
+            "existingSecret": {
+              "type": "string",
+              "title": "The name of an existing secret containing the token"
+            },
+            "tokenKey": {
+              "type": "string",
+              "title": "The key in the existing secret containing the token"
+            }
+          }
         }
       }
     }
