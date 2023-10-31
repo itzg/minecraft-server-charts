@@ -3,7 +3,22 @@
   "required": ["minecraftRouter"],
   "properties": {
     "minecraftRouter": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "autoScaleUp": {
+          "type": "object",
+          "title": "\"Wake up\" any stopped Minecraft servers.",
+          "description": "This requires Minecraft servers to be kind: StatefulSet",
+          "properties": {
+            "enabled": {
+              "anyOf": [
+                { "type": "string", "enum": ["default"] },
+                { "type": "boolean" }
+              ]
+            }
+          }
+        }
+      }
     }
   }
 }
