@@ -162,6 +162,14 @@
             { "type": "string", "enum": ["default"] },
             { "type": "boolean" }
           ]
+        },
+
+        "useProxyProtocol": {
+          "title": "Send PROXY protocol to backend servers",
+          "anyOf": [
+            { "type": "string", "enum": ["default"] },
+            { "type": "boolean" }
+          ]
         }
       }
     }
