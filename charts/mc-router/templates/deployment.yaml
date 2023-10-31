@@ -92,15 +92,32 @@ spec:
             - name: minecraft
               containerPort: {{ .Values.service.minecraftPort }}
               protocol: TCP
-          # TODO: Check if probes are feasible
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          livenessProbe:
+            initialDelaySeconds: 30
+            failureThreshold: 20
+            httpGet:
+              path: /routes
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+              port: {{ .Values.service.apiPort }}
+          readinessProbe:
+            initialDelaySeconds: 30
+            failureThreshold: 20
+            httpGet:
+              path: /routes
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+              port: {{ .Values.service.apiPort }}
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /routes
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+              port: {{ .Values.service.apiPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
