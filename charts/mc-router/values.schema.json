@@ -40,6 +40,19 @@
               ]
             }
           }
+        },
+
+        "defaultServer": {
+          "type": "object",
+          "title": "Default Minecraft server to use when mapping not found",
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            }
+          }
         }
       }
     }
