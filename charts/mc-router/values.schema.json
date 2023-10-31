@@ -21,7 +21,8 @@
 
         "connectionRateLimit": {
           "type": "integer",
-          "title": "Max number of connections to allow per second"
+          "title": "Max number of connections to allow per second",
+          "minimum": 1
         },
 
         "cpuProfilePath": {
@@ -47,7 +48,8 @@
           "title": "Default Minecraft server to use when mapping not found",
           "properties": {
             "host": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1
             },
             "port": {
               "type": "integer"
@@ -63,10 +65,12 @@
             "uniqueItems": true,
             "properties": {
               "externalHostname": {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               "host": {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               "port": {
                 "type": "integer"
@@ -101,13 +105,16 @@
                 "minProperties": 6,
                 "properties": {
                   "address": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "database": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "interval": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "credentials": {
                     "type": "object",
@@ -116,15 +123,18 @@
                     "properties": {
                       "existingSecret": {
                         "type": "string",
-                        "title": "The name of an existing secret containing the database credentials"
+                        "title": "The name of an existing secret containing the database credentials",
+                        "minLength": 1
                       },
                       "usernameKey": {
                         "type": "string",
-                        "title": "The key in the existing secret containing the username"
+                        "title": "The key in the existing secret containing the username",
+                        "minLength": 1
                       },
                       "passwordKey": {
                         "type": "string",
-                        "title": "The key in the existing secret containing the password"
+                        "title": "The key in the existing secret containing the password",
+                        "minLength": 1
                       }
                     }
                   },
@@ -147,11 +157,13 @@
           "properties": {
             "existingSecret": {
               "type": "string",
-              "title": "The name of an existing secret containing the token"
+              "title": "The name of an existing secret containing the token",
+              "minLength": 1
             },
             "tokenKey": {
               "type": "string",
-              "title": "The key in the existing secret containing the token"
+              "title": "The key in the existing secret containing the token",
+              "minLength": 1
             }
           }
         },
