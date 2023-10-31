@@ -17,6 +17,11 @@
               ]
             }
           }
+        },
+
+        "connectionRateLimit": {
+          "type": "integer",
+          "title": "Max number of connections to allow per second"
         }
       }
     }
