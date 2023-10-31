@@ -170,6 +170,14 @@
             { "type": "string", "enum": ["default"] },
             { "type": "boolean" }
           ]
+        },
+
+        "showVersion": {
+          "title": "Output version and exit",
+          "anyOf": [
+            { "type": "string", "enum": ["default"] },
+            { "type": "boolean" }
+          ]
         }
       }
     }
