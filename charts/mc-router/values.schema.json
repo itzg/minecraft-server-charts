@@ -154,6 +154,14 @@
               "title": "The key in the existing secret containing the token"
             }
           }
+        },
+
+        "simplifySrv": {
+          "title": "Simplify fully qualified SRV records for mapping",
+          "anyOf": [
+            { "type": "string", "enum": ["default"] },
+            { "type": "boolean" }
+          ]
         }
       }
     }
