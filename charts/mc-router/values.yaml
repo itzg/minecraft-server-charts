@@ -76,6 +76,9 @@ tolerations: []
 
 affinity: {}
 
+# TODO: Add Volumes
+# TODO: Add Extra Resources array
+
 minecraftRouter:
   # "Wake up" any stopped Minecraft servers.
   # This requires Minecraft servers to be kind: StatefulSet
