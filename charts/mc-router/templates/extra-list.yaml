@@ -1,0 +1,4 @@
+{{- range .Values.extraDeploy }}
+---
+{{ include "mc-router.extraDeploy.render" (dict "value" . "context" $) }}
+{{- end }}

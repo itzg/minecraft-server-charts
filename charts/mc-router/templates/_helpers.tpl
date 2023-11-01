@@ -113,3 +113,19 @@ Helper function for mappings formatting
 {{- printf "%s=%s:%d" .externalHostname .host (.port | int) | nindent 4 -}}
 {{- end -}}
 {{- end }}
+
+{{/*
+Helper function for rendering extra resources to deploy
+*/}}
+{{- define "mc-router.extraDeploy.render" -}}
+{{- $value := typeIs "string" .value | ternary .value (.value | toYaml) }}
+{{- if contains "{{" (toJson .value) }}
+  {{- if .scope }}
+      {{- tpl (cat "{{- with $.RelativeScope -}}" $value "{{- end }}") (merge (dict "RelativeScope" .scope) .context) }}
+  {{- else }}
+    {{- tpl $value .context }}
+  {{- end }}
+{{- else }}
+    {{- $value }}
+{{- end }}
+{{- end -}}
