@@ -81,15 +81,16 @@ affinity: {}
 ## Array of extra objects to deploy with the release.
 ## This value is evaluated as a template
 extraDeploy: []
-#   - apiVersion: v1
-#     kind: ConfigMap
-#     metadata:
-#       name: {{ template "mc-router.fullname" . }}-extra-cm
-#     data:
-#       key: |-
-#         {
-#           "key": "value"
-#         }
+  # - |-
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: {{ template "mc-router.fullname" . }}-extra-cm
+  #   data:
+  #     key: |-
+  #       {
+  #         "key": "value"
+  #       }
 
 minecraftRouter:
   # "Wake up" any stopped Minecraft servers.
