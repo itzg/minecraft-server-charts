@@ -60,3 +60,12 @@ helm install mc-router -f values.yaml itzg/mc-router
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Port Range
+
+Depending on the chosen API and Minecraft ports, you might need to update your
+cluster's allowed node port range by adding
+`--service-node-port-range=25000-32767` to
+`/etc/kubernetes/manifests/kube-apiserver.yaml`. For K3s clusters, refer to K3s'
+[documentation](https://docs.k3s.io/installation/configuration) to know how to
+change the allowed port range.
