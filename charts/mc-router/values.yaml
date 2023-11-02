@@ -51,7 +51,7 @@ securityContext: {}
 service:
   type: LoadBalancer
   # The port bound for servicing API requests
-  apiPort: 8080
+  apiPort: 25580
   # The port bound to listen for Minecraft client connections
   minecraftPort: 25565
 
