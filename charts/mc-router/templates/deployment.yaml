@@ -47,8 +47,8 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
 {{- include "mc-router.envBoolMap" (list "IN_KUBE_CLUSTER" "true") }}
-{{- include "mc-router.envMap" (list "API_BINDING" (printf ":%d" (.Values.service.apiPort | int))) }}
-{{- include "mc-router.envMap" (list "PORT" .Values.service.minecraftPort) }}
+{{- include "mc-router.envMap" (list "API_BINDING" (printf ":%d" (.Values.services.api.port | int))) }}
+{{- include "mc-router.envMap" (list "PORT" .Values.services.minecraft.port) }}
 
             {{- with .Values.minecraftRouter }}
 {{- include "mc-router.envBoolMap" (list "AUTO_SCALE_UP" .autoScaleUp.enabled) }}
@@ -100,10 +100,10 @@ spec:
             {{- end }}
           ports:
             - name: api
-              containerPort: {{ .Values.service.apiPort }}
+              containerPort: {{ .Values.services.api.port }}
               protocol: TCP
             - name: minecraft
-              containerPort: {{ .Values.service.minecraftPort }}
+              containerPort: {{ .Values.services.minecraft.port }}
               protocol: TCP
           livenessProbe:
             initialDelaySeconds: 30
@@ -113,7 +113,7 @@ spec:
               httpHeaders:
                 - name: Accept
                   value: application/json
-              port: {{ .Values.service.apiPort }}
+              port: {{ .Values.services.api.port }}
           readinessProbe:
             initialDelaySeconds: 30
             failureThreshold: 20
@@ -122,7 +122,7 @@ spec:
               httpHeaders:
                 - name: Accept
                   value: application/json
-              port: {{ .Values.service.apiPort }}
+              port: {{ .Values.services.api.port }}
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -130,7 +130,7 @@ spec:
               httpHeaders:
                 - name: Accept
                   value: application/json
-              port: {{ .Values.service.apiPort }}
+              port: {{ .Values.services.api.port }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.extraVolumes }}

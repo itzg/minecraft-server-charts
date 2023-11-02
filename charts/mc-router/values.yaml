@@ -48,12 +48,15 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
-  type: LoadBalancer
-  # The port bound for servicing API requests
-  apiPort: 25580
-  # The port bound to listen for Minecraft client connections
-  minecraftPort: 25565
+services:
+  # Service for API requests
+  api:
+    type: ClusterIP
+    port: 8080
+  # Service for Minecraft client connections
+  minecraft:
+    type: LoadBalancer
+    port: 25565
 
 resources: {}
   # limits:

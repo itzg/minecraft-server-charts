@@ -1,7 +1,54 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "required": ["minecraftRouter"],
+  "required": [
+    "minecraftRouter",
+    "services"
+  ],
   "properties": {
+
+    "services": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "ExternalName",
+                "ClusterIP",
+                "NodePort",
+                "LoadBalancer"
+              ]
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+
+        "minecraft": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "ExternalName",
+                "ClusterIP",
+                "NodePort",
+                "LoadBalancer"
+              ]
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+
     "minecraftRouter": {
       "type": "object",
       "properties": {
