@@ -47,7 +47,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
 {{- include "mc-router.envBoolMap" (list "IN_KUBE_CLUSTER" "true") }}
-{{- include "mc-router.envMap" (list "API_BINDING" (printf ":%d" (.Values.services.api.port | int))) }}
+{{- include "mc-router.envMap" (list "API_BINDING" (printf ":%d" (default 8080 .Values.services.api.port | int))) }}
 {{- include "mc-router.envMap" (list "PORT" .Values.services.minecraft.port) }}
 
             {{- with .Values.minecraftRouter }}
@@ -100,7 +100,7 @@ spec:
             {{- end }}
           ports:
             - name: api
-              containerPort: {{ .Values.services.api.port }}
+              containerPort: {{ default 8080 .Values.services.api.port }}
               protocol: TCP
             - name: minecraft
               containerPort: {{ .Values.services.minecraft.port }}
@@ -113,7 +113,7 @@ spec:
               httpHeaders:
                 - name: Accept
                   value: application/json
-              port: {{ .Values.services.api.port }}
+              port: {{ default 8080 .Values.services.api.port }}
           readinessProbe:
             initialDelaySeconds: 30
             failureThreshold: 20
@@ -122,7 +122,7 @@ spec:
               httpHeaders:
                 - name: Accept
                   value: application/json
-              port: {{ .Values.services.api.port }}
+              port: {{ default 8080 .Values.services.api.port }}
           startupProbe:
             failureThreshold: 30
             httpGet:
@@ -130,7 +130,7 @@ spec:
               httpHeaders:
                 - name: Accept
                   value: application/json
-              port: {{ .Values.services.api.port }}
+              port: {{ default 8080 .Values.services.api.port }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.extraVolumes }}

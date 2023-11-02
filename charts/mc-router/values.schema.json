@@ -8,6 +8,10 @@
 
     "services": {
       "type": "object",
+      "required": [
+        "api",
+        "minecraft"
+      ],
       "properties": {
         "api": {
           "type": "object",
@@ -30,6 +34,10 @@
 
         "minecraft": {
           "type": "object",
+          "required": [
+            "type",
+            "port"
+          ],
           "properties": {
             "type": {
               "type": "string",

@@ -50,9 +50,9 @@ securityContext: {}
 
 services:
   # Service for API requests
-  api:
-    type: ClusterIP
-    port: 8080
+  api: {}
+  #   type: ClusterIP
+  #   port: 8080
   # Service for Minecraft client connections
   minecraft:
     type: LoadBalancer
