@@ -1,6 +1,7 @@
 # Minecraft Router
 
-Routes Minecraft client connections to backend servers based upon the requested server address.
+Routes Minecraft client connections to backend servers based upon the requested
+server address.
 
 ## Introduction
 
@@ -32,13 +33,18 @@ To uninstall/delete the `mc-router` deployment:
 helm delete mc-router
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+The command removes all the Kubernetes components associated with the chart and
+deletes the release.
 
 ## Configuration
 
-Refer to [values.yaml](values.yaml) for the full run-down on defaults. These are a mixture of Kubernetes and Minecraft Router -related directives that map to environment variables in the [itzg/mc-router](https://hub.docker.com/r/itzg/mc-router/) Docker image.
+Refer to [values.yaml](values.yaml) for the full run-down on defaults. These are
+a mixture of Kubernetes and Minecraft Router -related directives that map to
+environment variables in the
+[itzg/mc-router](https://hub.docker.com/r/itzg/mc-router/) Docker image.
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm
+install`. For example,
 
 ```shell
 helm install mc-router \
@@ -46,7 +52,8 @@ helm install mc-router \
   itzg/mc-router
 ```
 
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+Alternatively, a YAML file that specifies the values for the parameters can be
+provided while installing the chart. For example,
 
 ```shell
 helm install mc-router -f values.yaml itzg/mc-router
