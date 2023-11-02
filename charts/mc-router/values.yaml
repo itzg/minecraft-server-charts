@@ -52,11 +52,18 @@ services:
   # Service for API requests
   api: {}
     # type: ClusterIP
+    # # Service port exposed within the cluster
     # port: 8080
+    # # Service port exposed externally on each node
+    # nodePort: 38080
+
   # Service for Minecraft client connections
   minecraft:
-    type: LoadBalancer
+    type: NodePort
+    # Service port exposed within the cluster
     port: 25565
+    # Service port exposed externally on each node
+    # nodePort: 30065
 
 resources: {}
   # limits:

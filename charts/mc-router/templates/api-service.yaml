@@ -9,9 +9,11 @@ spec:
   {{- with .Values.services.api }}
   type: {{ .type }}
   ports:
-    - port: {{ .port }}
+    - port: {{ default 8080 .port }}
       {{- if list "LoadBalancer" "NodePort" | has .type }}
-      nodePort: {{ .port }}
+      {{- if .nodePort }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
       {{- end }}
       targetPort: api
       protocol: TCP

@@ -10,7 +10,9 @@ spec:
   ports:
     - port: {{ .port }}
       {{- if list "LoadBalancer" "NodePort" | has .type }}
-      nodePort: {{ .port }}
+      {{- if .nodePort }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
       {{- end }}
       targetPort: minecraft
       protocol: TCP
