@@ -78,8 +78,8 @@ affinity: {}
 
 # TODO: Add Volumes
 
-## Array of extra objects to deploy with the release.
-## This value is evaluated as a template
+# Array of extra objects to deploy with the release.
+# This value is evaluated as a template
 extraDeploy: []
   # - |-
   #   apiVersion: v1
