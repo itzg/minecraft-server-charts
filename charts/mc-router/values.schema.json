@@ -1,0 +1,254 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "required": [
+    "minecraftRouter",
+    "services"
+  ],
+  "properties": {
+
+    "services": {
+      "type": "object",
+      "required": [
+        "api",
+        "minecraft"
+      ],
+      "properties": {
+        "api": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "ExternalName",
+                "ClusterIP",
+                "NodePort",
+                "LoadBalancer"
+              ]
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+
+        "minecraft": {
+          "type": "object",
+          "required": [
+            "type",
+            "port"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "ExternalName",
+                "ClusterIP",
+                "NodePort",
+                "LoadBalancer"
+              ]
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+
+    "minecraftRouter": {
+      "type": "object",
+      "properties": {
+        "autoScaleUp": {
+          "type": "object",
+          "title": "\"Wake up\" any stopped Minecraft servers.",
+          "description": "This requires Minecraft servers to be kind: StatefulSet",
+          "properties": {
+            "enabled": {
+              "anyOf": [
+                { "type": "string", "enum": ["default"] },
+                { "type": "boolean" }
+              ]
+            }
+          }
+        },
+
+        "connectionRateLimit": {
+          "type": "integer",
+          "title": "Max number of connections to allow per second",
+          "minimum": 1
+        },
+
+        "cpuProfilePath": {
+          "type": "string",
+          "title": "Write CPU profiling to given path"
+        },
+
+        "debug": {
+          "type": "object",
+          "title": "Enable debug logs",
+          "properties": {
+            "enabled": {
+              "anyOf": [
+                { "type": "string", "enum": ["default"] },
+                { "type": "boolean" }
+              ]
+            }
+          }
+        },
+
+        "defaultServer": {
+          "type": "object",
+          "title": "Default Minecraft server to use when mapping not found",
+          "properties": {
+            "host": {
+              "type": "string",
+              "minLength": 1
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+
+        "mappings": {
+          "type": "array",
+          "title": "Minecraft server mappings",
+          "items": {
+            "type": "object",
+            "uniqueItems": true,
+            "properties": {
+              "externalHostname": {
+                "type": "string",
+                "minLength": 1
+              },
+              "host": {
+                "type": "string",
+                "minLength": 1
+              },
+              "port": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "backend": {
+              "type": "string",
+              "title": "Backend to use for metrics exposure/publishing",
+              "enum": ["discard", "expvar", "influxdb"]
+            }
+          },
+          "if": {
+            "properties": {
+              "backend": { "const": "influxdb" }
+            },
+            "required": ["backend"]
+          },
+          "then": {
+            "required": ["influxdb"],
+            "properties": {
+              "influxdb": {
+                "type": "object",
+                "title": "InfluxDB settings",
+                "description": "Required if backend is set to influxdb",
+                "additionalProperties": false,
+                "minProperties": 6,
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "database": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "interval": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "credentials": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 3,
+                    "properties": {
+                      "existingSecret": {
+                        "type": "string",
+                        "title": "The name of an existing secret containing the database credentials",
+                        "minLength": 1
+                      },
+                      "usernameKey": {
+                        "type": "string",
+                        "title": "The key in the existing secret containing the username",
+                        "minLength": 1
+                      },
+                      "passwordKey": {
+                        "type": "string",
+                        "title": "The key in the existing secret containing the password",
+                        "minLength": 1
+                      }
+                    }
+                  },
+                  "retentionPolicy": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "type": "string",
+                    "title": "Extra tags to be included with all reported metrics"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "ngrokToken": {
+          "type": "object",
+          "title": "If set, an ngrok tunnel will be established.",
+          "properties": {
+            "existingSecret": {
+              "type": "string",
+              "title": "The name of an existing secret containing the token",
+              "minLength": 1
+            },
+            "tokenKey": {
+              "type": "string",
+              "title": "The key in the existing secret containing the token",
+              "minLength": 1
+            }
+          }
+        },
+
+        "simplifySrv": {
+          "title": "Simplify fully qualified SRV records for mapping",
+          "anyOf": [
+            { "type": "string", "enum": ["default"] },
+            { "type": "boolean" }
+          ]
+        },
+
+        "useProxyProtocol": {
+          "title": "Send PROXY protocol to backend servers",
+          "anyOf": [
+            { "type": "string", "enum": ["default"] },
+            { "type": "boolean" }
+          ]
+        },
+
+        "showVersion": {
+          "title": "Output version and exit",
+          "anyOf": [
+            { "type": "string", "enum": ["default"] },
+            { "type": "boolean" }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,188 @@
+# Default values for mc-router.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: itzg/mc-router
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+deploymentStrategy:
+  type: Recreate
+  # rollingUpdate:
+  #   maxSurge: 0.25
+  #   maxUnavailable: 0.25
+
+deploymentAnnotations: {}
+deploymentLabels: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+services:
+  # Service for API requests
+  api: {}
+    # type: ClusterIP
+    # # Service port exposed within the cluster
+    # port: 8080
+    # # Service port exposed externally on each node
+    # nodePort: 38080
+
+  # Service for Minecraft client connections
+  minecraft:
+    type: NodePort
+    # Service port exposed within the cluster
+    port: 25565
+    # Service port exposed externally on each node
+    # nodePort: 30065
+
+resources: {}
+  # limits:
+  #   cpu: 250m
+  #   memory: 100Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 50Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Array of extra volumes to attach to the pod
+extraVolumes: []
+  # - volumeMounts:
+  #     - name: nfs
+  #       mountPath: /mnt/volume
+  #       readOnly: true
+  #   volumes:
+  #     - name: nfs
+  #       server: some.nfs.server.com
+  #       path: /
+  #       mountOptions:
+  #         - port=2049
+  #         - hard
+  #         - vers=4
+
+# Additional mc-router container environment variables
+# Values can be either variable values or `valueFrom` yaml
+extraEnv: {}
+  # some_variable: some value
+  # another_variable:
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: status.hostIP
+
+# Array of extra objects to deploy with the release.
+# This value is evaluated as a template
+extraDeploy: []
+  # - |-
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: {{ template "mc-router.fullname" . }}-extra-cm
+  #   data:
+  #     key: |-
+  #       {
+  #         "key": "value"
+  #       }
+
+minecraftRouter:
+  # "Wake up" any stopped Minecraft servers.
+  # This requires Minecraft servers to be kind: StatefulSet
+  autoScaleUp:
+    enabled: false
+
+  # Max number of connections to allow per second
+  connectionRateLimit: 1
+
+  # Write CPU profiling to given path
+  cpuProfilePath: ""
+
+  # Enable debug logs
+  debug:
+    enabled: false
+
+  # Default Minecraft server to use when mapping not found
+  defaultServer: {}
+    # host: ""
+    # port: 25565
+
+  # Minecraft server mappings
+  mappings: []
+    # - externalHostname: ""
+    #   host: ""
+    #   port: 25565
+
+  metrics:
+    # Backend to use for metrics exposure/publishing: discard,expvar,influxdb
+    backend: discard
+
+    # InfluxDB settings. Required if backend is set to influxdb
+    # influxdb:
+    #   address: ""
+    #   database: ""
+    #   interval: 1m0s
+    #   credentials:
+    #     # The name of an existing secret containing the database credentials
+    #     existingSecret: ""
+    #     # The key in the existing secret containing the username
+    #     usernameKey: username
+    #     # The key in the existing secret containing the password
+    #     passwordKey: password
+    #   retentionPolicy: ""
+    #   # Extra tags to be included with all reported metrics
+    #   tags: ""
+
+  # If set, an ngrok tunnel will be established.
+  ngrokToken: {}
+    # # The name of an existing secret containing the token
+    # existingSecret: ""
+    # # The key in the existing secret containing the token
+    # tokenKey: token
+
+  # Simplify fully qualified SRV records for mapping
+  simplifySrv: false
+
+  # Send PROXY protocol to backend servers
+  useProxyProtocol: false
+
+  # Output version and exit
+  showVersion: false

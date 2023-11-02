@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mc-router.fullname" . }}
+  labels:
+    {{- include "mc-router.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.services.minecraft }}
+  type: {{ .type }}
+  ports:
+    - port: {{ .port }}
+      {{- if list "LoadBalancer" "NodePort" | has .type }}
+      {{- if .nodePort }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
+      {{- end }}
+      targetPort: minecraft
+      protocol: TCP
+      name: minecraft
+  {{- end }}
+  selector:
+    {{- include "mc-router.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,24 @@
+{{- if .Values.services.api }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mc-router.fullname" . }}-api
+  labels:
+    {{- include "mc-router.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.services.api }}
+  type: {{ .type }}
+  ports:
+    - port: {{ default 8080 .port }}
+      {{- if list "LoadBalancer" "NodePort" | has .type }}
+      {{- if .nodePort }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
+      {{- end }}
+      targetPort: api
+      protocol: TCP
+      name: api
+  {{- end }}
+  selector:
+    {{- include "mc-router.selectorLabels" . | nindent 4 }}
+{{- end }}

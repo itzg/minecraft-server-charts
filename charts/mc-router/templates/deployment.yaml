@@ -1,0 +1,166 @@
+{{- $apiPort := 8080 }}
+{{- $minecraftPort := 25565 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mc-router.fullname" . }}
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "mc-router.labels" . | nindent 4 }}
+  {{- with .Values.deploymentLabels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "mc-router.selectorLabels" . | nindent 6 }}
+  strategy:
+    {{- .Values.deploymentStrategy | toYaml | nindent 4}}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mc-router.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "mc-router.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+{{- include "mc-router.envBoolMap" (list "IN_KUBE_CLUSTER" "true") }}
+{{- include "mc-router.envMap" (list "API_BINDING" (printf ":%d" $apiPort)) }}
+{{- include "mc-router.envMap" (list "PORT" $minecraftPort) }}
+
+            {{- with .Values.minecraftRouter }}
+{{- include "mc-router.envBoolMap" (list "AUTO_SCALE_UP" .autoScaleUp.enabled) }}
+{{- include "mc-router.envMap" (list "CONNECTION_RATE_LIMIT" .connectionRateLimit) }}
+{{- include "mc-router.envMap" (list "CPU_PROFILE" .cpuProfilePath) }}
+{{- include "mc-router.envBoolMap" (list "DEBUG" .debug.enabled) }}
+
+              {{- with .defaultServer }}
+{{- include "mc-router.envMap" (list "DEFAULT" (printf "%s:%d" .host (.port | int))) }}
+              {{- end }}
+
+{{- include "mc-router.envMultilineMap" (list "MAPPING" (include "mc-router.formatMappings" .mappings)) }}
+
+              {{- with .metrics }}
+{{- include "mc-router.envMap" (list "METRICS_BACKEND" .backend) }}
+
+                {{- if eq .backend "influxdb" }}
+                  {{- with .influxdb }}
+{{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_ADDR" .address) }}
+{{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_DATABASE" .database) }}
+{{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_INTERVAL" .interval) }}
+{{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_RETENTION_POLICY" .retentionPolicy) }}
+{{- include "mc-router.envMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_TAGS" .tags) }}
+                    {{- with .credentials }}
+{{- include "mc-router.envSecretMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_USERNAME" .existingSecret .usernameKey) }}
+{{- include "mc-router.envSecretMap" (list "METRICS_BACKEND_CONFIG_INFLUXDB_PASSWORD" .existingSecret .passwordKey) }}
+                    {{- end }}
+                  {{- end }}
+                {{- end }}
+              {{- end }}
+
+{{- include "mc-router.envSecretMap" (list "NGROK_TOKEN" .ngrokToken.existingSecret .ngrokToken.tokenKey ) }}
+{{- include "mc-router.envBoolMap" (list "SIMPLIFY_SRV" .simplifySrv) }}
+{{- include "mc-router.envBoolMap" (list "USE_PROXY_PROTOCOL" .useProxyProtocol) }}
+{{- include "mc-router.envBoolMap" (list "VERSION" .showVersion) }}
+            {{- end }}
+
+            {{- range $key, $value := .Values.extraEnv }}
+              {{- if kindIs "map" $value }}
+                {{- if hasKey $value "valueFrom" }}
+            - name: {{ $key }}
+              valueFrom:
+                  {{- $value.valueFrom | toYaml | nindent 14 }}
+                {{- end }}
+              {{- else }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+              {{- end }}
+            {{- end }}
+          ports:
+            - name: api
+              containerPort: {{ $apiPort }}
+              protocol: TCP
+            - name: minecraft
+              containerPort: {{ $minecraftPort }}
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 30
+            failureThreshold: 20
+            httpGet:
+              path: /routes
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+              port: {{ $apiPort }}
+          readinessProbe:
+            initialDelaySeconds: 30
+            failureThreshold: 20
+            httpGet:
+              path: /routes
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+              port: {{ $apiPort }}
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /routes
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+              port: {{ $apiPort }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.extraVolumes }}
+          volumeMounts:
+            {{- range . }}
+            {{-   if .volumeMounts }}
+            {{-     toYaml .volumeMounts | nindent 12 }}
+            {{-   end }}
+            {{- end }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.extraVolumes }}
+      volumes:
+        {{- range . }}
+        {{-   if .volumes }}
+        {{-     toYaml .volumes | nindent 8 }}
+        {{-   end }}
+        {{- end }}
+      {{- end }}
