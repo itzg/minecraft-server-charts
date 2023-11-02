@@ -8,10 +8,16 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.apiPort }}
+      {{- if list "LoadBalancer" "NodePort" | has .Values.service.type }}
+      nodePort: {{ .Values.service.apiPort }}
+      {{- end }}
       targetPort: api
       protocol: TCP
       name: api
     - port: {{ .Values.service.minecraftPort }}
+      {{- if list "LoadBalancer" "NodePort" | has .Values.service.type }}
+      nodePort: {{ .Values.service.minecraftPort }}
+      {{- end }}
       targetPort: minecraft
       protocol: TCP
       name: minecraft
