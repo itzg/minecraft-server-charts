@@ -91,6 +91,15 @@ extraVolumes: []
   #         - hard
   #         - vers=4
 
+# Additional mc-router container environment variables
+# Values can be either variable values or `valueFrom` yaml
+extraEnv: {}
+  # some_variable: some value
+  # another_variable:
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: status.hostIP
+
 # Array of extra objects to deploy with the release.
 # This value is evaluated as a template
 extraDeploy: []

@@ -85,6 +85,19 @@ spec:
 {{- include "mc-router.envBoolMap" (list "USE_PROXY_PROTOCOL" .useProxyProtocol) }}
 {{- include "mc-router.envBoolMap" (list "VERSION" .showVersion) }}
             {{- end }}
+
+            {{- range $key, $value := .Values.extraEnv }}
+              {{- if kindIs "map" $value }}
+                {{- if hasKey $value "valueFrom" }}
+            - name: {{ $key }}
+              valueFrom:
+                  {{- $value.valueFrom | toYaml | nindent 14 }}
+                {{- end }}
+              {{- else }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+              {{- end }}
+            {{- end }}
           ports:
             - name: api
               containerPort: {{ .Values.service.apiPort }}
