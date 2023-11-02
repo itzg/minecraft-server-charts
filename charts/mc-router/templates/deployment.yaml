@@ -120,6 +120,14 @@ spec:
               port: {{ .Values.service.apiPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.extraVolumes }}
+          volumeMounts:
+            {{- range . }}
+            {{-   if .volumeMounts }}
+            {{-     toYaml .volumeMounts | nindent 12 }}
+            {{-   end }}
+            {{- end }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -131,4 +139,13 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.extraVolumes }}
+      volumes:
+        {{- range . }}
+        {{-   if .volumes }}
+        {{-     toYaml .volumes | nindent 8 }}
+        {{-   end }}
+        {{- end }}
       {{- end }}
