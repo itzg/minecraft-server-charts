@@ -1,5 +1,36 @@
 apiVersion: v1
 entries:
+  mc-router:
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/mc-router
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/mc-router
+    apiVersion: v1
+    appVersion: 1.20.0
+    created: "2023-11-02T23:15:47.864745066Z"
+    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    digest: 2c504ebc75eaf7a74b4e31ff0de3c4797345183f30bb326c7a5311ee8649dcef
+    home: https://github.com/itzg/mc-router
+    keywords:
+    - minecraft
+    - router
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    - email: yannik@carbongem.com
+      name: bibz87
+    name: mc-router
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/mc-router-1.0.0/mc-router-1.0.0.tgz
+    version: 1.0.0
   minecraft:
   - annotations:
       artifacthub.io/links: |
