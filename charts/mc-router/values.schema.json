@@ -107,7 +107,8 @@
               "minLength": 1
             },
             "port": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           }
         },
@@ -128,7 +129,8 @@
                 "minLength": 1
               },
               "port": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1
               }
             }
           }
