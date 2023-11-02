@@ -65,9 +65,9 @@ Create the name of the service account to use
 Helper function for environment variables
 */}}
 {{- define "mc-router.envMap" -}}
-{{- if index . 1 -}}
-- name: {{ index . 0 }}
-  value: {{ index . 1 | quote }}
+{{- if index . 1 }}
+            - name: {{ index . 0 }}
+              value: {{ index . 1 | quote }}
 {{- end }}
 {{- end }}
 
@@ -75,9 +75,9 @@ Helper function for environment variables
 Helper function for boolean environment variables
 */}}
 {{- define "mc-router.envBoolMap" -}}
-{{- if ne (toString (index . 1)) "default" -}}
-- name: {{ index . 0 }}
-  value: {{ index . 1 | quote }}
+{{- if ne (toString (index . 1)) "default" }}
+            - name: {{ index . 0 }}
+              value: {{ index . 1 | quote }}
 {{- end }}
 {{- end }}
 
@@ -85,10 +85,10 @@ Helper function for boolean environment variables
 Helper function for multiline environment variables
 */}}
 {{- define "mc-router.envMultilineMap" -}}
-{{- if index . 1 -}}
-- name: {{ index . 0 }}
-  value: |
-    {{- index . 1 }}
+{{- if index . 1 }}
+            - name: {{ index . 0 }}
+              value: |
+                {{- index . 1 }}
 {{- end }}
 {{- end }}
 
@@ -96,12 +96,12 @@ Helper function for multiline environment variables
 Helper function for secret environment variables
 */}}
 {{- define "mc-router.envSecretMap" -}}
-{{- if index . 1 -}}
-- name: {{ index . 0 }}
-  valueFrom:
-    secretKeyRef:
-      name: {{ index . 1 }}
-      key: {{ index . 2 }}
+{{- if index . 1 }}
+            - name: {{ index . 0 }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ index . 1 }}
+                  key: {{ index . 2 }}
 {{- end }}
 {{- end }}
 
@@ -109,8 +109,8 @@ Helper function for secret environment variables
 Helper function for mappings formatting
 */}}
 {{- define "mc-router.formatMappings" -}}
-{{- range . -}}
-{{- printf "%s=%s:%d" .externalHostname .host (.port | int) | nindent 4 -}}
+{{- range . }}
+                {{ printf "%s=%s:%d" .externalHostname .host (.port | int) }}
 {{- end -}}
 {{- end }}
 
