@@ -77,6 +77,24 @@ kubectl cp ${NAMESPACE}/${POD_ID}:/data .
 kubectl exec --namespace ${NAMESPACE} ${POD_ID} rcon-cli save-on
 ```
 
+### Known issues
+
+`rclone` can attempt to update its configuration file when there is data to be
+modified, such as missing configuration entries or tokens. As this configuration
+file will most likely be stored in a ConfigMap or a Secret, it will be read-only
+and the container will generate errors like this one:
+
+``` text
+rclone: 2023/11/22 21:41:18 ERROR : Failed to save config after 10 tries: failed to create temp file for new config: open /config/rclone/rclone.conf4086229703: read-only file system
+```
+
+In that case, double-check if there are missing entries in your `rclone`
+configuration as this might be the reason why `rclone` throws an error. This
+might not solve all cases, though.
+
+For more information, see this GitHub
+[issue](https://github.com/rclone/rclone/issues/3655)
+
 ## Tutorials
 
 For a quickstart guide to setting up a Kubernetes cluster and deploying
