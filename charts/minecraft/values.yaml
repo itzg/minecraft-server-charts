@@ -476,6 +476,8 @@ mcbackup:
   # if you prefer to create a secret from file (e.g. kubectl create secret generic my-rclone-config --from-file=~/.config/rclone/rclone.conf)
   # rcloneConfigExistingSecret: my-rclone-config
 
+  # variable to override Restic backup's hostname
+  resticHostname:
   resticRepository:
   # variable to define a space separated list of additional restic tags. see https://hub.docker.com/r/itzg/mc-backup
   resticAdditionalTags: "mc_backups"

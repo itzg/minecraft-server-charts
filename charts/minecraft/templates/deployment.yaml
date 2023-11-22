@@ -108,6 +108,7 @@ spec:
         {{- end }}
         {{- end }}
         {{- if eq .Values.mcbackup.backupMethod "restic" }}
+{{- template "minecraft.envMap" list "RESTIC_HOSTNAME" .Values.mcbackup.resticHostname  }}
 {{- template "minecraft.envMap" list "RESTIC_REPOSITORY" .Values.mcbackup.resticRepository  }}
 {{- template "minecraft.envMap" list "RESTIC_ADDITIONAL_TAGS" .Values.mcbackup.resticAdditionalTags  }}
 {{- template "minecraft.envMap" list "PRUNE_RESTIC_RETENTION" .Values.mcbackup.pruneResticRetention  }}
