@@ -51,3 +51,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- $value }}
 {{- end }}
 {{- end -}}
+
+{{- define "isResticWithRclone" -}}
+{{- if hasPrefix "rclone" .Values.mcbackup.resticRepository }}
+true
+{{- else }}
+false
+{{- end }}
+{{- end -}}
