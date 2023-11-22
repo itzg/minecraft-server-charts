@@ -175,6 +175,22 @@
             "required": [
                 "eula"
             ]
+        },
+        "mcbackup": {
+            "type": "object",
+            "properties": {
+                "backupMethod": {
+                    "type": "string",
+                    "enum": [
+                        "tar",
+                        "restic",
+                        "rclone"
+                    ]
+                },
+                "resticRepository": {
+                    "type": "string"
+                }
+            }
         }
     }
 }
