@@ -53,9 +53,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "isResticWithRclone" -}}
-{{- if hasPrefix "rclone" .Values.mcbackup.resticRepository }}
-true
-{{- else }}
-false
+{{- if .Values.mcbackup -}}
+{{-   if and (eq .Values.mcbackup.backupMethod "restic") (hasPrefix "rclone" .Values.mcbackup.resticRepository) }}
+{{-   printf "true" }}
+{{-   else }}
+{{-   printf "false" }}
+{{-   end }}
 {{- end }}
 {{- end -}}

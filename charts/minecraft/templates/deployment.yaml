@@ -145,7 +145,7 @@ spec:
           readOnly: true
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
-        {{- if or (eq .Values.mcbackup.backupMethod "rclone") (include "isResticWithRclone" $) }}
+        {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
         - name: rclone-config
           mountPath: /config/rclone
         {{- end }}
@@ -455,7 +455,7 @@ spec:
       - name: backupdir
         emptyDir: {}
       {{- end }}
-      {{- if or (eq .Values.mcbackup.backupMethod "rclone") (include "isResticWithRclone" $) }}
+      {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
       - name: rclone-config
         secret:
         {{- if .Values.mcbackup.rcloneConfigExistingSecret }}
