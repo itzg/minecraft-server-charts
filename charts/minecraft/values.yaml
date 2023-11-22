@@ -500,7 +500,7 @@ mcbackup:
     #     fieldRef:
     #       fieldPath: status.hostIP
 
-  ## Additional environment variables to add to the minecraft container from
+  ## Additional environment variables to add to the mc-backup container from
   ## ConfigMaps and Secrets
   ##
   envFrom: []
