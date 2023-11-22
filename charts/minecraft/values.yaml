@@ -486,7 +486,7 @@ mcbackup:
 
   # At least one of RESTIC_PASSWORD* env variables need to be defined, see https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html
   resticEnvs:
-    []
+    {}
     # RESTIC_PASSWORD: restic-password
 
   ## Additional minecraft container environment variables
