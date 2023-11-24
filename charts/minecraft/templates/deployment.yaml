@@ -111,10 +111,18 @@ spec:
 {{- template "minecraft.envMap" list "RESTIC_REPOSITORY" .Values.mcbackup.resticRepository  }}
 {{- template "minecraft.envMap" list "RESTIC_ADDITIONAL_TAGS" .Values.mcbackup.resticAdditionalTags  }}
 {{- template "minecraft.envMap" list "PRUNE_RESTIC_RETENTION" .Values.mcbackup.pruneResticRetention  }}
-        {{- range $key, $value := .Values.mcbackup.resticEnvs }}
+        {{-   range $key, $value := .Values.mcbackup.resticEnvs }}
+        {{-     if kindIs "map" $value }}
+        {{-       if hasKey $value "valueFrom" }}
+        - name: {{ $key }}
+          valueFrom:
+            {{- $value.valueFrom | toYaml | nindent 12 }}
+        {{-       end }}
+        {{-     else }}
         - name: {{ $key }}
           value: {{ $value | quote }}
-        {{- end }}
+        {{-     end }}
+        {{-   end }}
         {{- end }}
 
         {{- range $key, $value := .Values.mcbackup.extraEnv }}
@@ -137,7 +145,7 @@ spec:
           readOnly: true
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
-        {{- if eq .Values.mcbackup.backupMethod "rclone" }}
+        {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
         - name: rclone-config
           mountPath: /config/rclone
         {{- end }}
@@ -447,7 +455,7 @@ spec:
       - name: backupdir
         emptyDir: {}
       {{- end }}
-      {{- if eq .Values.mcbackup.backupMethod "rclone" }}
+      {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
       - name: rclone-config
         secret:
         {{- if .Values.mcbackup.rcloneConfigExistingSecret }}
