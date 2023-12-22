@@ -184,7 +184,8 @@
                     "enum": [
                         "tar",
                         "restic",
-                        "rclone"
+                        "rclone",
+                        "rsync"
                     ]
                 },
                 "resticRepository": {

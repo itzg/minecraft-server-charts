@@ -96,11 +96,13 @@ spec:
 {{- template "minecraft.envMap" list "RCON_RETRY_INTERVAL" .Values.mcbackup.rconRetryInterval  }}
 {{- template "minecraft.envMap" list "EXCLUDES" .Values.mcbackup.excludes  }}
 {{- template "minecraft.envMap" list "BACKUP_METHOD" .Values.mcbackup.backupMethod  }}
-        {{- if or (eq .Values.mcbackup.backupMethod "tar") (eq .Values.mcbackup.backupMethod "rclone") }}
+        {{- if or (eq .Values.mcbackup.backupMethod "tar") (eq .Values.mcbackup.backupMethod "rclone") (eq .Values.mcbackup.backupMethod "rsync") }}
 {{- template "minecraft.envMap" list "DEST_DIR" .Values.mcbackup.destDir  }}
 {{- template "minecraft.envMap" list "LINK_LATEST" .Values.mcbackup.linkLatest  }}
+        {{- if ne .Values.mcbackup.backupMethod "rsync" }}
 {{- template "minecraft.envMap" list "TAR_COMPRESS_METHOD" .Values.mcbackup.compressMethod  }}
 {{- template "minecraft.envMap" list "ZSTD_PARAMETERS" .Values.mcbackup.zstdParameters  }}
+        {{- end }}    
         {{- if eq .Values.mcbackup.backupMethod "rclone" }}
 {{- template "minecraft.envMap" list "RCLONE_REMOTE" .Values.mcbackup.rcloneRemote  }}
 {{- template "minecraft.envMap" list "RCLONE_DEST_DIR" .Values.mcbackup.rcloneDestDir  }}
