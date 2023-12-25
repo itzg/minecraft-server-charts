@@ -28,6 +28,9 @@ spec:
   {{- if .Values.minecraftProxy.rcon.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.minecraftProxy.rcon.externalTrafficPolicy }}
   {{- end }}
+  {{- if .Values.minecraftProxy.rcon.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.minecraftProxy.rcon.ipFamilyPolicy }}
+  {{- end }}
   ports:
   - name: rcon
     port: {{ .Values.minecraftProxy.rcon.port }}
