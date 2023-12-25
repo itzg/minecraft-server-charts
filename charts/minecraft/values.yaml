@@ -523,3 +523,8 @@ mcbackup:
       enabled: false
       # existingClaim: nil
       Size: 1Gi
+# dnsPolicy: ClusterFirst
+# dnsConfig:
+#   options:
+#   - name: ndots
+#     value: '1'
