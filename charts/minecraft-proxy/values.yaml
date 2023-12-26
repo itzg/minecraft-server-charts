@@ -121,6 +121,8 @@ minecraftProxy:
   # loadBalancerSourceRanges: []
   ## Set the externalTrafficPolicy in the Service to either Cluster or Local
   # externalTrafficPolicy: Cluster
+  ## Set the ipFamilyPolicy in the service to SingleStack, PreferDualStack, RequireDualStack
+  # ipFamilyPolicy: SingleStack
   externalIPs:
   # If set, this overrides the default config file path
   configFilePath: /server/config.yml
@@ -184,6 +186,8 @@ minecraftProxy:
     # loadBalancerSourceRanges: []
     ## Set the externalTrafficPolicy in the Service to either Cluster or Local
     # externalTrafficPolicy: Cluster
+    ## Set the ipFamilyPolicy in the service to SingleStack, PreferDualStack, RequireDualStack
+    # ipFamilyPolicy: SingleStack
 
   extraPorts: []
   # These options allow you to expose another port from the Minecraft proxy, plugins such

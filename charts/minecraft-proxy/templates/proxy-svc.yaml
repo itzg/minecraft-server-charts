@@ -28,6 +28,9 @@ spec:
   {{- if .Values.minecraftProxy.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.minecraftProxy.externalTrafficPolicy }}
   {{- end }}
+  {{- if .Values.minecraftProxy.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.minecraftProxy.ipFamilyPolicy }}
+  {{- end }}
   ports:
   - name: proxy
     port: 25565
