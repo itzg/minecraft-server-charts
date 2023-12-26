@@ -27,6 +27,13 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
       {{- end }}
+      {{- if .Values.dnsPolicy }}
+      dnsPolicy: {{ .Values.dnsPolicy}}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: 
+        {{- toYaml .Values.dnsConfig | nindent 8 }}
+      {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers: {{- toYaml .Values.initContainers | nindent 8 }}
