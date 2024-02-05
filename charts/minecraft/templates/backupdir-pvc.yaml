@@ -22,7 +22,7 @@ metadata:
   {{- end }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    {{ .Values.mcbackup.persistence.backupDir.accessModes | toYaml | nindent 4 }}
   resources:
     requests:
       storage: {{ .Values.mcbackup.persistence.backupDir.Size | quote }}

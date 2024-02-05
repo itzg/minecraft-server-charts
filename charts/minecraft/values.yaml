@@ -398,6 +398,8 @@ persistence:
     # Set this to false if you don't care to persist state between restarts.
     enabled: false
     Size: 1Gi
+    accessModes:
+      - ReadWriteOnce
     # existingClaim: nil
     ## specify a subpath in the volume where the data is. Useful when sharing volumes with other apps.
     # subPath: /path/to/dataDir
@@ -523,6 +525,8 @@ mcbackup:
       enabled: false
       # existingClaim: nil
       Size: 1Gi
+      accessModes:
+        - ReadWriteOnce
 # dnsPolicy: ClusterFirst
 # dnsConfig:
 #   options:
