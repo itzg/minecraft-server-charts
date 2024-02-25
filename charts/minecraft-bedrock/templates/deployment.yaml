@@ -136,7 +136,7 @@ spec:
 
         {{- if .Values.minecraftServer.enableSSH }}
         - name: ENABLE_SSH
-          value: true
+          value: "true"
         {{- end }}
 
         {{- if .Values.minecraftServer.passwordSSH }}
