@@ -134,6 +134,16 @@ spec:
         - name: SERVER_PORT
           value: {{ .Values.minecraftServer.serverPort | quote }}
 
+        {{- if .Values.minecraftServer.enableSSH }}
+        - name: ENABLE_SSH
+          value: true
+        {{- end }}
+
+        {{- if .Values.minecraftServer.passwordSSH }}
+        - name: RCON_PASSWORD
+          value: {{ .Values.minecraftServer.passwordSSH }}
+        {{- end }}
+
       {{- range $key, $value := .Values.extraEnv }}
       {{-   if kindIs "map" $value }}
       {{-     if hasKey $value "valueFrom" }}
@@ -151,6 +161,11 @@ spec:
         - name: minecraft
           containerPort: {{ .Values.minecraftServer.serverPort }}
           protocol: UDP
+        {{- if .Values.minecraftServer.enableSSH }}
+        - name: minecraft-ssh
+          containerPort: 2222
+          protocol: TCP
+        {{-   end }}
 
         volumeMounts:
         - name: tmp
