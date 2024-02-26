@@ -39,5 +39,14 @@ spec:
     nodePort: {{ .Values.minecraftServer.nodePort }}
     {{- end }}
     protocol: UDP
+  {{- if .Values.minecraftServer.enableSSH }}
+  - name: minecraft-ssh
+    port: {{ default "2222" .Values.minecraftServer.exposedPortSSH }}
+    targetPort: minecraft-ssh
+    {{- if .Values.minecraftServer.nodePortSSH }}
+    nodePort: {{ .Values.minecraftServer.nodePortSSH }}
+    {{- end }}
+    protocol: TCP
+  {{ end }}
   selector:
     app: {{ template "minecraft.fullname" . }}
