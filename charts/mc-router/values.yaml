@@ -56,6 +56,8 @@ services:
     # port: 8080
     # # Service port exposed externally on each node
     # nodePort: 38080
+    # Service annotations
+    # annotations: {}
 
   # Service for Minecraft client connections
   minecraft:
@@ -64,6 +66,8 @@ services:
     port: 25565
     # Service port exposed externally on each node
     # nodePort: 30065
+    # Service annotations
+    # annotations: {}
 
 resources: {}
   # limits:

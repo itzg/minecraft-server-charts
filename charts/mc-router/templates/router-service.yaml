@@ -4,6 +4,8 @@ metadata:
   name: {{ include "mc-router.fullname" . }}
   labels:
     {{- include "mc-router.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.services.minecraft.annotations | nindent 4 }}
 spec:
   {{- with .Values.services.minecraft }}
   type: {{ .type }}

@@ -5,6 +5,8 @@ metadata:
   name: {{ include "mc-router.fullname" . }}-api
   labels:
     {{- include "mc-router.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.services.api.annotations | nindent 4 }}
 spec:
   {{- with .Values.services.api }}
   type: {{ .type }}
