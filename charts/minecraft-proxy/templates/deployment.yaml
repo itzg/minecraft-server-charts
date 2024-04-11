@@ -118,7 +118,7 @@ spec:
         - name: RCON_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.minecraftProxy.rcon.existingSecret | default (printf "%s-rcon" (include "proxy.fullname" .)) }}
+              name: {{ .Values.minecraftProxy.rcon.existingSecret | default (include "proxy.fullname" .) }}
               key: {{ .Values.minecraftProxy.rcon.secretKey | default "rcon-password" }}
         {{- else }}
         - name: ENABLE_RCON
