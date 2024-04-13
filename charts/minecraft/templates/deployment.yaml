@@ -345,7 +345,7 @@ spec:
 {{- template "minecraft.envMap" list "QUERY_PORT" .Values.minecraftServer.query.port  }}
         {{- end }}
 
-    {{- if and .Values.minecraftServer.autoCurseForge (eq "AUTO_CURSEFORGE" .Values.minecraftServer.type) }}
+    {{- if .Values.minecraftServer.autoCurseForge }}
     {{- with .Values.minecraftServer.autoCurseForge }}
         - name: CF_API_KEY
           valueFrom:
