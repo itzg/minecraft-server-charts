@@ -23,7 +23,7 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  replicas: {{ default 1 .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   {{- if .Values.workloadAsStatefulSet }}
   serviceName: {{ template "minecraft.fullname" . }}
   updateStrategy:
