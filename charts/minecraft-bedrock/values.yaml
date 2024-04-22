@@ -209,4 +209,8 @@ podAnnotations: {}
 
 deploymentAnnotations: {}
 
+deploymentLables: {}
+
 serviceAnnotations: {}
+
+serviceLables: {}

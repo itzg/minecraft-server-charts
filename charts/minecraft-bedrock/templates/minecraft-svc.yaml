@@ -7,6 +7,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- with .Values.serviceLabels  }}
+  {{ toYaml . | nindent 4 }}
+  {{- end }}
   {{- if .Values.serviceAnnotations }}
   annotations:
     {{- range $key, $value := .Values.serviceAnnotations }}
