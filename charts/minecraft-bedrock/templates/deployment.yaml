@@ -14,6 +14,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- with .Values.deploymentLabels  }}
+  {{ toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.workloadAsStatefulSet }}
   serviceName: {{ template "minecraft.fullname" . }}
@@ -216,7 +219,7 @@ spec:
   volumeClaimTemplates:
     {{- if and .Values.persistence.dataDir.enabled (not .Values.persistence.dataDir.existingClaim) }}
     - metadata:
-        name: datadir   
+        name: datadir
         labels:
           app: {{ template "minecraft.fullname" . }}
           chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
