@@ -19,7 +19,7 @@ metadata:
   {{- end }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    {{- .Values.persistence.dataDir.accessModes | toYaml | nindent 4 }}
   resources:
     requests:
       storage: {{ .Values.persistence.dataDir.Size | quote }}
