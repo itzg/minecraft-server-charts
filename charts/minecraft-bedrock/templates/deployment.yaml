@@ -182,6 +182,9 @@ spec:
         {{- end }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
+      {{- with .Values.extraContainers }}
+        {{- tpl . $ | nindent 6 }}
+      {{- end }}
       volumes:
       - name: tmp
         emptyDir: {}

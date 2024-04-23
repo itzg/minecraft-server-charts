@@ -63,6 +63,17 @@ readinessProbe:
 #         readOnly: true
 initContainers: []
 
+## Enable an Specify container in extraContainers. To add a sidecar;
+extraContainers: ""
+# extraContainers: |
+#   - name: proxy
+#     image: "quay.io/my/favourite:image-tag
+#     args:
+#       - -setting1
+#     ports:
+#       - name: web
+#         containerPort: 8080
+
 # extraVolumes:
 #   - volumeMounts:
 #       - name: nfs
