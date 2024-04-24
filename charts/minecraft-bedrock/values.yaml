@@ -53,6 +53,9 @@ livenessProbe:
 readinessProbe:
   initialDelaySeconds: 30
 
+# https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+shareProcessNamespace: false
+
 # initContainers:
 #   - name: do-something
 #     image: busybox
