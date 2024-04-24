@@ -63,9 +63,9 @@ readinessProbe:
 #         readOnly: true
 initContainers: []
 
-## Enable an Specify container in extraContainers. To add a sidecar;
-extraContainers: ""
-# extraContainers: |
+## Enable an Specify container in sidecarContainers. To add a sidecar;
+sidecarContainers: ""
+# sidecarContainers: |
 #   - name: proxy
 #     image: "quay.io/my/favourite:image-tag
 #     args:
