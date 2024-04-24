@@ -40,6 +40,7 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      shareProcessNamespace: {{ .Values.shareProcessNamespace }}
       {{- if .Values.image.pullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
@@ -193,6 +194,9 @@ spec:
         {{- end }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
+      {{- with .Values.sidecarContainers }}
+        {{- tpl . $ | nindent 6 }}
+      {{- end }}
       volumes:
       - name: tmp
         emptyDir: {}

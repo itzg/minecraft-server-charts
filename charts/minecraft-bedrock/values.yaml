@@ -53,6 +53,9 @@ livenessProbe:
 readinessProbe:
   initialDelaySeconds: 30
 
+# https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+shareProcessNamespace: false
+
 # initContainers:
 #   - name: do-something
 #     image: busybox
@@ -62,6 +65,17 @@ readinessProbe:
 #         mountPath: /mnt/volume
 #         readOnly: true
 initContainers: []
+
+## Enable an Specify container in sidecarContainers. To add a sidecar;
+sidecarContainers: ""
+# sidecarContainers: |
+#   - name: proxy
+#     image: "quay.io/my/favourite:image-tag
+#     args:
+#       - -setting1
+#     ports:
+#       - name: web
+#         containerPort: 8080
 
 # extraVolumes:
 #   - volumeMounts:
