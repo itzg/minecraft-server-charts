@@ -52,34 +52,45 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "minecraft.fullname" . }}
+        {{- if .Values.restoreMode }}
+        command:
+          - /bin/bash
+        args:
+          - -s
+          - "while true; do sleep 30; done"
+        {{- end }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         stdin: true
         tty: true
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+        {{- if not .Values.restoreMode }}
         readinessProbe:
           exec:
-              command:
-                - mc-monitor
-                - status-bedrock
-                - --host
-                # force health check against IPv4 port
-                - 127.0.0.1
-                - --port
-                - {{ .Values.minecraftServer.serverPort | quote }}
+            command:
+              - mc-monitor
+              - status-bedrock
+              - --host
+              # force health check against IPv4 port
+              - 127.0.0.1
+              - --port
+              - {{ .Values.minecraftServer.serverPort | quote }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+        {{- end }}
+        {{- if not .Values.restoreMode }}
         livenessProbe:
           exec:
-              command:
-                - mc-monitor
-                - status-bedrock
-                - --host
-                # force health check against IPv4 port
-                - 127.0.0.1
-                - --port
-                - {{ .Values.minecraftServer.serverPort | quote }}
+            command:
+              - mc-monitor
+              - status-bedrock
+              - --host
+              # force health check against IPv4 port
+              - 127.0.0.1
+              - --port
+              - {{ .Values.minecraftServer.serverPort | quote }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+        {{- end }}
 
       {{- with .Values.envFrom }}
         envFrom:
