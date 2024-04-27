@@ -249,6 +249,9 @@
           ]
         }
       }
+    },
+    "extraPodSpec": {
+      "type": "object"
     }
   }
 }

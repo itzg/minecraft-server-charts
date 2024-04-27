@@ -230,6 +230,9 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
     {{- end }}
+    {{- range $key, $value := .Values.extraPodSpec }}
+      {{ $key }}: {{ tpl $value $ }}
+    {{- end }}
   {{- if .Values.workloadAsStatefulSet }}
   volumeClaimTemplates:
     {{- if and .Values.persistence.dataDir.enabled (not .Values.persistence.dataDir.existingClaim) }}

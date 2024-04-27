@@ -481,6 +481,9 @@ spec:
       {{-     toYaml .volumes | nindent 6 }}
       {{-   end }}
       {{- end }}
+      {{- range $key, $value := .Values.extraPodSpec }}
+      {{ $key }}: {{ tpl $value $ }}
+      {{- end }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
