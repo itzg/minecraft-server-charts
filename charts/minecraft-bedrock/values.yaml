@@ -92,6 +92,16 @@ sidecarContainers: ""
 #           - vers=4
 extraVolumes: []
 
+# Extra fields to set on the pod
+#
+# Fields set here will be added to the end of the Pod spec
+# Can include any fields from https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+# that are not already set by the chart.
+#
+# The value of the field will be interpretted as a template.
+extraPodSpec: {}
+#   priorityClassName: 'my-priority-class'
+
 ## Array of extra objects to deploy with the release
 ##
 # extraDeploy:
