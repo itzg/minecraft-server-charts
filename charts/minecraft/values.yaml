@@ -107,12 +107,13 @@ sidecarContainers: []
 #         readOnly: true
 #     volumes:
 #       - name: nfs
-#         server: some.nfs.server.com
-#         path: /
-#         mountOptions:
-#           - port=2049
-#           - hard
-#           - vers=4
+#         nfs:
+#           server: some.nfs.server.com
+#           path: /
+#           mountOptions:
+#             - port=2049
+#             - hard
+#             - vers=4
 extraVolumes: []
 
 
@@ -130,6 +131,18 @@ extraVolumes: []
 #           "key": "value"
 #         }
 extraDeploy: []
+
+## Extra fields to set on the pod
+##
+## Fields set here will be added to the end of the Pod spec
+## Can include any fields from https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+## that are not already set by the chart.
+##
+## The value of the field will be interpretted as a template.
+##
+# extraPodSpec:
+#   priorityClassName: 'my-priority-class'
+extraPodSpec: {}
 
 minecraftServer:
   # This must be overridden, since we can't accept this for the user.
