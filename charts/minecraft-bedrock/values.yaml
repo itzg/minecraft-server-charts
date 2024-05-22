@@ -233,6 +233,10 @@ persistence:
     enabled: false
     # existingClaim: nil
     Size: 1Gi
+    # access modes used by the volume, RWO by default,
+    # ensure your storage class supports other modes if chosen
+    accessModes:
+      - ReadWriteOnce
 
 podAnnotations: {}
 
