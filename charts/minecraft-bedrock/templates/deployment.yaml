@@ -14,6 +14,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- with .Values.deploymentLabels  }}
+  {{ toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.workloadAsStatefulSet }}
   serviceName: {{ template "minecraft.fullname" . }}
@@ -37,6 +40,7 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      shareProcessNamespace: {{ .Values.shareProcessNamespace }}
       {{- if .Values.image.pullSecret }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
@@ -49,34 +53,45 @@ spec:
       {{- end }}
       containers:
       - name: {{ template "minecraft.fullname" . }}
+        {{- if .Values.restoreMode }}
+        command:
+          - /bin/bash
+        args:
+          - -s
+          - "while true; do sleep 30; done"
+        {{- end }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         stdin: true
         tty: true
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+        {{- if not .Values.restoreMode }}
         readinessProbe:
           exec:
-              command:
-                - mc-monitor
-                - status-bedrock
-                - --host
-                # force health check against IPv4 port
-                - 127.0.0.1
-                - --port
-                - {{ .Values.minecraftServer.serverPort | quote }}
+            command:
+              - mc-monitor
+              - status-bedrock
+              - --host
+              # force health check against IPv4 port
+              - 127.0.0.1
+              - --port
+              - {{ .Values.minecraftServer.serverPort | quote }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+        {{- end }}
+        {{- if not .Values.restoreMode }}
         livenessProbe:
           exec:
-              command:
-                - mc-monitor
-                - status-bedrock
-                - --host
-                # force health check against IPv4 port
-                - 127.0.0.1
-                - --port
-                - {{ .Values.minecraftServer.serverPort | quote }}
+            command:
+              - mc-monitor
+              - status-bedrock
+              - --host
+              # force health check against IPv4 port
+              - 127.0.0.1
+              - --port
+              - {{ .Values.minecraftServer.serverPort | quote }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+        {{- end }}
 
       {{- with .Values.envFrom }}
         envFrom:
@@ -179,6 +194,9 @@ spec:
         {{- end }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
+      {{- with .Values.sidecarContainers }}
+        {{- tpl . $ | nindent 6 }}
+      {{- end }}
       volumes:
       - name: tmp
         emptyDir: {}
@@ -212,11 +230,14 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
     {{- end }}
+    {{- range $key, $value := .Values.extraPodSpec }}
+      {{ $key }}: {{ tpl $value $ }}
+    {{- end }}
   {{- if .Values.workloadAsStatefulSet }}
   volumeClaimTemplates:
     {{- if and .Values.persistence.dataDir.enabled (not .Values.persistence.dataDir.existingClaim) }}
     - metadata:
-        name: datadir   
+        name: datadir
         labels:
           app: {{ template "minecraft.fullname" . }}
           chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"

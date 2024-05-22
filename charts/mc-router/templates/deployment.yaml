@@ -164,3 +164,6 @@ spec:
         {{-   end }}
         {{- end }}
       {{- end }}
+      {{- range $key, $value := .Values.extraPodSpec }}
+      {{ $key }}: {{ tpl $value $ }}
+      {{- end }}

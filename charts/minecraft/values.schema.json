@@ -192,6 +192,9 @@
                     "type": "string"
                 }
             }
+        },
+        "extraPodSpec": {
+            "type": "object"
         }
     }
 }
