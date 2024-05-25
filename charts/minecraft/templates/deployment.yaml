@@ -149,9 +149,14 @@ spec:
         volumeMounts:
         - name: tmp
           mountPath: /tmp
+        {{- if .Values.persistence.altDataVolumeName }}
+        - name: {{ .Values.persistence.altDataVolumeName }}
+          mountPath: /data
+        {{- else }}
         - name: datadir
           mountPath: /data
           readOnly: true
+        {{- end }}
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
         {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
@@ -413,11 +418,16 @@ spec:
         volumeMounts:
         - name: tmp
           mountPath: /tmp
+        {{- if .Values.persistence.altDataVolumeName }}
+        - name: {{ .Values.persistence.altDataVolumeName }}
+          mountPath: /data
+        {{- else }}
         - name: datadir
           mountPath: /data
           {{- if (and .Values.persistence.dataDir.enabled .Values.persistence.dataDir.subPath) }}
           subPath: {{ .Values.persistence.dataDir.subPath }}
           {{- end }}
+        {{- end }}
         - name: backupdir
           mountPath: {{ default "/backups" .Values.mcbackup.destDir }}
           readOnly: true
