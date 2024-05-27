@@ -39,7 +39,7 @@ You can watch for EXTERNAL-IP to populate by running:
 
 {{- end }}
 
-{{- if .Values.persistence.dataDir.enabled }}
+{{- if or .Values.persistence.dataDir.enabled .Values.persistence.altDataVolumeName }}
 {{- else }}
 
 ############################################################################
