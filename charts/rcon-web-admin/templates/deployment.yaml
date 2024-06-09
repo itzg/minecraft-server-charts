@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "rcon-web-admin.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "rcon-web-admin.labels" . | nindent 4 }}
 spec:
