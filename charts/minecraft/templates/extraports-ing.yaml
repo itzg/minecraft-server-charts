@@ -8,6 +8,7 @@ apiVersion: {{ include "minecraft.ingress.apiVersion" $ }}
 kind: Ingress
 metadata:
   name: {{ $serviceName }}
+  namespace: {{ .Release.Namespace }}
   {{- if .ingress.annotations }}
   annotations: {{- toYaml .ingress.annotations | nindent 4 }}
   {{- end }}

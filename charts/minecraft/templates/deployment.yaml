@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: {{ ternary "StatefulSet" "Deployment" .Values.workloadAsStatefulSet }}
 metadata:
   name: {{ template "minecraft.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   {{- if .Values.deploymentAnnotations }}
   annotations:
     {{- range $key, $value := .Values.deploymentAnnotations }}
