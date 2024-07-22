@@ -441,6 +441,17 @@ spec:
       {{- if .Values.sidecarContainers }}
       {{- toYaml .Values.sidecarContainers | nindent 6 }}
       {{- end }}
+      {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
+      initContainers:
+        - name: init-container
+          image: busybox
+          command: ['sh', '-c', 'cp /secret/rclone.conf /config/rclone/']
+          volumeMounts:
+          - name: rclone-secret
+            mountPath: /secret
+          - name: rclone-config
+            mountPath: /config/rclone
+      {{- end }}
       volumes:
       - name: tmp
         emptyDir: {}
@@ -475,7 +486,7 @@ spec:
         emptyDir: {}
       {{- end }}
       {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
-      - name: rclone-config
+      - name: rclone-secret
         secret:
         {{- if .Values.mcbackup.rcloneConfigExistingSecret }}
           secretName: {{ .Values.mcbackup.rcloneConfigExistingSecret }}
@@ -485,6 +496,8 @@ spec:
           items:
           - key: rclone.conf
             path: rclone.conf
+      - name: rclone-config
+        emptyDir: {}
       {{- end }}
       {{- range .Values.extraVolumes }}
       {{-   if .volumes }}
