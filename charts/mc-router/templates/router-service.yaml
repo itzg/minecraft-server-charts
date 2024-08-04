@@ -22,3 +22,6 @@ spec:
   {{- end }}
   selector:
     {{- include "mc-router.selectorLabels" . | nindent 4 }}
+  {{- if .Values.services.extraServiceSpec }}
+  {{ toYaml .Values.services.extraServiceSpec | indent 4 }}
+  {{- end }}
