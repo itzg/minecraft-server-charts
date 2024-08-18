@@ -47,12 +47,11 @@ spec:
         {{ $key }}: {{ $value | quote }}
         {{- end }}
       {{- end }}
-      {{- if .Values.podAnnotations }}
       annotations:
+        kubectl.kubernetes.io/default-container: {{ template "minecraft.fullname" . }}
         {{- range $key, $value := .Values.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
-      {{- end }}
     spec:
       {{- if .Values.image.pullSecret }}
       imagePullSecrets:
@@ -62,7 +61,7 @@ spec:
       dnsPolicy: {{ .Values.dnsPolicy}}
       {{- end }}
       {{- if .Values.dnsConfig }}
-      dnsConfig: 
+      dnsConfig:
         {{- toYaml .Values.dnsConfig | nindent 8 }}
       {{- end }}
       securityContext:
@@ -109,7 +108,7 @@ spec:
         {{- if ne .Values.mcbackup.backupMethod "rsync" }}
 {{- template "minecraft.envMap" list "TAR_COMPRESS_METHOD" .Values.mcbackup.compressMethod  }}
 {{- template "minecraft.envMap" list "ZSTD_PARAMETERS" .Values.mcbackup.zstdParameters  }}
-        {{- end }}    
+        {{- end }}
         {{- if eq .Values.mcbackup.backupMethod "rclone" }}
 {{- template "minecraft.envMap" list "RCLONE_REMOTE" .Values.mcbackup.rcloneRemote  }}
 {{- template "minecraft.envMap" list "RCLONE_DEST_DIR" .Values.mcbackup.rcloneDestDir  }}
@@ -523,7 +522,7 @@ spec:
   volumeClaimTemplates:
     {{- if and .Values.persistence.dataDir.enabled (not .Values.persistence.dataDir.existingClaim) }}
     - metadata:
-        name: datadir   
+        name: datadir
         labels:
           app: {{ template "minecraft.fullname" . }}
           chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -531,7 +530,7 @@ spec:
           heritage: "{{ .Release.Service }}"
           app.kubernetes.io/name: "{{ .Chart.Name }}"
           app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
-          app.kubernetes.io/version: "{{ .Chart.Version }}"  
+          app.kubernetes.io/version: "{{ .Chart.Version }}"
         annotations:
         {{- with .Values.persistence.annotations  }}
         {{ toYaml . | nindent 10 }}
