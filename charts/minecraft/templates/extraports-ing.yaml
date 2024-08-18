@@ -1,6 +1,6 @@
 {{- $minecraftFullname := include "minecraft.fullname" . }}
 {{- range .Values.minecraftServer.extraPorts }}
-{{- if default "" .ingress.enabled }}
+{{- if default "" (.ingress).enabled }}
 {{- $servicePort := .service.port }}
 {{- $serviceName := printf "%s-%s" $minecraftFullname .name }}
 ---
