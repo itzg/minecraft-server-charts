@@ -1,0 +1,38 @@
+{{ with .Values.minecraftServer }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "minecraft.fullname" . }}-backup-config
+data:
+  SRC_DIR: "/data"
+  BACKUP_NAME: {{ .Values.minecraftServer.worldSaveName }}
+  INITIAL_DELAY: {{ .Values.mcbackup.initialDelay }}
+  BACKUP_INTERVAL: {{ .Values.mcbackup.backupInterval }}
+  PRUNE_BACKUPS_DAYS: {{ .Values.mcbackup.pruneBackupsDays }}
+  PAUSE_IF_NO_PLAYERS: {{ .Values.mcbackup.pauseIfNoPlayers }}
+  SERVER_PORT: "25565"
+  RCON_HOST: "localhost"
+  RCON_PORT: {{ .Values.minecraftServer.rcon.port }}
+  RCON_RETRIES: {{ .Values.mcbackup.rconRetries }}
+  RCON_RETRY_INTERVAL: {{ .Values.mcbackup.rconRetryInterval }}
+  EXCLUDES: {{ .Values.mcbackup.excludes }}
+  BACKUP_METHOD: {{ .Values.mcbackup.backupMethod }}
+  {{- if or (eq .Values.mcbackup.backupMethod "tar") (eq .Values.mcbackup.backupMethod "rclone") (eq .Values.mcbackup.backupMethod "rsync") }}
+  DEST_DIR: {{ .Values.mcbackup.destDir }}
+  LINK_LATEST: {{ .Values.mcbackup.linkLatest }}
+  {{-   if ne .Values.mcbackup.backupMethod "rsync" }}
+  TAR_COMPRESS_METHOD: {{ .Values.mcbackup.compressMethod }}
+  ZSTD_PARAMETERS: {{ .Values.mcbackup.zstdParameters }}
+  {{-   end }}
+  {{-   if eq .Values.mcbackup.backupMethod "rclone" }}
+  RCLONE_REMOTE: {{ .Values.mcbackup.rcloneRemote }}
+  RCLONE_DEST_DIR: {{ .Values.mcbackup.rcloneDestDir }}
+  RCLONE_COMPRESS_METHOD: {{ .Values.mcbackup.rcloneCompressMethod }}
+  {{-   end }}
+  {{- end }}
+  {{- if eq .Values.mcbackup.backupMethod "restic" }}
+  RESTIC_REPOSITORY: {{ .Values.mcbackup.resticRepository }}
+  RESTIC_ADDITIONAL_TAGS: {{ .Values.mcbackup.resticAdditionalTags }}
+  PRUNE_RESTIC_RETENTION: {{ .Values.mcbackup.pruneResticRetention }}
+  {{- end }}
+{{- end }}

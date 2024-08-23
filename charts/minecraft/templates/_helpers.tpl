@@ -25,17 +25,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end }}
 {{- end -}}
 
-{{- define "minecraft.envMap" }}
-{{- if index . 1 }}
-        - name: {{ index . 0 }}
-          value: {{ index . 1 | quote }}
+{{- define "minecraft.extraEnv" }}
+{{- range $key, $value := . }}
+{{- if kindIs "map" $value }}
+{{-   if hasKey $value "valueFrom" }}
+- name: {{ $key }}
+  valueFrom:
+    {{- $value.valueFrom | toYaml | nindent 4 }}
+{{-   end }}
+{{- else }}
+- name: {{ $key }}
+  value: {{ $value | quote }}
 {{- end }}
-{{- end }}
-
-{{- define "minecraft.envBoolMap" }}
-{{- if ne (toString (index . 1)) "default" }}
-        - name: {{ index . 0 }}
-          value: {{ index . 1 | quote }}
 {{- end }}
 {{- end }}
 

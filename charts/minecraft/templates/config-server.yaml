@@ -1,0 +1,85 @@
+{{ with .Values.minecraftServer }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "minecraft.fullname" . }}-config
+data:
+  EULA: {{ .eula }}
+  TYPE: {{ .type }}
+  FORGE_INSTALLER_URL: {{ .forgeInstallerUrl }}
+  FORGEVERSION: {{ .forgeVersion }}
+  SPIGOT_DOWNLOAD_URL: {{ .spigotDownloadUrl }}
+  BUKKIT_DOWNLOAD_URL: {{ .bukkitDownloadUrl }}
+  PAPER_DOWNLOAD_URL: {{ .paperDownloadUrl }}
+  {{- if eq .type "FTBA" }}
+  FTB_MODPACK_ID: {{ required "You must supply a minecraftserver.ftbModpackVersionID with type=FTBA" .ftbModpackId }}
+  {{- end }}
+  FTB_MODPACK_VERSION_ID: {{ .ftbModpackVersionId }}
+  CF_SERVER_MOD: {{ .cfServerMod }}
+  FTB_LEGACYJAVAFIXER: {{ .ftbLegacyJavaFixer }}
+  VERSION: {{ .version }}
+  DIFFICULTY: {{ .difficulty }}
+  WHITELIST: {{ .whitelist }}
+  OPS: {{ .ops }}
+  ICON: {{ .icon }}
+  MAX_PLAYERS: {{ .maxPlayers }}
+  MAX_WORLD_SIZE: {{ .maxWorldSize }}
+  ALLOW_NETHER: {{ .allowNether }}
+  ANNOUNCE_PLAYER_ACHIEVEMENTS: {{ .announcePlayerAchievements }}
+  ENABLE_COMMAND_BLOCK: {{ .enableCommandBlock }}
+  FORCE_GAMEMODE: {{ .forcegameMode }}
+  FORCE_REDOWNLOAD: {{ .forceReDownload }}
+  GENERATE_STRUCTURES: {{ .generateStructures }}
+  HARDCORE: {{ .hardcore }}
+  MAX_BUILD_HEIGHT: {{ .maxBuildHeight }}
+  MAX_TICK_TIME: {{ .maxTickTime }}
+  SPAWN_ANIMALS: {{ .spawnAnimals }}
+  SPAWN_MONSTERS: {{ .spawnMonsters }}
+  SPAWN_NPCS: {{ .spawnNPCs }}
+  SPAWN_PROTECTION: {{ .spawnProtection }}
+  VIEW_DISTANCE: {{ .viewDistance }}
+  SEED: {{ .levelSeed }}
+  MODE: {{ .gameMode }}
+  MOTD: {{ .motd }}
+  PVP: {{ .pvp }}
+  LEVEL_TYPE: {{ .levelType }}
+  GENERATOR_SETTINGS: {{ .generatorSettings }}
+  LEVEL: {{ .worldSaveName }}
+  WORLD: {{ .downloadWorldUrl }}
+  MODPACK: {{ .downloadModpackUrl }}
+  REMOVE_OLD_MODS: {{ .removeOldMods }}
+  MODS: {{ join "," .modUrls }}
+  PLUGINS: {{ join "," .pluginUrls }}
+  SPIGET_RESOURCES: {{ join "," .spigetResources }}
+  {{- with .modrinth }}
+  MODRINTH_PROJECTS: {{ join "," .projects }}
+  MODRINTH_DOWNLOAD_OPTIONAL_DEPENDENCIES: {{ .optionalDependencies }} # TODO: Deprecated in favor of MODRINTH_DOWNLOAD_DEPENDENCIES
+  MODRINTH_ALLOWED_VERSION_TYPE: {{ .allowedVersionType }}
+  {{- end }}
+  VANILLATWEAKS_SHARECODE: {{ join "," .vanillaTweaksShareCodes }}
+  RESOURCE_PACK_ENFORCE: {{ .resourcePackEnforce }}
+  RESOURCE_PACK: {{ .resourcePackUrl }}
+  RESOURCE_PACK_SHA1: {{ .resourcePackSha }}
+  ONLINE_MODE: {{ .onlineMode }}
+  ENFORCE_SECURE_PROFILE: {{ .enforceSecureProfile }}
+  MEMORY: {{ .memory }}
+  JVM_OPTS: {{ .jvmOpts }}
+  JVM_XX_OPTS: {{ .jvmXXOpts }}
+  OVERRIDE_SERVER_PROPERTIES: {{ .overrideServerProperties }}
+  ENABLE_RCON: {{ .rcon.enabled }}
+  ENABLE_QUERY: {{ .query.enabled }}
+  QUERY_PORT: {{ .query.port }}
+  {{- with .autoCurseForge }}
+  CF_PAGE_URL: {{ .pageUrl }}
+  CF_SLUG: {{ .slug }}
+  CF_FILE_ID: {{ .fileId }}
+  CF_FILENAME_MATCHER: {{ .filenameMatcher }}
+  CF_EXCLUDE_MODS: {{ join "," .excludeMods }}
+  CF_FORCE_INCLUDE_MODS: {{ join "," .includeMods }}
+  CF_EXCLUDE_INCLUDE_FILE: {{ .excludeIncludeFile }}
+  CF_FORCE_SYNCHRONIZE: {{ .forceSynchronize }}
+  CF_SET_LEVEL_FROM: {{ .setLevelFrom }}
+  CF_PARALLEL_DOWNLOADS: {{ .parallelDownloads }}
+  CF_OVERRIDES_SKIP_EXISTING: "true"
+  {{- end }}
+{{- end }}
