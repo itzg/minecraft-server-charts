@@ -133,7 +133,6 @@ spec:
               optional: false
           {{- . | toYaml | nindent 10 }}
         {{- end }}
-        {{- end }}
         env:
         {{- with .Values.minecraftServer.rcon }}
         {{- if and .enabled (not .withGeneratedPassword) }} # TODO: Validate functionality
@@ -313,7 +312,7 @@ spec:
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:
-        {{ toYaml .Values.nodeSelector |n indent 8 }}
+        {{ toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity:
