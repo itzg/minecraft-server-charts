@@ -17,11 +17,11 @@ metadata:
     app.kubernetes.io/name: "{{ .Chart.Name }}"
     app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
     app.kubernetes.io/version: "{{ .Chart.Version }}"
-  {{- if .Values.deploymentLabels }}
+    {{- if .Values.deploymentLabels }}
     {{- range $key, $value := .Values.deploymentLabels}}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-  {{- end }}
+    {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   {{- if .Values.workloadAsStatefulSet }}
@@ -42,11 +42,11 @@ spec:
         app.kubernetes.io/name: "{{ .Chart.Name }}"
         app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
         app.kubernetes.io/version: "{{ .Chart.Version }}"
-      {{- if .Values.podLabels }}
+        {{- if .Values.podLabels }}
         {{- range $key, $value := .Values.podLabels}}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
-      {{- end }}
+        {{- end }}
       {{- if .Values.podAnnotations }}
       annotations:
         checksum/config-backup: {{ include (print $.Template.BasePath "/config-backup.yaml") . | sha256sum }}
@@ -71,7 +71,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if .Values.initContainers }}
       initContainers:
-      {{- toYaml .Values.initContainers | nindent 8 }}
+        {{- toYaml .Values.initContainers | nindent 8 }}
       {{- end }}
       containers:
       - name: {{ template "minecraft.fullname" . }}
@@ -84,14 +84,16 @@ spec:
           {{- if .Values.lifecycle.postStart }}
           postStart:
             exec:
-              command: {{- range .Values.lifecycle.postStart }}
+              command:
+              {{- range .Values.lifecycle.postStart }}
                 - {{ . }}
               {{- end }}
           {{- end }}
           {{- if .Values.lifecycle.preStop }}
           preStop:
             exec:
-              command: {{- range .Values.lifecycle.preStop }}
+              command:
+              {{- range .Values.lifecycle.preStop }}
                 - {{ . }}
               {{- end }}
           {{- end }}
@@ -129,7 +131,8 @@ spec:
           - configMapRef:
               name: {{ template "minecraft.fullname" . }}-config
               optional: false
-          {{- . | toYaml | nindent 10 }}{{ end }}
+          {{- . | toYaml | nindent 10 }}
+        {{- end }}
         {{- end }}
         env:
         {{- with .Values.minecraftServer.rcon }}
@@ -191,13 +194,13 @@ spec:
         {{-   end }}
         {{- end }}
         securityContext:
-            {{- toYaml .Values.securityContext | nindent 10 }}
+          {{- toYaml .Values.securityContext | nindent 10 }}
       {{- if and .Values.mcbackup.enabled .Values.minecraftServer.rcon.enabled }}
       - name: {{ template "minecraft.fullname" . }}-mc-backup
         image: "{{ .Values.mcbackup.image.repository }}:{{ .Values.mcbackup.image.tag }}"
         imagePullPolicy: {{ .Values.mcbackup.image.pullPolicy }}
         resources:
-{{ toYaml .Values.mcbackup.resources | indent 10 }}
+          {{ toYaml .Values.mcbackup.resources | nindent 10 }}
       {{- with .Values.mcbackup.envFrom }}
         envFrom:
           - configMapRef:
@@ -257,30 +260,30 @@ spec:
       - name: tmp
         emptyDir: {}
       {{- if .Values.persistence.dataDir.enabled }}
-      {{- if .Values.persistence.dataDir.existingClaim }}
+      {{-   if .Values.persistence.dataDir.existingClaim }}
       - name: datadir
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.dataDir.existingClaim }}
-      {{- else if (not .Values.workloadAsStatefulSet) }}
+      {{-   else if (not .Values.workloadAsStatefulSet) }}
       - name: datadir
         persistentVolumeClaim:
           claimName: {{ template "minecraft.fullname" . }}-datadir
-      {{- end -}}
+      {{-   end -}}
       {{/* if persistence enabled in stateful set without existing claim, a volume claim template will be defined */}}
       {{- else }}
       - name: datadir
         emptyDir: {}
       {{- end }}
       {{- if and .Values.mcbackup.persistence.backupDir.enabled .Values.mcbackup.enabled }}
-      {{- if .Values.mcbackup.persistence.backupDir.existingClaim }}
+      {{-   if .Values.mcbackup.persistence.backupDir.existingClaim }}
       - name: backupdir
         persistentVolumeClaim:
           claimName: {{ .Values.mcbackup.persistence.backupDir.existingClaim }}
-      {{- else if (not .Values.workloadAsStatefulSet) }}
+      {{-   else if (not .Values.workloadAsStatefulSet) }}
       - name: backupdir
         persistentVolumeClaim:
           claimName: {{ template "minecraft.fullname" . }}-backupdir
-      {{- end -}}
+      {{-   end -}}
       {{/* if persistence enabled in stateful set without existing claim, a volume claim template will be defined */}}
       {{- else }}
       - name: backupdir
@@ -289,11 +292,11 @@ spec:
       {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
       - name: rclone-secret
         secret:
-        {{- if .Values.mcbackup.rcloneConfigExistingSecret }}
+          {{- if .Values.mcbackup.rcloneConfigExistingSecret }}
           secretName: {{ .Values.mcbackup.rcloneConfigExistingSecret }}
-        {{- else }}
+          {{- else }}
           secretName: {{ template "minecraft.fullname" . }}-rclone-config
-        {{- end }}
+          {{- end }}
           items:
           - key: rclone.conf
             path: rclone.conf
@@ -308,18 +311,18 @@ spec:
       {{- range $key, $value := .Values.extraPodSpec }}
       {{ $key }}: {{ tpl $value $ }}
       {{- end }}
-    {{- if .Values.nodeSelector }}
+      {{- if .Values.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
-    {{- end }}
-    {{- if .Values.affinity }}
+        {{ toYaml .Values.nodeSelector |n indent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
       affinity:
-{{ toYaml .Values.affinity | indent 8 }}
-    {{- end }}
-    {{- if .Values.tolerations }}
+        {{ toYaml .Values.affinity | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
       tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
-    {{- end }}
+        {{ toYaml .Values.tolerations | nindent 8 }}
+      {{- end }}
   {{- if .Values.workloadAsStatefulSet }}
   volumeClaimTemplates:
     {{- if and .Values.persistence.dataDir.enabled (not .Values.persistence.dataDir.existingClaim) }}
@@ -334,27 +337,27 @@ spec:
           app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
           app.kubernetes.io/version: "{{ .Chart.Version }}"
         annotations:
-        {{- with .Values.persistence.annotations  }}
-        {{ toYaml . | nindent 10 }}
-        {{- end }}
-        {{- if .Values.persistence.storageClass }}
+          {{- with .Values.persistence.annotations  }}
+          {{ toYaml . | nindent 10 }}
+          {{- end }}
+          {{- if .Values.persistence.storageClass }}
           volume.beta.kubernetes.io/storage-class: {{ .Values.persistence.storageClass | quote }}
-        {{- else }}
+          {{- else }}
           volume.alpha.kubernetes.io/storage-class: default
-        {{- end }}
+          {{- end }}
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
             storage: {{ .Values.persistence.dataDir.Size | quote }}
-      {{- if .Values.persistence.storageClass }}
-      {{- if (eq "-" .Values.persistence.storageClass) }}
+        {{- if .Values.persistence.storageClass }}
+        {{-   if (eq "-" .Values.persistence.storageClass) }}
         storageClassName: ""
-      {{- else }}
+        {{-   else }}
         storageClassName: "{{ .Values.persistence.storageClass }}"
-      {{- end }}
-      {{- end }}
+        {{-   end }}
+        {{- end }}
     {{- end }}
     {{- if and .Values.mcbackup.persistence.backupDir.enabled (not .Values.mcbackup.persistence.backupDir.existingClaim) }}
     - metadata:
@@ -368,27 +371,27 @@ spec:
           app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
           app.kubernetes.io/version: "{{ .Chart.Version }}"
         annotations:
-        {{- with .Values.mcbackup.persistence.annotations  }}
-        {{ toYaml . | nindent 10 }}
-        {{- end }}
-        {{- if .Values.mcbackup.persistence.storageClass }}
+          {{- with .Values.mcbackup.persistence.annotations  }}
+          {{ toYaml . | nindent 10 }}
+          {{- end }}
+          {{- if .Values.mcbackup.persistence.storageClass }}
           volume.beta.kubernetes.io/storage-class: {{ .Values.mcbackup.persistence.storageClass | quote }}
-        {{- else }}
+          {{- else }}
           volume.alpha.kubernetes.io/storage-class: default
-        {{- end }}
+          {{- end }}
       spec:
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
             storage: {{ .Values.mcbackup.persistence.backupDir.Size | quote }}
-      {{- if .Values.mcbackup.persistence.storageClass }}
-      {{- if (eq "-" .Values.mcbackup.persistence.storageClass) }}
+        {{- if .Values.mcbackup.persistence.storageClass }}
+        {{-   if (eq "-" .Values.mcbackup.persistence.storageClass) }}
         storageClassName: ""
-      {{- else }}
+        {{-   else }}
         storageClassName: "{{ .Values.mcbackup.persistence.storageClass }}"
-      {{- end }}
-      {{- end }}
+        {{-   end }}
+        {{- end }}
     {{- end }}
   {{- end }}
-{{ end }}
+{{- end }}
