@@ -49,6 +49,8 @@ spec:
       {{- end }}
       {{- if .Values.podAnnotations }}
       annotations:
+        checksum/config-backup: {{ include (print $.Template.BasePath "/config-backup.yaml") . | sha256sum }}
+        checksum/config-server: {{ include (print $.Template.BasePath "/config-server.yaml") . | sha256sum }}
         {{- range $key, $value := .Values.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
