@@ -26,6 +26,9 @@ spec:
   {{- if .Values.minecraftServer.loadBalancerIP }}
   loadBalancerIP: {{ .Values.minecraftServer.loadBalancerIP }}
   {{- end }}
+  {{- if .Values.minecraftServer.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.minecraftServer.loadBalancerClass }}
+  {{- end }}
   {{- if .Values.minecraftServer.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
 {{ toYaml .Values.minecraftServer.loadBalancerSourceRanges | indent 4 }}
