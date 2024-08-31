@@ -24,6 +24,9 @@ spec:
   type: ClusterIP
 {{- else if eq .Values.minecraftServer.rcon.serviceType "LoadBalancer" }}
   type: {{ .Values.minecraftServer.rcon.serviceType }}
+  {{- if .Values.minecraftServer.rcon.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.minecraftServer.rcon.loadBalancerClass }}
+  {{- end }}
   {{- if .Values.minecraftServer.rcon.loadBalancerIP }}
   loadBalancerIP: {{ .Values.minecraftServer.rcon.loadBalancerIP }}
   {{- end }}
