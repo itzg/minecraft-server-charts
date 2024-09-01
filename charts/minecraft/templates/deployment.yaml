@@ -68,10 +68,6 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if .Values.initContainers }}
-      initContainers:
-      {{- toYaml .Values.initContainers | nindent 8 }}
-      {{- end }}
       containers:
       - name: {{ template "minecraft.fullname" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -439,11 +435,12 @@ spec:
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
       {{- end }}
-      {{- if .Values.sidecarContainers }}
-      {{- toYaml .Values.sidecarContainers | nindent 6 }}
+      {{- range .Values.sidecarContainers }}
+      - {{ include "tplRender" (dict "value" . "context" $) | nindent 8 | trim }}
       {{- end }}
-      {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
+      {{- if or .Values.initContainers (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
       initContainers:
+        {{- if or (eq .Values.mcbackup.backupMethod "rclone") (eq (include "isResticWithRclone" $) "true") }}
         - name: init-container
           image: busybox
           command: ['sh', '-c', 'cp /secret/rclone.conf /config/rclone/']
@@ -452,6 +449,10 @@ spec:
             mountPath: /secret
           - name: rclone-config
             mountPath: /config/rclone
+        {{- end }}
+        {{- range .Values.initContainers }}
+        - {{ include "tplRender" (dict "value" . "context" $) | nindent 10 | trim }}
+        {{- end }}
       {{- end }}
       volumes:
       - name: tmp

@@ -80,24 +80,46 @@ startupProbe:
   failureThreshold: 30
   periodSeconds: 10
 
+## Array of initContainers to add to include in deployment (supports templating)
+##
 # initContainers:
 #   - name: do-something
 #     image: busybox
 #     command: ['do', 'something']
-#     volumesMounts:
+#     volumeMounts:
+#       - name: nfs
+#         mountPath: /mnt/volume
+#         readOnly: true
+#   - |
+#     name: {{ template "minecraft.fullname" . }}-init
+#     image: busybox
+#     command: ['do', 'something']
+#     volumeMounts:
 #       - name: nfs
 #         mountPath: /mnt/volume
 #         readOnly: true
 initContainers: []
 
+## Array of additional sidecards to include in the deployment (supports templating)
+##
 # sidecarContainers:
 #   - name: do-something
 #     image: busybox
 #     command: ['do', 'something']
-#     volumesMounts:
+#     volumeMounts:
 #       - name: nfs
 #         mountPath: /mnt/volume
 #         readOnly: true
+#   - |
+#     name: {{ template "minecraft.fullname" . }}-sidecar
+#     image: busybox
+#     command: ['do', 'something', 'with', 'rcon']
+#     env:
+#       - name: RCON_PASSWORD
+#         valueFrom:
+#           secretKeyRef:
+#             name: '{{ .Values.minecraftServer.rcon.existingSecret | default (printf "%s-rcon" (include "minecraft.fullname" .)) }}'
+#             key: "{{ .Values.minecraftServer.rcon.secretKey | default "rcon-password" }}"
 sidecarContainers: []
 
 # extraVolumes:
