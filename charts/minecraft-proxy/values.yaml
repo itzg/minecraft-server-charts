@@ -195,6 +195,7 @@ minecraftProxy:
   #   bind = "0.0.0.0:25577"
   #   motd = "Hello from Helmified Velocity!"
   #   show-max-players = 500
+  #   player-info-forwarding-mode = "modern"
 
   # Needed when you wish to pass a forwarding secret to Velocity
   # velocityForwardingSecret: "CHANGEME!"
