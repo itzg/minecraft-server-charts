@@ -189,8 +189,8 @@ minecraftProxy:
   #  inject_commands: false
 
   # Needed when you wish to pass a forwarding secret to velocity
-  velocityForwardingSecret: testing123
-  velocityForwardingSecretFilePath: /server/forwarding.secret
+  # velocityForwardingSecret: "CHANGEME!"
+  # velocityForwardingSecretFilePath: /server/forwarding.secret
 
   rcon:
     # If you enable this, make SURE to change your password below.
