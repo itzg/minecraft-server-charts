@@ -170,6 +170,12 @@ spec:
           mountPath: {{ .Values.minecraftProxy.configFilePath }}
           subPath: config.yml
         {{- end }}
+        {{- if .Values.minecraftProxy.velocityForwardingSecret }}
+        - name: velocity-forwarding-secret
+          mountPath: {{ .Values.minecraftProxy.velocityForwardingSecretFilePath }}
+          subPath: forwarding.secret
+          readOnly: true
+        {{- end }}
         {{- range .Values.extraVolumes }}
         {{-   if .volumeMounts }}
         {{-     toYaml .volumeMounts | nindent 8 }}
@@ -193,6 +199,14 @@ spec:
         {{- end }}
       {{- else }}
         emptyDir: {}
+      {{- end }}
+      {{- if .Values.minecraftProxy.velocityForwardingSecret }}
+      - name: velocity-forwarding-secret
+        secret:
+          secretName: "{{ template "proxy.fullname" . }}-velocity-forwarding-secret"
+          items:
+            - key: velocity-forwarding-secret
+              path: forwarding.secret
       {{- end }}
       {{- if .Values.minecraftProxy.config }}
       - name: config
