@@ -356,7 +356,7 @@ spec:
         - name: SERVER_PORT
           value: "25565"
         - name: RCON_HOST
-          value: "localhost"
+          value: "{{ template "minecraft.fullname" . }}-rcon.{{ .Release.Namespace }}.svc.cluster.local"
 {{- template "minecraft.envMap" list "RCON_PORT" .Values.minecraftServer.rcon.port  }}
         - name: RCON_PASSWORD
           valueFrom:
