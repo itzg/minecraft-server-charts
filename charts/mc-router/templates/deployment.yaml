@@ -49,15 +49,15 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-{{- include "mc-router.envBoolMap" (list "IN_KUBE_CLUSTER" "true") }}
+{{- include "mc-router.envMap" (list "IN_KUBE_CLUSTER" "true") }}
 {{- include "mc-router.envMap" (list "API_BINDING" (printf ":%d" $apiPort)) }}
 {{- include "mc-router.envMap" (list "PORT" $minecraftPort) }}
 
             {{- with .Values.minecraftRouter }}
-{{- include "mc-router.envBoolMap" (list "AUTO_SCALE_UP" .autoScaleUp.enabled) }}
+{{- include "mc-router.envMap" (list "AUTO_SCALE_UP" .autoScaleUp.enabled) }}
 {{- include "mc-router.envMap" (list "CONNECTION_RATE_LIMIT" .connectionRateLimit) }}
 {{- include "mc-router.envMap" (list "CPU_PROFILE" .cpuProfilePath) }}
-{{- include "mc-router.envBoolMap" (list "DEBUG" .debug.enabled) }}
+{{- include "mc-router.envMap" (list "DEBUG" .debug.enabled) }}
 
               {{- with .defaultServer }}
 {{- include "mc-router.envMap" (list "DEFAULT" (printf "%s:%d" .host (.port | int))) }}
@@ -84,9 +84,9 @@ spec:
               {{- end }}
 
 {{- include "mc-router.envSecretMap" (list "NGROK_TOKEN" .ngrokToken.existingSecret .ngrokToken.tokenKey ) }}
-{{- include "mc-router.envBoolMap" (list "SIMPLIFY_SRV" .simplifySrv) }}
-{{- include "mc-router.envBoolMap" (list "USE_PROXY_PROTOCOL" .useProxyProtocol) }}
-{{- include "mc-router.envBoolMap" (list "VERSION" .showVersion) }}
+{{- include "mc-router.envMap" (list "SIMPLIFY_SRV" .simplifySrv) }}
+{{- include "mc-router.envMap" (list "USE_PROXY_PROTOCOL" .useProxyProtocol) }}
+{{- include "mc-router.envMap" (list "VERSION" .showVersion) }}
             {{- end }}
 
             {{- range $key, $value := .Values.extraEnv }}

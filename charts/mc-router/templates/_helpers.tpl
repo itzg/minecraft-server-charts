@@ -65,17 +65,7 @@ Create the name of the service account to use
 Helper function for environment variables
 */}}
 {{- define "mc-router.envMap" -}}
-{{- if index . 1 }}
-            - name: {{ index . 0 }}
-              value: {{ index . 1 | quote }}
-{{- end }}
-{{- end }}
-
-{{/*
-Helper function for boolean environment variables
-*/}}
-{{- define "mc-router.envBoolMap" -}}
-{{- if ne (toString (index . 1)) "default" }}
+{{- if or (index . 1) (kindIs "bool" (index . 1)) }}
             - name: {{ index . 0 }}
               value: {{ index . 1 | quote }}
 {{- end }}
