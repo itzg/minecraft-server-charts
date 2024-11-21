@@ -65,7 +65,7 @@ Create the name of the service account to use
 Helper function for environment variables
 */}}
 {{- define "mc-router.envMap" -}}
-{{- if or (index . 1) (kindIs "bool" (index . 1)) }}
+{{- if or (index . 1) (kindIs "float64" (index . 1)) (kindIs "bool" (index . 1)) }}
             - name: {{ index . 0 }}
               value: {{ index . 1 | quote }}
 {{- end }}
