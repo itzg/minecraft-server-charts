@@ -2,7 +2,7 @@
 image:
   repository: itzg/minecraft-server
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   pullSecret: ""
 
 # ### WARNING ###
