@@ -144,7 +144,7 @@ spec:
         {{- end }}
         {{- else if eq .Values.minecraftServer.type "CURSEFORGE" }}
 {{- template "minecraft.envMap" list "CF_SERVER_MOD" .Values.minecraftServer.cfServerMod  }}
-{{- template "minecraft.envBoolMap" list "FTB_LEGACYJAVAFIXER" .Values.minecraftServer.ftbLegacyJavaFixer  }}
+{{- template "minecraft.envMap" list "FTB_LEGACYJAVAFIXER" .Values.minecraftServer.ftbLegacyJavaFixer  }}
         {{- end }}
 {{- template "minecraft.envMap" list "VERSION" .Values.minecraftServer.version  }}
 {{- template "minecraft.envMap" list "DIFFICULTY" .Values.minecraftServer.difficulty  }}
@@ -153,27 +153,27 @@ spec:
 {{- template "minecraft.envMap" list "ICON" .Values.minecraftServer.icon  }}
 {{- template "minecraft.envMap" list "MAX_PLAYERS" .Values.minecraftServer.maxPlayers  }}
 {{- template "minecraft.envMap" list "MAX_WORLD_SIZE" .Values.minecraftServer.maxWorldSize  }}
-{{- template "minecraft.envBoolMap" list "ALLOW_NETHER" .Values.minecraftServer.allowNether  }}
-{{- template "minecraft.envBoolMap" list "ANNOUNCE_PLAYER_ACHIEVEMENTS" .Values.minecraftServer.announcePlayerAchievements  }}
-{{- template "minecraft.envBoolMap" list "ENABLE_COMMAND_BLOCK" .Values.minecraftServer.enableCommandBlock  }}
-{{- template "minecraft.envBoolMap" list "FORCE_GAMEMODE" .Values.minecraftServer.forcegameMode  }}
+{{- template "minecraft.envMap" list "ALLOW_NETHER" .Values.minecraftServer.allowNether  }}
+{{- template "minecraft.envMap" list "ANNOUNCE_PLAYER_ACHIEVEMENTS" .Values.minecraftServer.announcePlayerAchievements  }}
+{{- template "minecraft.envMap" list "ENABLE_COMMAND_BLOCK" .Values.minecraftServer.enableCommandBlock  }}
+{{- template "minecraft.envMap" list "FORCE_GAMEMODE" .Values.minecraftServer.forcegameMode  }}
         {{- if .Values.minecraftServer.forceReDownload }}
         - name: FORCE_REDOWNLOAD
           value: "TRUE"
         {{- end }}
-{{- template "minecraft.envBoolMap" list "GENERATE_STRUCTURES" .Values.minecraftServer.generateStructures  }}
-{{- template "minecraft.envBoolMap" list "HARDCORE" .Values.minecraftServer.hardcore  }}
+{{- template "minecraft.envMap" list "GENERATE_STRUCTURES" .Values.minecraftServer.generateStructures  }}
+{{- template "minecraft.envMap" list "HARDCORE" .Values.minecraftServer.hardcore  }}
 {{- template "minecraft.envMap" list "MAX_BUILD_HEIGHT" .Values.minecraftServer.maxBuildHeight  }}
 {{- template "minecraft.envMap" list "MAX_TICK_TIME" .Values.minecraftServer.maxTickTime  }}
-{{- template "minecraft.envBoolMap" list "SPAWN_ANIMALS" .Values.minecraftServer.spawnAnimals  }}
-{{- template "minecraft.envBoolMap" list "SPAWN_MONSTERS" .Values.minecraftServer.spawnMonsters  }}
-{{- template "minecraft.envBoolMap" list "SPAWN_NPCS" .Values.minecraftServer.spawnNPCs  }}
+{{- template "minecraft.envMap" list "SPAWN_ANIMALS" .Values.minecraftServer.spawnAnimals  }}
+{{- template "minecraft.envMap" list "SPAWN_MONSTERS" .Values.minecraftServer.spawnMonsters  }}
+{{- template "minecraft.envMap" list "SPAWN_NPCS" .Values.minecraftServer.spawnNPCs  }}
 {{- template "minecraft.envMap" list "SPAWN_PROTECTION" .Values.minecraftServer.spawnProtection  }}
 {{- template "minecraft.envMap" list "VIEW_DISTANCE" .Values.minecraftServer.viewDistance  }}
 {{- template "minecraft.envMap" list "SEED" .Values.minecraftServer.levelSeed  }}
 {{- template "minecraft.envMap" list "MODE" .Values.minecraftServer.gameMode  }}
 {{- template "minecraft.envMap" list "MOTD" .Values.minecraftServer.motd  }}
-{{- template "minecraft.envBoolMap" list "PVP" .Values.minecraftServer.pvp  }}
+{{- template "minecraft.envMap" list "PVP" .Values.minecraftServer.pvp  }}
 {{- template "minecraft.envMap" list "LEVEL_TYPE" .Values.minecraftServer.levelType  }}
 {{- template "minecraft.envMap" list "GENERATOR_SETTINGS" .Values.minecraftServer.generatorSettings  }}
 {{- template "minecraft.envMap" list "LEVEL" .Values.minecraftServer.worldSaveName  }}
@@ -221,12 +221,12 @@ spec:
         - name: RESOURCE_PACK_ENFORCE
           value: "TRUE"
         {{- end }}
-{{- template "minecraft.envBoolMap" list "ONLINE_MODE" .Values.minecraftServer.onlineMode  }}
-{{- template "minecraft.envBoolMap" list "ENFORCE_SECURE_PROFILE" .Values.minecraftServer.enforceSecureProfile  }}
+{{- template "minecraft.envMap" list "ONLINE_MODE" .Values.minecraftServer.onlineMode  }}
+{{- template "minecraft.envMap" list "ENFORCE_SECURE_PROFILE" .Values.minecraftServer.enforceSecureProfile  }}
 {{- template "minecraft.envMap" list "MEMORY" .Values.minecraftServer.memory  }}
 {{- template "minecraft.envMap" list "JVM_OPTS" .Values.minecraftServer.jvmOpts  }}
 {{- template "minecraft.envMap" list "JVM_XX_OPTS" .Values.minecraftServer.jvmXXOpts  }}
-{{- template "minecraft.envBoolMap" list "OVERRIDE_SERVER_PROPERTIES" .Values.minecraftServer.overrideServerProperties  }}
+{{- template "minecraft.envMap" list "OVERRIDE_SERVER_PROPERTIES" .Values.minecraftServer.overrideServerProperties  }}
 
 {{- if .Values.minecraftServer.rcon.enabled }}
         - name: ENABLE_RCON
