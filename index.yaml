@@ -9,6 +9,36 @@ entries:
           url: https://hub.docker.com/r/itzg/mc-router
     apiVersion: v1
     appVersion: 1.20.0
+    created: "2024-12-13T02:54:02.553671919Z"
+    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    digest: 836e2566860d58f391ca04f8cee202cf9af1899765a6a1adb62951eeb2b9e31c
+    home: https://github.com/itzg/mc-router
+    keywords:
+    - minecraft
+    - router
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    - email: yannik@carbongem.com
+      name: bibz87
+    name: mc-router
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/mc-router-1.2.4/mc-router-1.2.4.tgz
+    version: 1.2.4
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/mc-router
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/mc-router
+    apiVersion: v1
+    appVersion: 1.20.0
     created: "2024-08-30T12:56:36.72276425Z"
     description: Routes Minecraft client connections to backend servers based upon the requested server address.
     digest: 3d747bd32ee1c3185ee78e371adf86939650fc2d4a8da93242baeaba1bf57243
@@ -182,6 +212,36 @@ entries:
     - https://github.com/itzg/minecraft-server-charts/releases/download/mc-router-1.0.0/mc-router-1.0.0.tgz
     version: 1.0.0
   minecraft:
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-server
+    apiVersion: v1
+    appVersion: SeeValues
+    created: "2024-12-13T02:54:02.737989077Z"
+    description: Minecraft server
+    digest: 8bc56bf6b92ed9e5ff26c8cfffa5c5132086128786c3bfce88dcf23885404a05
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    - email: yannik@carbongem.com
+      name: bibz87
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-4.23.4/minecraft-4.23.4.tgz
+    version: 4.23.4
   - annotations:
       artifacthub.io/links: |
         - name: Image source
