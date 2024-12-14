@@ -30,10 +30,16 @@
                     "type": "string"
                 },
                 "maxPlayers": {
-                    "type": "integer"
+                    "oneOf": [
+                        {"type": "integer"},
+                        {"enum": ["default"]}
+                    ]
                 },
                 "maxWorldSize": {
-                    "type": "integer"
+                    "oneOf": [
+                        {"type": "integer"},
+                        {"enum": ["default"]}
+                    ]
                 },
                 "modrinth": {
                     "type": "object",
@@ -50,7 +56,7 @@
                             "type": "boolean"
                         },
                         "allowedVersionType": {
-                            "enum": ["release", "beta", "alpha"]
+                            "enum": ["release", "beta", "alpha", "default"]
                         }
                     }
                 },
@@ -135,13 +141,28 @@
                     }
                 },
                 "maxBuildHeight": {
-                    "type": "integer"
+                    "oneOf": [
+                        {"type": "integer"},
+                        {"enum": ["default"]}
+                    ]
                 },
                 "maxTickTime": {
-                    "type": "integer"
+                    "oneOf": [
+                        {"type": "integer"},
+                        {"enum": ["default"]}
+                    ]
                 },
                 "spawnProtection": {
-                    "type": "integer"
+                    "oneOf": [
+                        {"type": "integer"},
+                        {"enum": ["default"]}
+                    ]
+                },
+                "viewDistance": {
+                    "oneOf": [
+                        {"type": "integer"},
+                        {"enum": ["default"]}
+                    ]
                 },
                 "ftbLegacyJavaFixer": {
                     "anyOf": [{"type": "string", "enum": ["default"]}, {"type": "boolean"}]},
