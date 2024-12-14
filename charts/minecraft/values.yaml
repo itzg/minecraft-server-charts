@@ -203,9 +203,9 @@ minecraftServer:
   # A server icon URL for server listings. Auto-scaled and transcoded.
   icon:
   # Max connected players.
-  maxPlayers: 20
+  maxPlayers: default
   # This sets the maximum possible size in blocks, expressed as a radius, that the world border can obtain.
-  maxWorldSize: 10000
+  maxWorldSize: default
   # Allows players to travel to the Nether.
   allowNether: default
   # Allows server to announce when a player gets an achievement.
@@ -219,9 +219,9 @@ minecraftServer:
   # If set to true, players will be set to spectator mode if they die.
   hardcore: default
   # The maximum height in which building is allowed.
-  maxBuildHeight: 256
+  maxBuildHeight: default
   # The maximum number of milliseconds a single tick may take before the server watchdog stops the server with the message. -1 disables this entirely.
-  maxTickTime: 60000
+  maxTickTime: default
   # Determines if animals will be able to spawn.
   spawnAnimals: default
   # Determines if monsters will be spawned.
@@ -229,9 +229,9 @@ minecraftServer:
   # Determines if villagers will be spawned.
   spawnNPCs: default
   # Sets the area that non-ops can not edit (0 to disable)
-  spawnProtection: 16
+  spawnProtection: default
   # Max view distance (in chunks).
-  viewDistance: 10
+  viewDistance: default
   # Define this if you want a specific map generation seed.
   levelSeed:
   # One of: creative, survival, adventure, spectator
@@ -273,10 +273,7 @@ minecraftServer:
   jvmOpts: ""
   # Options like -X that need to proceed general JVM options
   jvmXXOpts: ""
-  # By default, the server configuration will be created and set based on the following environment variables, but only the first time the server is started
-  # If you would like to override the server configuration each time the container starts up, you can set this to true
-  # see https://github.com/itzg/docker-minecraft-server#server-configuration
-  overrideServerProperties: false
+  overrideServerProperties: default
   # DEPRECATED: use top-level rconServiceAnnotations instead
   serviceAnnotations: {}
   serviceType: ClusterIP
@@ -309,7 +306,7 @@ minecraftServer:
     # Downloads Modrinth project dependencies marked as optional
     optionalDependencies: false
     # The version type is used to determine the newest version to use from each project. The allowed values are: release, beta, alpha
-    allowedVersionType: release
+    allowedVersionType: default
 
   # Config for AUTO_CURSEFORGE server type
   autoCurseForge:
