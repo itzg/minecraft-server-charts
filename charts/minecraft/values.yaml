@@ -194,6 +194,14 @@ minecraftServer:
   ftbModpackVersionId:
   # If type is set to CURSEFORGE, this sets the server mod to run. Can also provide url to curseforge package.
   cfServerMod:
+  ## If type is set to FABRIC, this sets the version of fabric server launcher
+  ## to use. Defaults to latest available for minecraftServer.version.
+  ##
+  ## For a custom launcher, see: https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/server-types/fabric/
+  fabricLauncherVersion:
+  ## If type is set to FABRIC, this sets the version of fabric-loader to use.
+  ## Defaults to latest available for minecraftServer.version.
+  fabricLoaderVersion:
   # Set to true if running Feed The Beast and get an error like "unable to launch forgemodloader"
   ftbLegacyJavaFixer: default
   # One of: peaceful, easy, normal, and hard

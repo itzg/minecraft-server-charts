@@ -145,6 +145,9 @@ spec:
         {{- else if eq .Values.minecraftServer.type "CURSEFORGE" }}
 {{- template "minecraft.envMap" list "CF_SERVER_MOD" .Values.minecraftServer.cfServerMod  }}
 {{- template "minecraft.envMap" list "FTB_LEGACYJAVAFIXER" .Values.minecraftServer.ftbLegacyJavaFixer  }}
+        {{- else if eq .Values.minecraftServer.type "FABRIC" }}
+{{- template "minecraft.envMap" list "FABRIC_LAUNCHER_VERSION" .Values.minecraftServer.fabricLauncherVersion  }}
+{{- template "minecraft.envMap" list "FABRIC_LOADER_VERSION" .Values.minecraftServer.fabricLoaderVersion  }}
         {{- end }}
 {{- template "minecraft.envMap" list "VERSION" .Values.minecraftServer.version  }}
 {{- template "minecraft.envMap" list "DIFFICULTY" .Values.minecraftServer.difficulty  }}
