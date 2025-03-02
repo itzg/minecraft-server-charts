@@ -52,8 +52,8 @@
                             },
                             "uniqueItems": true
                         },
-                        "optionalDependencies": {
-                            "type": "boolean"
+                        "downloadDependencies": {
+                            "enum": ["none", "required", "optional"]
                         },
                         "allowedVersionType": {
                             "enum": ["release", "beta", "alpha", "default"]
