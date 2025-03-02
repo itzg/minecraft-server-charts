@@ -204,8 +204,8 @@ spec:
         {{- if .projects }}
 {{- template "minecraft.envMap" list "MODRINTH_PROJECTS" (join "," .projects) }}
         {{- end }}
-        {{- if .optionalDependencies }}
-{{- template "minecraft.envMap" list "MODRINTH_DOWNLOAD_OPTIONAL_DEPENDENCIES" .optionalDependencies }}
+        {{- if .downloadDependencies }}
+{{- template "minecraft.envMap" list "MODRINTH_DOWNLOAD_DEPENDENCIES" .downloadDependencies }}
         {{- end }}
 {{- template "minecraft.envMap" list "MODRINTH_ALLOWED_VERSION_TYPE" .allowedVersionType }}
     {{- end }}
