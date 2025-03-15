@@ -10,6 +10,9 @@ image:
 # ### WARNING ###
 replicaCount: 1
 
+nameOverride: ""
+fullnameOverride: ""
+
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
