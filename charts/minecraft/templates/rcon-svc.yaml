@@ -8,12 +8,12 @@ metadata:
 {{ toYaml .Values.rconServiceAnnotations | indent 4 }}
   labels:
     app: {{ template "minecraft.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     app.kubernetes.io/name: "{{ .Chart.Name }}"
     app.kubernetes.io/instance: {{ template "minecraft.fullname" . }}
-    app.kubernetes.io/version: "{{ .Chart.Version }}"
+    app.kubernetes.io/version: "{{ .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}"
   {{- if .Values.rconServiceLabels }}
     {{- range $key, $value := .Values.rconServiceLabels}}
     {{ $key }}: {{ $value | quote }}
