@@ -12,7 +12,7 @@ metadata:
   {{- end }}
   labels:
     app: {{ template "minecraft.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: "{{ include "chart.fullname" . }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     app.kubernetes.io/name: "{{ .Chart.Name }}"
@@ -531,7 +531,7 @@ spec:
         name: datadir
         labels:
           app: {{ template "minecraft.fullname" . }}
-          chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+          chart: "{{ include "chart.fullname" . }}"
           release: "{{ .Release.Name }}"
           heritage: "{{ .Release.Service }}"
           app.kubernetes.io/name: "{{ .Chart.Name }}"
@@ -565,7 +565,7 @@ spec:
         name: backupdir
         labels:
           app: {{ template "minecraft.fullname" . }}
-          chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+          chart: "{{ include "chart.fullname" . }}"
           release: "{{ .Release.Name }}"
           heritage: "{{ .Release.Service }}"
           app.kubernetes.io/name: "{{ .Chart.Name }}"

@@ -6,7 +6,7 @@ metadata:
   annotations: {{ toYaml .Values.deploymentAnnotations | nindent 4 }}
   labels:
     app: {{ template "proxy.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    chart: "{{ include "chart.fullname" . }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
