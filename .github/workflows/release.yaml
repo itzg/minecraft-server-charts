@@ -60,5 +60,5 @@ jobs:
               break
             fi
 
-            helm push "${pkg}" oci://ghcr.io/${{ github.repository }}/charts
+            helm push "${pkg}" oci://ghcr.io/${{ github.repository }}
           done
