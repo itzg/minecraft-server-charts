@@ -16,6 +16,15 @@ We change "+" with "_" for OCI compatibility
 {{- end }}
 
 {{/*
+Set the chart version
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the labels spec).
+We change "+" with "_" for OCI compatibility
+*/}}
+{{- define "chart.version" -}}
+{{- default .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end }}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
