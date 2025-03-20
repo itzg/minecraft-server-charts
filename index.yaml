@@ -10,7 +10,8 @@ entries:
     apiVersion: v1
     appVersion: 1.20.0
     created: "2024-12-13T02:54:02.553671919Z"
-    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
     digest: 836e2566860d58f391ca04f8cee202cf9af1899765a6a1adb62951eeb2b9e31c
     home: https://github.com/itzg/mc-router
     keywords:
@@ -40,7 +41,8 @@ entries:
     apiVersion: v1
     appVersion: 1.20.0
     created: "2024-08-30T12:56:36.72276425Z"
-    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
     digest: 3d747bd32ee1c3185ee78e371adf86939650fc2d4a8da93242baeaba1bf57243
     home: https://github.com/itzg/mc-router
     keywords:
@@ -70,7 +72,8 @@ entries:
     apiVersion: v1
     appVersion: 1.20.0
     created: "2024-08-05T15:36:57.41950417Z"
-    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
     digest: 80e154a9f7e1f41a9598f9b7a3e3a34d2080ab6b45aa7184e6922ba431f96bf0
     home: https://github.com/itzg/mc-router
     keywords:
@@ -100,7 +103,8 @@ entries:
     apiVersion: v1
     appVersion: 1.20.0
     created: "2024-08-05T02:33:46.635231967Z"
-    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
     digest: 6190a0b8c1cc87268c7103bbdd02698870702d638eb007b33ff4d8c5c85e5d1d
     home: https://github.com/itzg/mc-router
     keywords:
@@ -130,7 +134,8 @@ entries:
     apiVersion: v1
     appVersion: 1.20.0
     created: "2024-04-27T20:11:22.400573268Z"
-    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
     digest: e84e97d95b1b60f8d33a950e2cfe6a2d41a309c514cb06f1fa46d96d333c8f36
     home: https://github.com/itzg/mc-router
     keywords:
@@ -160,7 +165,8 @@ entries:
     apiVersion: v1
     appVersion: 1.20.0
     created: "2024-03-08T13:32:12.92087627Z"
-    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
     digest: 0b15ca5e467bad4f3c55df8bd91081412cb6bcb517db5e912eda88e56c0b251c
     home: https://github.com/itzg/mc-router
     keywords:
@@ -190,7 +196,8 @@ entries:
     apiVersion: v1
     appVersion: 1.20.0
     created: "2023-11-02T23:15:47.864745066Z"
-    description: Routes Minecraft client connections to backend servers based upon the requested server address.
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
     digest: 2c504ebc75eaf7a74b4e31ff0de3c4797345183f30bb326c7a5311ee8649dcef
     home: https://github.com/itzg/mc-router
     keywords:
@@ -212,6 +219,36 @@ entries:
     - https://github.com/itzg/minecraft-server-charts/releases/download/mc-router-1.0.0/mc-router-1.0.0.tgz
     version: 1.0.0
   minecraft:
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-server
+    apiVersion: v1
+    appVersion: SeeValues
+    created: "2025-03-20T23:27:33.436664818Z"
+    description: Minecraft server
+    digest: 118e03fee52b2e611ff183d4c51be4681171ea1a8e8473aebc7e410961a7ca87
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    - email: yannik@carbongem.com
+      name: bibz87
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-4.26.0/minecraft-4.26.0.tgz
+    version: 4.26.0
   - annotations:
       artifacthub.io/links: |
         - name: Image source
@@ -3786,6 +3823,37 @@ entries:
           url: https://hub.docker.com/r/itzg/bungeecord
     apiVersion: v1
     appVersion: SeeValues
+    created: "2025-03-20T23:27:33.542060132Z"
+    description: Minecraft proxy server (BungeeCord, Waterfall, Velocity, etc.)
+    digest: 4c117abea82164d506e9bc98bb6cdf878a47b28d764e134346fa6f02f4e9b31d
+    home: https://github.com/itzg/minecraft-server-charts
+    keywords:
+    - proxy
+    - game
+    - server
+    maintainers:
+    - email: hello@chipwolf.uk
+      name: chipwolf
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-proxy
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-proxy-3.9.0/minecraft-proxy-3.9.0.tgz
+    version: 3.9.0
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-bungeecord
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/bungeecord
+    apiVersion: v1
+    appVersion: SeeValues
     created: "2025-03-16T12:48:01.375048987Z"
     description: Minecraft proxy server (BungeeCord, Waterfall, Velocity, etc.)
     digest: 35115cc1b3972fc73b244c9d5b205a61fee0d21cc175eb27b467c92ea3a9dbe3
@@ -4629,4 +4697,4 @@ entries:
     urls:
     - https://github.com/itzg/minecraft-server-charts/releases/download/rcon-web-admin-0.1.0/rcon-web-admin-0.1.0.tgz
     version: 0.1.0
-generated: "2020-06-10T23:31:07.189813819Z"
+generated: "2025-03-20T23:27:33.542579528Z"
