@@ -9,6 +9,37 @@ entries:
           url: https://hub.docker.com/r/itzg/mc-router
     apiVersion: v1
     appVersion: 1.20.0
+    created: "2025-03-21T12:40:36.961692392Z"
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
+    digest: 4d581abb623a19854126238c71adc9df4c07c363fea4a8bc1f464cda008ff80c
+    home: https://github.com/itzg/mc-router
+    keywords:
+    - minecraft
+    - router
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    - email: yannik@carbongem.com
+      name: bibz87
+    name: mc-router
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/mc-router-1.2.5/mc-router-1.2.5.tgz
+    version: 1.2.5
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/mc-router
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/mc-router
+    apiVersion: v1
+    appVersion: 1.20.0
     created: "2024-12-13T02:54:02.553671919Z"
     description: Routes Minecraft client connections to backend servers based upon
       the requested server address.
@@ -3046,6 +3077,34 @@ entries:
           url: https://hub.docker.com/r/itzg/minecraft-bedrock-server
     apiVersion: v1
     appVersion: SeeValues
+    created: "2025-03-21T12:40:37.177818218Z"
+    description: Minecraft server
+    digest: e466ea2084245d2e1f9ae623931619666237fe7eef9a2c641b62ef1de90653fd
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-bedrock
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-bedrock-2.8.4/minecraft-bedrock-2.8.4.tgz
+    version: 2.8.4
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-bedrock-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-bedrock-server
+    apiVersion: v1
+    appVersion: SeeValues
     created: "2025-03-16T12:48:01.241537837Z"
     description: Minecraft server
     digest: b9d024c061a9783b521b8f7797cb23188c20bc415c3563ed27578551d35fa221
@@ -4697,4 +4756,4 @@ entries:
     urls:
     - https://github.com/itzg/minecraft-server-charts/releases/download/rcon-web-admin-0.1.0/rcon-web-admin-0.1.0.tgz
     version: 0.1.0
-generated: "2025-03-20T23:27:33.542579528Z"
+generated: "2025-03-21T12:40:37.178205541Z"
