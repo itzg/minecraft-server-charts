@@ -33,9 +33,9 @@ affinity: {}
 
 podSecurityContext:
   runAsUser: 1000
-  runAsGroup: 3000
+  runAsGroup: 1000
   runAsNonRoot: true
-  fsGroup: 2000
+  fsGroup: 1000
   seccompProfile:
     type: RuntimeDefault
 
