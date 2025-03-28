@@ -258,6 +258,36 @@ entries:
           url: https://hub.docker.com/r/itzg/minecraft-server
     apiVersion: v1
     appVersion: SeeValues
+    created: "2025-03-28T20:53:00.720605526Z"
+    description: Minecraft server
+    digest: b9a601e34c91135de6478a9f8c28eacae7b4d39a0e974409684a7384d6706c05
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    - email: yannik@carbongem.com
+      name: bibz87
+    name: minecraft
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-4.26.1/minecraft-4.26.1.tgz
+    version: 4.26.1
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-server
+    apiVersion: v1
+    appVersion: SeeValues
     created: "2025-03-20T23:27:33.436664818Z"
     description: Minecraft server
     digest: 118e03fee52b2e611ff183d4c51be4681171ea1a8e8473aebc7e410961a7ca87
@@ -4756,4 +4786,4 @@ entries:
     urls:
     - https://github.com/itzg/minecraft-server-charts/releases/download/rcon-web-admin-0.1.0/rcon-web-admin-0.1.0.tgz
     version: 0.1.0
-generated: "2025-03-21T12:40:37.178205541Z"
+generated: "2025-03-28T20:53:00.720943038Z"
