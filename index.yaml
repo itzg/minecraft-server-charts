@@ -8,6 +8,37 @@ entries:
         - name: Image DockerHub
           url: https://hub.docker.com/r/itzg/mc-router
     apiVersion: v1
+    appVersion: 1.0.0
+    created: "2025-04-15T03:02:14.053717105Z"
+    description: Routes Minecraft client connections to backend servers based upon
+      the requested server address.
+    digest: 59ff8e62ef70aa2608836be13208ae2af3526d1e925a0f22314033ea56245dbf
+    home: https://github.com/itzg/mc-router
+    keywords:
+    - minecraft
+    - router
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    - email: yannik@carbongem.com
+      name: bibz87
+    name: mc-router
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/mc-router-1.3.0/mc-router-1.3.0.tgz
+    version: 1.3.0
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/mc-router
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/mc-router
+    apiVersion: v1
     appVersion: 1.20.0
     created: "2025-04-07T12:25:47.447005338Z"
     description: Routes Minecraft client connections to backend servers based upon
@@ -4877,4 +4908,4 @@ entries:
     urls:
     - https://github.com/itzg/minecraft-server-charts/releases/download/rcon-web-admin-0.1.0/rcon-web-admin-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-12T23:15:23.055041297Z"
+generated: "2025-04-15T03:02:14.054107471Z"
