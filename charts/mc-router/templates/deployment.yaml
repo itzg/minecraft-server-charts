@@ -5,10 +5,11 @@ kind: Deployment
 metadata:
   name: {{ include "mc-router.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  {{- with .Values.deploymentAnnotations }}
   annotations:
+    checksum/secret-config: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
+    {{- with .Values.deploymentAnnotations }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
   labels:
     {{- include "mc-router.labels" . | nindent 4 }}
   {{- with .Values.deploymentLabels }}
@@ -54,7 +55,12 @@ spec:
 {{- include "mc-router.envMap" (list "PORT" $minecraftPort) }}
 
             {{- with .Values.minecraftRouter }}
-{{- include "mc-router.envMap" (list "AUTO_SCALE_UP" .autoScaleUp.enabled) }}
+{{- include "mc-router.envMap" (list "AUTO_SCALE_UP" .autoScale.up.enabled) }}
+{{- include "mc-router.envMap" (list "AUTO_SCALE_DOWN" .autoScale.down.enabled) }}
+{{- include "mc-router.envMap" (list "AUTO_SCALE_DOWN_AFTER" .autoScale.down.after) }}
+            {{- if .autoScale.allowDeny }}
+{{- include "mc-router.envMap" (list "AUTO_SCALE_ALLOW_DENY" "etc/mc-router/auto-scale-allow-deny-list.json") }}
+            {{- end }}
 {{- include "mc-router.envMap" (list "CONNECTION_RATE_LIMIT" .connectionRateLimit) }}
 {{- include "mc-router.envMap" (list "CPU_PROFILE" .cpuProfilePath) }}
 {{- include "mc-router.envMap" (list "DEBUG" .debug.enabled) }}
@@ -136,14 +142,17 @@ spec:
               port: {{ $apiPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.extraVolumes }}
           volumeMounts:
+            - name: secret-config
+              mountPath: /etc/mc-router
+              readOnly: true
+            {{- with .Values.extraVolumes }}
             {{- range . }}
             {{-   if .volumeMounts }}
             {{-     toYaml .volumeMounts | nindent 12 }}
             {{-   end }}
             {{- end }}
-          {{- end }}
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -157,14 +166,17 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with .Values.extraVolumes }}
       volumes:
+        - name: secret-config
+          secret:
+            secretName: {{ include "mc-router.fullname" . }}
+        {{- with .Values.extraVolumes }}
         {{- range . }}
         {{-   if .volumes }}
         {{-     toYaml .volumes | nindent 8 }}
         {{-   end }}
         {{- end }}
-      {{- end }}
+        {{- end }}
       {{- range $key, $value := .Values.extraPodSpec }}
       {{ $key }}: {{ tpl $value $ }}
       {{- end }}

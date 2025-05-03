@@ -143,10 +143,32 @@ extraDeploy: []
   #       }
 
 minecraftRouter:
-  # "Wake up" any stopped Minecraft servers.
-  # This requires Minecraft servers to be kind: StatefulSet
-  autoScaleUp:
-    enabled: false
+  autoScale:
+    up:
+      # "Wake up" any stopped Minecraft servers.
+      # This requires Minecraft servers to be kind: StatefulSet
+      enabled: false
+    down:
+      # Shut down any running Minecraft servers after there are no more connections.
+      # This requires Minecraft servers to be kind: StatefulSet
+      enabled: false
+      # Shut down waiting period after there are no more connections.
+      # It is recommended that this value is high enough so momentary disconnections do not result in a server shutdown
+      after: ""
+    # Specify a server allow/deny list to restrict which players may trigger the scalers.
+    # "$ref": "https://github.com/itzg/mc-router/blob/1.29.0/docs/allow-deny-list.schema.json"
+    allowDeny: {}
+      # global:
+      #   denylist:
+      #   - uuid: some-player-uuid
+      #     name: somePlayerName
+      # servers:
+      #   my.server.domain:
+      #     allowlist:
+      #     - uuid: some-player-uuid
+      #   my.other-server.domain:
+      #     denylist:
+      #     - uuid: some-player-uuid
 
   # Max number of connections to allow per second
   connectionRateLimit: 1
@@ -170,7 +192,7 @@ minecraftRouter:
     #   port: 25565
 
   metrics:
-    # Backend to use for metrics exposure/publishing: discard,expvar,influxdb
+    # Backend to use for metrics exposure/publishing: discard,expvar,influxdb,prometheus
     backend: discard
 
     # InfluxDB settings. Required if backend is set to influxdb

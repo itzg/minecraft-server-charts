@@ -4,6 +4,45 @@
     "minecraftRouter",
     "services"
   ],
+  "$defs": {
+    "userInfo": {
+      "description": "Player to allow/deny by uuid and/or name",
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "description": "Player username (takes priority over name if specified)",
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "description": "Player name",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "allowDenyLists": {
+      "description": "Allow and deny lists of player information",
+      "type": "object",
+      "properties": {
+        "allowlist": {
+          "description": "List of allowed players (takes priority over denylist if specified)",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/userInfo"
+          }
+        },
+        "denylist": {
+          "description": "List of denied players",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/userInfo"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
   "properties": {
 
     "services": {
@@ -60,16 +99,59 @@
     "minecraftRouter": {
       "type": "object",
       "properties": {
-        "autoScaleUp": {
+        "autoScale": {
           "type": "object",
-          "title": "\"Wake up\" any stopped Minecraft servers.",
-          "description": "This requires Minecraft servers to be kind: StatefulSet",
           "properties": {
-            "enabled": {
-              "anyOf": [
-                { "type": "string", "enum": ["default"] },
-                { "type": "boolean" }
-              ]
+            "up": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "title": "\"Wake up\" any stopped Minecraft servers.",
+                  "description": "This requires Minecraft servers to be kind: StatefulSet",
+                  "anyOf": [
+                    { "type": "string", "enum": ["default"] },
+                    { "type": "boolean" }
+                  ]
+                }
+              }
+            },
+            "down": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "title": "Shut down any running Minecraft servers after there are no more connections.",
+                  "description": "This requires Minecraft servers to be kind: StatefulSet",
+                  "anyOf": [
+                    { "type": "string", "enum": ["default"] },
+                    { "type": "boolean" }
+                  ]
+                },
+                "after": {
+                  "type": "string",
+                  "title": "Shut down waiting period after there are no more connections.",
+                  "description": "It is recommended that this value is high enough so momentary disconnections do not result in a server shutdown"
+                }
+              }
+            },
+            "allowDeny": {
+              "title": "Specify a server allow/deny list to restrict which players may trigger the scalers.",
+              "type": "object",
+              "properties": {
+                "global": {
+                  "description": "Global allow and deny lists of player information (allowlists take priority over denylists so if a player is denylisted globally but allowlisted in a server block, they will be allowed on that server)",
+                  "$ref": "#/$defs/allowDenyLists"
+                },
+                "servers": {
+                  "description": "Server-specific allow and deny lists of player information with each object key being a server address",
+                  "type": "object",
+                  "patternProperties": {
+                    "^.+$": {
+                      "$ref": "#/$defs/allowDenyLists"
+                    }
+                  }
+                }
+              },
+              "additionalProperties": false
             }
           }
         },
