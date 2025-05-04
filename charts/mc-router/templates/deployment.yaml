@@ -5,11 +5,10 @@ kind: Deployment
 metadata:
   name: {{ include "mc-router.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  {{- with .Values.deploymentAnnotations }}
   annotations:
-    checksum/secret-config: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
-    {{- with .Values.deploymentAnnotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
+  {{- end }}
   labels:
     {{- include "mc-router.labels" . | nindent 4 }}
   {{- with .Values.deploymentLabels }}
@@ -26,9 +25,14 @@ spec:
     {{- .Values.deploymentStrategy | toYaml | nindent 4}}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- if or .Values.minecraftRouter.autoScale.allowDeny .Values.podAnnotations }}
       annotations:
+        {{- if .Values.minecraftRouter.autoScale.allowDeny }}
+        checksum/secret-config: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       labels:
         {{- include "mc-router.labels" . | nindent 8 }}
@@ -142,10 +146,13 @@ spec:
               port: {{ $apiPort }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if or .Values.minecraftRouter.autoScale.allowDeny .Values.extraVolumes }}
           volumeMounts:
+            {{- if .Values.minecraftRouter.autoScale.allowDeny }}
             - name: secret-config
               mountPath: /etc/mc-router
               readOnly: true
+            {{- end }}
             {{- with .Values.extraVolumes }}
             {{- range . }}
             {{-   if .volumeMounts }}
@@ -153,6 +160,7 @@ spec:
             {{-   end }}
             {{- end }}
             {{- end }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -166,10 +174,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
+      {{- if or .Values.minecraftRouter.autoScale.allowDeny .Values.extraVolumes }}
       volumes:
+        {{- if .Values.minecraftRouter.autoScale.allowDeny }}
         - name: secret-config
           secret:
             secretName: {{ include "mc-router.fullname" . }}
+        {{- end }}
         {{- with .Values.extraVolumes }}
         {{- range . }}
         {{-   if .volumes }}
@@ -177,6 +188,7 @@ spec:
         {{-   end }}
         {{- end }}
         {{- end }}
+      {{- end }}
       {{- range $key, $value := .Values.extraPodSpec }}
       {{ $key }}: {{ tpl $value $ }}
       {{- end }}

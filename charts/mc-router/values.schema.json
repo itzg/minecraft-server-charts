@@ -1,48 +1,9 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "minecraftRouter",
     "services"
   ],
-  "$defs": {
-    "userInfo": {
-      "description": "Player to allow/deny by uuid and/or name",
-      "type": "object",
-      "properties": {
-        "uuid": {
-          "description": "Player username (takes priority over name if specified)",
-          "type": "string",
-          "format": "uuid"
-        },
-        "name": {
-          "description": "Player name",
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "allowDenyLists": {
-      "description": "Allow and deny lists of player information",
-      "type": "object",
-      "properties": {
-        "allowlist": {
-          "description": "List of allowed players (takes priority over denylist if specified)",
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/userInfo"
-          }
-        },
-        "denylist": {
-          "description": "List of denied players",
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/userInfo"
-          }
-        }
-      },
-      "additionalProperties": false
-    }
-  },
   "properties": {
 
     "services": {
@@ -135,23 +96,8 @@
             },
             "allowDeny": {
               "title": "Specify a server allow/deny list to restrict which players may trigger the scalers.",
-              "type": "object",
-              "properties": {
-                "global": {
-                  "description": "Global allow and deny lists of player information (allowlists take priority over denylists so if a player is denylisted globally but allowlisted in a server block, they will be allowed on that server)",
-                  "$ref": "#/$defs/allowDenyLists"
-                },
-                "servers": {
-                  "description": "Server-specific allow and deny lists of player information with each object key being a server address",
-                  "type": "object",
-                  "patternProperties": {
-                    "^.+$": {
-                      "$ref": "#/$defs/allowDenyLists"
-                    }
-                  }
-                }
-              },
-              "additionalProperties": false
+              "$comment": "Update tag below and in values.yaml comment when this file changes",
+              "$ref": "https://raw.githubusercontent.com/itzg/mc-router/refs/tags/1.29.0/docs/allow-deny-list.schema.json"
             }
           }
         },

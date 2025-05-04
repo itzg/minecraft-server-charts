@@ -156,7 +156,8 @@ minecraftRouter:
       # It is recommended that this value is high enough so momentary disconnections do not result in a server shutdown
       after: ""
     # Specify a server allow/deny list to restrict which players may trigger the scalers.
-    # "$ref": "https://github.com/itzg/mc-router/blob/1.29.0/docs/allow-deny-list.schema.json"
+    # For more info on the schema, check out the file in `mc-router`
+    # https://github.com/itzg/mc-router/blob/1.29.0/docs/allow-deny-list.schema.json
     allowDeny: {}
       # global:
       #   denylist:
