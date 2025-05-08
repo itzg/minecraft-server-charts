@@ -155,6 +155,9 @@ minecraftRouter:
       # Shut down waiting period after there are no more connections.
       # It is recommended that this value is high enough so momentary disconnections do not result in a server shutdown
       after: ""
+    # Type of Kubernetes object to store autoscale allow/deny list config in.
+    # Valid options: Secret,ConfigMap
+    configObject: Secret
     # Specify a server allow/deny list to restrict which players may trigger the scalers.
     # For more info on the schema, check out the file in `mc-router`
     # https://github.com/itzg/mc-router/blob/1.29.0/docs/allow-deny-list.schema.json

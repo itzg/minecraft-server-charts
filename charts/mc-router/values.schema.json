@@ -59,6 +59,7 @@
 
     "minecraftRouter": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "autoScale": {
           "type": "object",
@@ -93,6 +94,11 @@
                   "description": "It is recommended that this value is high enough so momentary disconnections do not result in a server shutdown"
                 }
               }
+            },
+            "configObject": {
+              "type": "string",
+              "enum": ["Secret", "ConfigMap"],
+              "title": "Type of Kubernetes object to store autoscale allow/deny list config in."
             },
             "allowDeny": {
               "title": "Specify a server allow/deny list to restrict which players may trigger the scalers.",

@@ -28,7 +28,11 @@ spec:
       {{- if or .Values.minecraftRouter.autoScale.allowDeny .Values.podAnnotations }}
       annotations:
         {{- if .Values.minecraftRouter.autoScale.allowDeny }}
-        checksum/secret-config: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{-   if eq .Values.minecraftRouter.autoScale.configObject "Secret" }}
+        checksum/autoscale-allow-deny-config: {{ include (print .Template.BasePath "/autoscale-allow-deny-secret.yaml") . | sha256sum }}
+        {{-   else if eq .Values.minecraftRouter.autoScale.configObject "ConfigMap" }}
+        checksum/autoscale-allow-deny-config: {{ include (print .Template.BasePath "/autoscale-allow-deny-configmap.yaml") . | sha256sum }}
+        {{-   end }}
         {{- end }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -149,7 +153,7 @@ spec:
           {{- if or .Values.minecraftRouter.autoScale.allowDeny .Values.extraVolumes }}
           volumeMounts:
             {{- if .Values.minecraftRouter.autoScale.allowDeny }}
-            - name: secret-config
+            - name: autoscale-allow-deny
               mountPath: /etc/mc-router
               readOnly: true
             {{- end }}
@@ -177,9 +181,15 @@ spec:
       {{- if or .Values.minecraftRouter.autoScale.allowDeny .Values.extraVolumes }}
       volumes:
         {{- if .Values.minecraftRouter.autoScale.allowDeny }}
-        - name: secret-config
+        {{-   if eq .Values.minecraftRouter.autoScale.configObject "Secret" }}
+        - name: autoscale-allow-deny
           secret:
-            secretName: {{ include "mc-router.fullname" . }}
+            secretName: {{ include "mc-router.fullname" . }}-autoscale-allow-deny
+        {{-   else if eq .Values.minecraftRouter.autoScale.configObject "ConfigMap" }}
+        - name: autoscale-allow-deny
+          configMap:
+            name: {{ include "mc-router.fullname" . }}-autoscale-allow-deny
+        {{-   end }}
         {{- end }}
         {{- with .Values.extraVolumes }}
         {{- range . }}
