@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "minecraftRouter",
     "services"
@@ -59,17 +59,51 @@
 
     "minecraftRouter": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "autoScaleUp": {
+        "autoScale": {
           "type": "object",
-          "title": "\"Wake up\" any stopped Minecraft servers.",
-          "description": "This requires Minecraft servers to be kind: StatefulSet",
           "properties": {
-            "enabled": {
-              "anyOf": [
-                { "type": "string", "enum": ["default"] },
-                { "type": "boolean" }
-              ]
+            "up": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "title": "\"Wake up\" any stopped Minecraft servers.",
+                  "description": "This requires Minecraft servers to be kind: StatefulSet",
+                  "anyOf": [
+                    { "type": "string", "enum": ["default"] },
+                    { "type": "boolean" }
+                  ]
+                }
+              }
+            },
+            "down": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "title": "Shut down any running Minecraft servers after there are no more connections.",
+                  "description": "This requires Minecraft servers to be kind: StatefulSet",
+                  "anyOf": [
+                    { "type": "string", "enum": ["default"] },
+                    { "type": "boolean" }
+                  ]
+                },
+                "after": {
+                  "type": "string",
+                  "title": "Shut down waiting period after there are no more connections.",
+                  "description": "It is recommended that this value is high enough so momentary disconnections do not result in a server shutdown"
+                }
+              }
+            },
+            "configObject": {
+              "type": "string",
+              "enum": ["Secret", "ConfigMap"],
+              "title": "Type of Kubernetes object to store autoscale allow/deny list config in."
+            },
+            "allowDeny": {
+              "title": "Specify a server allow/deny list to restrict which players may trigger the scalers.",
+              "$comment": "Update tag below and in values.yaml comment when this file changes",
+              "$ref": "https://raw.githubusercontent.com/itzg/mc-router/refs/tags/1.29.0/docs/allow-deny-list.schema.json"
             }
           }
         },
