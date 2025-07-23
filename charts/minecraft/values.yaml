@@ -43,6 +43,8 @@ tolerations: []
 
 affinity: {}
 
+revisionHistoryLimit: 10
+
 podSecurityContext:
   runAsUser: 1000
   runAsGroup: 3000
