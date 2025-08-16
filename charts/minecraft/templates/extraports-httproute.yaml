@@ -1,0 +1,35 @@
+{{- $minecraftFullname := include "minecraft.fullname" . }}
+{{- range .Values.minecraftServer.extraPorts }}
+{{- if default "" (.httproute).enabled }}
+{{- $servicePort := .service.port }}
+{{- $serviceName := printf "%s-%s" $minecraftFullname .name }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ $serviceName }}
+  namespace: "{{ $.Release.Namespace }}"
+  {{- if .httproute.annotations }}
+  annotations: {{- toYaml .httproute.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    app: {{ $serviceName }}
+    chart: {{ template "chart.fullname" $ }}
+    release: "{{ $.Release.Name }}"
+    heritage: "{{ $.Release.Service }}"
+    app.kubernetes.io/name: "{{ $.Chart.Name }}"
+    app.kubernetes.io/instance: {{ $minecraftFullname }}
+    app.kubernetes.io/version: {{ template "chart.version" $ }}
+spec:
+{{- if .httproute.parentRefs}}
+  parentRefs: {{- toYaml .httproute.parentRefs| nindent 2}}
+{{- end }}
+{{- if .httproute.hostnames}}
+  hostnames: {{- toYaml .httproute.hostnames | nindent 2}}
+{{- end }}
+  rules:
+  - backendRefs:
+    - name: {{ $serviceName }}
+      port: {{ $servicePort }}
+{{- end }}
+{{- end }}
