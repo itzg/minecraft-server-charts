@@ -352,7 +352,7 @@ spec:
         env:
         - name: SRC_DIR
           value: "/data"
-{{- template "minecraft.envMap" list "BACKUP_NAME" .Values.minecraftServer.worldSaveName  }}
+{{- template "minecraft.envMap" list "BACKUP_NAME" (.Values.mcbackup.backupName | default .Values.minecraftServer.worldSaveName)  }}
 {{- template "minecraft.envMap" list "INITIAL_DELAY" .Values.mcbackup.initialDelay  }}
 {{- template "minecraft.envMap" list "BACKUP_INTERVAL" .Values.mcbackup.backupInterval  }}
 {{- template "minecraft.envMap" list "PRUNE_BACKUPS_DAYS" .Values.mcbackup.pruneBackupsDays  }}

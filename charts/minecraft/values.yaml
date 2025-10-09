@@ -483,6 +483,10 @@ mcbackup:
   #  wait 2 minutes before starting
   initialDelay: 2m
 
+  # Sets `BACKUP_NAME`, defaults to `minecraftServer.worldSaveName`
+  # WARN: When using restic and sharing the `mcbackup.resticRepository` across multiple minecraft server deployments: either `mcbackup.backupName` or `mcbackup.resticHostname` must be unique!
+  backupName:
+
   # ***set to 0 or smaller, script will run once and exit.  DO NOT SET TO 0 or smaller, this will cause K8s to kill your pod!***
   # backupInterval="1.5d" -> backup every one and a half days (36 hours)
   # backupInterval="2h 30m" -> backup every two and a half hours
