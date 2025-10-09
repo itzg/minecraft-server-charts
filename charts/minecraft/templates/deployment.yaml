@@ -352,7 +352,7 @@ spec:
         env:
         - name: SRC_DIR
           value: "/data"
-{{- template "minecraft.envMap" list "BACKUP_NAME" .Values.minecraftServer.worldSaveName  }}
+{{- template "minecraft.envMap" list "BACKUP_NAME" (.Values.mcbackup.backupName | default .Values.minecraftServer.worldSaveName)  }}
 {{- template "minecraft.envMap" list "INITIAL_DELAY" .Values.mcbackup.initialDelay  }}
 {{- template "minecraft.envMap" list "BACKUP_INTERVAL" .Values.mcbackup.backupInterval  }}
 {{- template "minecraft.envMap" list "PRUNE_BACKUPS_DAYS" .Values.mcbackup.pruneBackupsDays  }}
@@ -388,6 +388,7 @@ spec:
 {{- template "minecraft.envMap" list "RESTIC_REPOSITORY" .Values.mcbackup.resticRepository  }}
 {{- template "minecraft.envMap" list "RESTIC_ADDITIONAL_TAGS" .Values.mcbackup.resticAdditionalTags  }}
 {{- template "minecraft.envMap" list "PRUNE_RESTIC_RETENTION" .Values.mcbackup.pruneResticRetention  }}
+{{- template "minecraft.envMap" list "RESTIC_HOSTNAME" (required "mcbackup.resticHostname is required" .Values.mcbackup.resticHostname) }}
         {{-   range $key, $value := .Values.mcbackup.resticEnvs }}
         {{-     if kindIs "map" $value }}
         {{-       if hasKey $value "valueFrom" }}
