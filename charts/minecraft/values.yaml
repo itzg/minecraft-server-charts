@@ -542,6 +542,10 @@ mcbackup:
   resticAdditionalTags: "mc_backups"
   # see https://restic.readthedocs.io/en/latest/060_forget.html
   pruneResticRetention: "--keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75"
+  # Sets `RESTIC_HOSTNAME`
+  # Required because the container hostname changes on every recreate of the pod which prevents restic from pruning snapshots from previous pods/hostnames
+  # WARN: When using restic and sharing the `mcbackup.resticRepository` across multiple minecraft server deployments: either `mcbackup.backupName` or `mcbackup.resticHostname` must be unique!
+  resticHostname:
 
   # At least one of RESTIC_PASSWORD* env variables need to be defined, see https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html
   resticEnvs:
