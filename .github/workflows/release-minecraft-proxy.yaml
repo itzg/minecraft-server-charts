@@ -1,0 +1,49 @@
+name: Publish minecraft-proxy Helm Chart
+
+on:
+  push:
+    tags:
+      - 'minecraft-proxy-*.*.*'
+
+env:
+  REGISTRY: ghcr.io
+  CHART_NAME: minecraft-proxy
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract Chart Version from Tag
+        id: chart-version
+        run: |
+          # Exemple de tag: refs/tags/minecraft-proxy-3.9.1
+          TAG_NAME="${GITHUB_REF##*/}"
+          VERSION="${TAG_NAME#${CHART_NAME}-}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Extracted version: ${VERSION}"
+
+      - name: Update Chart.yaml Version
+        run: |
+          sed -i "s|^version: .*|version: ${{ steps.chart-version.outputs.version }}|" ./charts/${{ env.CHART_NAME }}/Chart.yaml
+          echo "✅ Updated Chart.yaml version:"
+          cat ./charts/${{ env.CHART_NAME }}/Chart.yaml
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package and Push Helm Chart to ${{ env.REGISTRY }}
+        run: |
+          helm package ./charts/${{ env.CHART_NAME }} --version ${{ steps.chart-version.outputs.version }}
+          helm push ${CHART_NAME}-${{ steps.chart-version.outputs.version }}.tgz oci://${{ env.REGISTRY }}/arffornia
