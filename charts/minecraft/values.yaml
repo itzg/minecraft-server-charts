@@ -355,6 +355,12 @@ minecraftServer:
     # Set to skip files in modpack "overrides" folder that would replace existing files
     # NOTE: World data is always skipped if present
     overridesSkipExisting: false
+    # Override the Fabric loader version specified in the modpack
+    fabricLoaderVersion: ""
+    # Override the Forge version specified in the modpack
+    forgeVersion: ""
+    # Override the NeoForge version specified in the modpack
+    neoforgeVersion: ""
 
   rcon:
     # If you enable this, make SURE to change your password below.

@@ -1,0 +1,49 @@
+# Example configuration for AUTO_CURSEFORGE with custom modloader versions
+#
+# This example demonstrates how to override modloader versions when using
+# CurseForge modpacks, which is useful when you need a newer Fabric Loader,
+# Forge, or NeoForge version than what the modpack originally specified.
+
+minecraftServer:
+  # Accept the EULA (required)
+  eula: "TRUE"
+  
+  # Set the server type to AUTO_CURSEFORGE
+  type: AUTO_CURSEFORGE
+  
+  # Configure AUTO_CURSEFORGE settings
+  autoCurseForge:
+    # CurseForge API key - get from https://console.curseforge.com/
+    # IMPORTANT: Store this in a Kubernetes secret in production!
+    apiKey:
+      key: "your-api-key-here"
+    
+    # Example: Cobblemon Fabric modpack
+    slug: "cobblemon-fabric"
+    
+    # Override the Fabric loader version from the modpack's default
+    # Example: Change from Fabric 0.16.10 to 0.16.14
+    fabricLoaderVersion: "0.16.14"
+    
+    # For Forge modpacks, you could override the Forge version:
+    # forgeVersion: "43.2.0"
+    
+    # For NeoForge modpacks, you could override the NeoForge version:
+    # neoforgeVersion: "47.1.99"
+    
+    # Other standard AUTO_CURSEFORGE options
+    parallelDownloads: 4
+    forceSynchronize: false
+
+# Recommended memory allocation for modpacks
+resources:
+  requests:
+    memory: 4Gi
+  limits:
+    memory: 6Gi
+
+# Enable persistent storage for world data
+persistence:
+  dataDir:
+    enabled: true
+    Size: 10Gi

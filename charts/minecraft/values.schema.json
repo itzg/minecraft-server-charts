@@ -131,6 +131,15 @@
                         },
                         "overridesSkipExisting": {
                             "type": "boolean"
+                        },
+                        "fabricLoaderVersion": {
+                            "type": "string"
+                        },
+                        "forgeVersion": {
+                            "type": "string"
+                        },
+                        "neoforgeVersion": {
+                            "type": "string"
                         }
                     }
                 },
