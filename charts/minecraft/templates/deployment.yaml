@@ -280,9 +280,7 @@ spec:
         {{- if .overridesSkipExisting }}
 {{- template "minecraft.envMap" list "CF_OVERRIDES_SKIP_EXISTING" "true" }}
         {{- end }}
-{{- template "minecraft.envMap" list "CF_FABRIC_LOADER_VERSION" .fabricLoaderVersion }}
-{{- template "minecraft.envMap" list "CF_FORGE_VERSION" .forgeVersion }}
-{{- template "minecraft.envMap" list "CF_NEOFORGE_VERSION" .neoforgeVersion }}
+{{- template "minecraft.envMap" list "CF_MOD_LOADER_VERSION" .modLoaderVersion }}
     {{- end }}
     {{- end }}
 
