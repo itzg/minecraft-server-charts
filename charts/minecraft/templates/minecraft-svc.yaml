@@ -42,6 +42,9 @@ spec:
   {{- if .Values.minecraftServer.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.minecraftServer.externalTrafficPolicy }}
   {{- end }}
+  ipFamilies:
+    {{- toYaml .Values.minecraftServer.ipFamilies | nindent 4 }}
+  ipFamilyPolicy: {{.Values.minecraftServer.ipFamilyPolicy}}
   ports:
   - name: minecraft
     port: {{ .Values.minecraftServer.servicePort | default 25565 }}
