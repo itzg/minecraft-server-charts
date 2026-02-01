@@ -14,7 +14,7 @@ metadata:
   {{- end }}
   labels:
     app: {{ $serviceName }}
-    chart: {{ template "proxy.fullname" . }}
+    chart: {{ template "minecraft.fullname" . }}
     release: "{{ $.Release.Name }}"
     heritage: "{{ $.Release.Service }}"
 spec:
