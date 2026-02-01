@@ -11,7 +11,7 @@ metadata:
   annotations: {{ toYaml .service.annotations | nindent 4 }}
   labels:
     app: {{ $serviceName }}
-    chart: {{ template "minecraft.fullname" . }}
+    chart: {{ template "proxy.fullname" . }}
     release: "{{ $.Release.Name }}"
     heritage: "{{ $.Release.Service }}"
 spec:
