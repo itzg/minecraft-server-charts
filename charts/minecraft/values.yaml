@@ -357,6 +357,8 @@ minecraftServer:
     # Set to skip files in modpack "overrides" folder that would replace existing files
     # NOTE: World data is always skipped if present
     overridesSkipExisting: false
+    # Override the mod loader version specified in the modpack
+    modLoaderVersion: ""
 
   rcon:
     # If you enable this, make SURE to change your password below.
