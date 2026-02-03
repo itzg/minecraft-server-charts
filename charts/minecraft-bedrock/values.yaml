@@ -52,6 +52,11 @@ livenessProbe:
   initialDelaySeconds: 30
 readinessProbe:
   initialDelaySeconds: 30
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  failureThreshold: 60
+  periodSeconds: 10
 
 # https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
 shareProcessNamespace: false
