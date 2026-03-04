@@ -93,6 +93,21 @@ spec:
               - {{ .Values.minecraftServer.serverPort | quote }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
         {{- end }}
+        {{- if and .Values.startupProbe.enabled (not .Values.restoreMode) }}
+        startupProbe:
+          exec:
+            command:
+              - mc-monitor
+              - status-bedrock
+              - --host
+              # force health check against IPv4 port
+              - 127.0.0.1
+              - --port
+              - {{ .Values.minecraftServer.serverPort | quote }}
+          initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+          failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+        {{- end }}
 
       {{- with .Values.envFrom }}
         envFrom:
