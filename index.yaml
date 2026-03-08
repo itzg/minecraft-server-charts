@@ -3441,6 +3441,34 @@ entries:
           url: https://hub.docker.com/r/itzg/minecraft-bedrock-server
     apiVersion: v1
     appVersion: SeeValues
+    created: "2026-03-08T18:39:14.412350905Z"
+    description: Minecraft server
+    digest: a71eeaee084fa4456884ec878e05748de82751c5c3a80bd133cfa443c2a5e314
+    home: https://minecraft.net/
+    keywords:
+    - game
+    - server
+    maintainers:
+    - email: gtaylor@gc-taylor.com
+      name: gtaylor
+    - email: jeff@billimek.com
+      name: billimek
+    - email: itzgeoff@gmail.com
+      name: itzg
+    name: minecraft-bedrock
+    sources:
+    - https://github.com/itzg/minecraft-server-charts
+    urls:
+    - https://github.com/itzg/minecraft-server-charts/releases/download/minecraft-bedrock-2.9.0/minecraft-bedrock-2.9.0.tgz
+    version: 2.9.0
+  - annotations:
+      artifacthub.io/links: |
+        - name: Image source
+          url: https://github.com/itzg/docker-minecraft-bedrock-server
+        - name: Image DockerHub
+          url: https://hub.docker.com/r/itzg/minecraft-bedrock-server
+    apiVersion: v1
+    appVersion: SeeValues
     created: "2025-03-21T12:40:37.177818218Z"
     description: Minecraft server
     digest: e466ea2084245d2e1f9ae623931619666237fe7eef9a2c641b62ef1de90653fd
@@ -5120,4 +5148,4 @@ entries:
     urls:
     - https://github.com/itzg/minecraft-server-charts/releases/download/rcon-web-admin-0.1.0/rcon-web-admin-0.1.0.tgz
     version: 0.1.0
-generated: "2026-03-02T00:43:14.42001368Z"
+generated: "2026-03-08T18:39:14.41282629Z"
