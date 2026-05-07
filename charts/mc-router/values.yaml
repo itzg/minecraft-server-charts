@@ -65,6 +65,8 @@ services:
     port: 25565
     # Service port exposed externally on each node
     # nodePort: 30065
+    # IP address to assign to LoadBalancer service
+    # loadBalancerIP: ""
     # Service annotations
     # annotations: {}
 

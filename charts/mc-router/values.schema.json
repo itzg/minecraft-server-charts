@@ -51,7 +51,34 @@
             "port": {
               "type": "integer",
               "minimum": 1
+            },
+            "nodePort": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "loadBalancerIP": {
+              "type": "string",
+              "title": "IP address to assign to LoadBalancer service"
             }
+          },
+          "if": {
+            "properties": {
+              "loadBalancerIP": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": ["loadBalancerIP"]
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "LoadBalancer"
+              }
+            }
+          },
+          "errorMessage": {
+            "then": "loadBalancerIP can only be used when service type is LoadBalancer"
           }
         }
       }

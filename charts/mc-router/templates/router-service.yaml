@@ -10,6 +10,9 @@ metadata:
 spec:
   {{- with .Values.services.minecraft }}
   type: {{ .type }}
+  {{- if .loadBalancerIP }}
+  loadBalancerIP: {{ .loadBalancerIP }}
+  {{- end }}
   ports:
     - port: {{ .port }}
       {{- if list "LoadBalancer" "NodePort" | has .type }}
