@@ -210,7 +210,7 @@ minecraftServer:
   # Set to true if running Feed The Beast and get an error like "unable to launch forgemodloader"
   ftbLegacyJavaFixer: default
   # One of: peaceful, easy, normal, and hard
-  difficulty: easy
+  difficulty: default
   # A comma-separated list of player names to whitelist.
   whitelist:
   # A comma-separated list of player names who should be admins.
@@ -250,13 +250,13 @@ minecraftServer:
   # Define this if you want a specific map generation seed.
   levelSeed:
   # One of: creative, survival, adventure, spectator
-  gameMode: survival
+  gameMode: default
   # Message of the Day
   motd: "Welcome to Minecraft on Kubernetes!"
   # If true, enable player-vs-player damage.
   pvp: default
   # One of: DEFAULT, FLAT, LARGEBIOMES, AMPLIFIED, CUSTOMIZED
-  levelType: DEFAULT
+  levelType: default
   # When levelType == FLAT or CUSTOMIZED, this can be used to further customize map generation.
   # ref: https://hub.docker.com/r/itzg/minecraft-server/
   generatorSettings:
