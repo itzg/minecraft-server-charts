@@ -24,7 +24,9 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  {{- if not .Values.autoscaled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.workloadAsStatefulSet }}
   serviceName: {{ template "minecraft.fullname" . }}
@@ -34,6 +36,7 @@ spec:
   strategy:
     type: {{ .Values.strategyType }}
   {{- end }}
+  terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | int }}
   selector:
     matchLabels:
       app: {{ template "minecraft.fullname" . }}
@@ -75,7 +78,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         tty: {{ default true .Values.minecraftServer.tty }}
         stdin: true
-        {{- if or (.Values.lifecycle.postStart) (.Values.lifecycle.preStop)}}
+        {{- if or (.Values.lifecycle.postStart) (.Values.lifecycle.preStop) (and .Values.mcbackup.enabled .Values.mcbackup.backupOnTerminate) }}
         lifecycle:
           {{- if .Values.lifecycle.postStart }}
           postStart:
@@ -90,6 +93,10 @@ spec:
               command: {{- range .Values.lifecycle.preStop }}
                 - {{ . }}
               {{- end }}
+          {{- else if and .Values.mcbackup.enabled .Values.mcbackup.backupOnTerminate }}
+          preStop:
+            exec:
+              command: [touch, /data/.paused]
           {{- end }}
         {{- end }}
         resources:
@@ -345,6 +352,23 @@ spec:
       - name: {{ template "minecraft.fullname" . }}-mc-backup
         image: "{{ .Values.mcbackup.image.repository }}:{{ .Values.mcbackup.image.tag }}"
         imagePullPolicy: {{ .Values.mcbackup.image.pullPolicy }}
+        {{- if and .Values.mcbackup.enabled .Values.mcbackup.backupOnTerminate }}
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - bash
+              - -c
+              - |
+                while true; do
+                  if mc-monitor status --host "${SERVER_HOST}" --port "${SERVER_PORT}" &>/dev/null; then
+                    sleep 1
+                    continue
+                  fi
+                  break
+                done
+                /usr/bin/backup now
+        {{- end }}
         resources:
 {{ toYaml .Values.mcbackup.resources | indent 10 }}
       {{- with .Values.mcbackup.envFrom }}
