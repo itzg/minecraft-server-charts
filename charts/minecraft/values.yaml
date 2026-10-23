@@ -10,6 +10,9 @@ image:
 # ### WARNING ###
 replicaCount: 1
 
+# Enable if mc-router or another controller is used to autoscale the Minecraft servers.
+autoscaled: false
+
 nameOverride: ""
 fullnameOverride: ""
 
@@ -44,6 +47,8 @@ tolerations: []
 affinity: {}
 
 revisionHistoryLimit: 10
+
+terminationGracePeriodSeconds: 30
 
 podSecurityContext:
   runAsUser: 1000
@@ -476,6 +481,13 @@ rconServiceLabels: {}
 # PLEASE NOTE! rcon must be enabled above!  It does NOT require a nodePort or loadBalancerIP
 mcbackup:
   enabled: false
+
+  # Adds a preStop lifecycle hook to the mc-backup sidecar which will wait till the server has shut down and then performs a final backup.
+  # This also configures a preStop hook for the main server container (if no custom preStop hook was set) so the server marks itself as paused after shutting down.
+  # Otherwise, mc-backup would need to ensure rcon connectivity which will fail.
+  # It is recommended to adjust the terminationGracePeriodSeconds to ensure there is enough time for the server shutdown and final backup.
+  # Note! preStop logs are not made available in the pod logs.
+  backupOnTerminate: false
 
   image:
     repository: itzg/mc-backup
