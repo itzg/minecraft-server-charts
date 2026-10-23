@@ -36,7 +36,6 @@ spec:
   strategy:
     type: {{ .Values.strategyType }}
   {{- end }}
-  terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | int }}
   selector:
     matchLabels:
       app: {{ template "minecraft.fullname" . }}
@@ -70,6 +69,7 @@ spec:
       dnsConfig:
         {{- toYaml .Values.dnsConfig | nindent 8 }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | int }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
