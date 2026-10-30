@@ -1,0 +1,26 @@
+apiVersion: v2
+name: minecraft-server
+description: A Helm chart for Minecraft Java Edition.
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - minecraft
+  - game
+  - server
+home: https://docker-minecraft-server.readthedocs.io/
+sources:
+  - https://github.com/itzg/minecraft-server-charts
+maintainers:
+  - name: billimek
+    email: jeff@billimek.com
+  - name: drewburr
+    email: drew@drewburr.com
+  - name: itzg
+    email: itzgeoff@gmail.com
+annotations:
+  artifacthub.io/links: |
+    - name: Image source
+      url: https://github.com/itzg/docker-minecraft-server
+    - name: Image DockerHub
+      url: https://hub.docker.com/r/itzg/minecraft-server
