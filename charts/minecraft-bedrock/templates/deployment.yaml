@@ -73,6 +73,8 @@ spec:
             command:
               - mc-monitor
               - status-bedrock
+              - --protocol
+              - {{ .Values.minecraftServer.transport }}
               - --host
               # force health check against IPv4 port
               - 127.0.0.1
@@ -86,6 +88,8 @@ spec:
             command:
               - mc-monitor
               - status-bedrock
+              - --protocol
+              - {{ .Values.minecraftServer.transport }}
               - --host
               # force health check against IPv4 port
               - 127.0.0.1
@@ -99,6 +103,8 @@ spec:
             command:
               - mc-monitor
               - status-bedrock
+              - --protocol
+              - {{ .Values.minecraftServer.transport }}
               - --host
               # force health check against IPv4 port
               - 127.0.0.1
@@ -164,6 +170,12 @@ spec:
           value: {{ .Values.minecraftServer.enableLanVisibility | quote }}
         - name: SERVER_PORT
           value: {{ .Values.minecraftServer.serverPort | quote }}
+        - name: TRANSPORT
+          value: {{ .Values.minecraftServer.transport | quote }}
+        {{- if eq .Values.minecraftServer.transport "nethernet" }}
+        - name: SERVER_UDP_PORTS
+          value: {{ include "minecraft.serverUdpPorts" . | quote }}
+        {{- end }}
 
         {{- if .Values.minecraftServer.enableSSH }}
         - name: ENABLE_SSH
@@ -191,7 +203,14 @@ spec:
         ports:
         - name: minecraft
           containerPort: {{ .Values.minecraftServer.serverPort }}
+          protocol: {{ ternary "TCP" "UDP" (eq .Values.minecraftServer.transport "nethernet") }}
+        {{- if eq .Values.minecraftServer.transport "nethernet" }}
+        {{- range $port := untilStep (int .Values.minecraftServer.nethernet.udpPortStart) (int (add1 .Values.minecraftServer.nethernet.udpPortEnd)) 1 }}
+        - name: minecraft-{{ $port }}
+          containerPort: {{ $port }}
           protocol: UDP
+        {{- end }}
+        {{- end }}
         {{- if .Values.minecraftServer.enableSSH }}
         - name: minecraft-ssh
           containerPort: 2222

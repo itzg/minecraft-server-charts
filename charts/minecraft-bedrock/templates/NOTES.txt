@@ -7,7 +7,7 @@ This deployment will be incomplete until you read the Minecraft EULA linked
 in the README.md, then:
 
     helm upgrade {{ .Release.Name }} \
-        --set minecraftServer.eula=true stable/minecraft
+        --set minecraftServer.eula=true itzg/minecraft-bedrock
 {{- else -}}
 
 Get the IP address of your Minecraft server by running these commands in the
@@ -30,13 +30,22 @@ You can watch for EXTERNAL-IP to populate by running:
   kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "minecraft.fullname" . }}
 
 {{- else if contains "ClusterIP" .Values.minecraftServer.serviceType }}
-  export POD_NAME=$(kubectl get pods \
-    --namespace {{ .Release.Namespace }} \
-    -l "component={{ template "minecraft.fullname" . }}" \
-    -o jsonpath="{.items[0].metadata.name}")
-  kubectl port-forward $POD_NAME 25565:25565
-  echo "Point your Minecraft client at 127.0.0.1:22565"
+  This Service is reachable inside the cluster. For external clients, use a
+  NodePort or LoadBalancer Service and configure the advertised address.
+  kubectl port-forward does not forward UDP gameplay traffic.
 
+{{- end }}
+
+{{- if eq .Values.minecraftServer.transport "nethernet" }}
+
+NetherNet requires TCP signaling and the full UDP gameplay range.
+  TCP signaling: {{ .Values.minecraftServer.serverPort }}{{ if eq .Values.minecraftServer.serviceType "NodePort" }} (use the Service's TCP NodePort externally){{ end }}
+  SERVER_UDP_PORTS: {{ include "minecraft.serverUdpPorts" . }}
+Allow both protocols through any firewalls between clients and the server.
+{{- if not .Values.minecraftServer.nethernet.advertisedAddress }}
+Set minecraftServer.nethernet.advertisedAddress before connecting through NAT
+or a load balancer; otherwise the server advertises its pod address.
+{{- end }}
 {{- end }}
 
 {{- if .Values.persistence.dataDir.enabled }}
