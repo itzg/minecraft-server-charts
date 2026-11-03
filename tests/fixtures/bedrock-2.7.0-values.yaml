@@ -1,0 +1,81 @@
+# Defaults from the published minecraft-bedrock 2.7.0 chart.
+# Used to reproduce helm upgrade --reuse-values without merging new defaults.
+image:
+  repository: itzg/minecraft-bedrock-server
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecret: ''
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 500m
+workloadAsStatefulSet: false
+strategyType: Recreate
+nodeSelector: {}
+tolerations: []
+affinity: {}
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 3000
+  runAsNonRoot: true
+  fsGroup: 2000
+  seccompProfile:
+    type: RuntimeDefault
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+livenessProbe:
+  initialDelaySeconds: 30
+readinessProbe:
+  initialDelaySeconds: 30
+shareProcessNamespace: false
+initContainers: []
+sidecarContainers: ''
+extraVolumes: []
+extraPodSpec: {}
+extraDeploy: []
+minecraftServer:
+  eula: 'FALSE'
+  version: LATEST
+  difficulty: easy
+  whitelist: null
+  whitelistUsers: null
+  ops: null
+  members: null
+  visitors: null
+  maxPlayers: 10
+  tickDistance: 4
+  viewDistance: 10
+  levelName: level
+  levelSeed: null
+  gameMode: survival
+  defaultPermission: member
+  playerIdleTimeout: 30
+  levelType: DEFAULT
+  texturepackRequired: false
+  serverName: Dedicated Server
+  onlineMode: true
+  maxThreads: 8
+  cheats: false
+  emitServerTelemetry: false
+  enableLanVisibility: false
+  serverPort: 19132
+  serviceType: ClusterIP
+  loadBalancerIP: null
+  enableSSH: false
+restoreMode: false
+extraEnv: {}
+envFrom: []
+persistence:
+  labels: {}
+  dataDir:
+    enabled: false
+    Size: 1Gi
+podAnnotations: {}
+deploymentAnnotations: {}
+deploymentLables: {}
+serviceAnnotations: {}
+serviceLables: {}

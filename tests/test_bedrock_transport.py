@@ -1,4 +1,4 @@
-"""Render the Bedrock chart and check the client-to-server transport contract.
+"""Check that Bedrock environment variables, ports, and probes agree.
 
 Run with: python -m unittest discover -s tests -p 'test_bedrock_*.py'
 Requires Helm on PATH and PyYAML.
@@ -7,7 +7,9 @@ Requires Helm on PATH and PyYAML.
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
+import tempfile
 import unittest
 
 import yaml
@@ -17,10 +19,10 @@ CHART = Path(__file__).resolve().parents[1] / "charts" / "minecraft-bedrock"
 
 
 class BedrockTransportTests(unittest.TestCase):
-    def render(self, server=None, **values):
+    def render(self, server=None, chart=CHART, **values):
         values["minecraftServer"] = {"eula": "TRUE", **(server or {})}
         return subprocess.run(
-            [os.environ.get("HELM", "helm"), "template", "test", str(CHART), "-f", "-"],
+            [os.environ.get("HELM", "helm"), "template", "test", str(chart), "-f", "-"],
             input=json.dumps(values), text=True, capture_output=True, check=False,
         )
 
@@ -33,15 +35,20 @@ class BedrockTransportTests(unittest.TestCase):
         container = workload["spec"]["template"]["spec"]["containers"][0]
         return service, workload, container
 
-    def assert_transport(self, service, container, transport):
+    def assert_transport(self, service, container, transport, startup=False):
         env = {item["name"]: item.get("value") for item in container["env"]}
         self.assertEqual(env["TRANSPORT"], transport)
         self.assertEqual(len(env), len(container["env"]), "Duplicate environment variables")
-        for probe in ("livenessProbe", "readinessProbe", "startupProbe"):
-            if probe in container:
-                command = container[probe]["exec"]["command"]
-                self.assertEqual(command[command.index("--protocol") + 1], transport)
-                self.assertEqual(command[command.index("--port") + 1], env["SERVER_PORT"])
+        probes = ["livenessProbe", "readinessProbe"]
+        if startup:
+            probes.append("startupProbe")
+        else:
+            self.assertNotIn("startupProbe", container)
+        for probe in probes:
+            self.assertEqual(container[probe]["exec"]["command"], [
+                "mc-monitor", "status-bedrock", "--protocol", transport,
+                "--host", "127.0.0.1", "--port", env["SERVER_PORT"],
+            ])
         # Every Service port must resolve to a declared pod port with the same protocol.
         for port in service["spec"]["ports"]:
             target = port["targetPort"]
@@ -54,7 +61,7 @@ class BedrockTransportTests(unittest.TestCase):
 
     def test_default_nethernet(self):
         service, _, container = self.manifests(startupProbe={"enabled": True})
-        env = self.assert_transport(service, container, "nethernet")
+        env = self.assert_transport(service, container, "nethernet", startup=True)
         self.assertEqual(env["SERVER_UDP_PORTS"], "19140-19155")
         self.assertEqual(service["spec"]["ports"][0]["protocol"], "TCP")
         self.assertEqual(service["spec"]["ports"][0]["port"], 19132)
@@ -64,14 +71,21 @@ class BedrockTransportTests(unittest.TestCase):
 
     def test_nodeport_mapping_uses_external_ports_in_advertisement(self):
         service, _, container = self.manifests({
-            "serviceType": "NodePort", "serverPort": 31234, "nodePort": 31234,
-            "nethernet": {"advertisedAddress": "192.0.2.10", "nodePortStart": 31240},
+            "serviceType": "NodePort", "serverPort": 19133, "nodePort": 31234,
+            "nethernet": {
+                "advertisedAddress": "192.0.2.10", "nodePortStart": 31240,
+                "udpPortStart": 20000, "udpPortEnd": 20003,
+            },
         }, startupProbe={"enabled": True})
-        env = self.assert_transport(service, container, "nethernet")
-        self.assertEqual(env["SERVER_UDP_PORTS"], "192.0.2.10:31240-31255:19140-19155")
-        self.assertEqual(service["spec"]["ports"][0]["nodePort"], 31234)
-        for port, internal, external in zip(service["spec"]["ports"][1:], range(19140, 19156), range(31240, 31256)):
-            self.assertEqual((port["port"], port["targetPort"], port["nodePort"]), (internal, internal, external))
+        env = self.assert_transport(service, container, "nethernet", startup=True)
+        self.assertEqual(env["SERVER_UDP_PORTS"], "192.0.2.10:31240-31243:20000-20003")
+        self.assertEqual(service["spec"]["ports"], [{
+            "name": "minecraft", "port": 19133, "targetPort": "minecraft",
+            "nodePort": 31234, "protocol": "TCP",
+        }] + [{
+            "name": f"minecraft-{port}", "port": port, "targetPort": port,
+            "nodePort": 31240 + port - 20000, "protocol": "UDP",
+        } for port in range(20000, 20004)])
 
     def test_loadbalancer_and_ssh(self):
         service, _, container = self.manifests({
@@ -94,8 +108,9 @@ class BedrockTransportTests(unittest.TestCase):
     def test_raknet_retains_udp_service_without_nethernet_ports(self):
         service, _, container = self.manifests({
             "transport": "raknet", "serviceType": "NodePort", "nodePort": 31234,
+            "nethernet": None,
         }, startupProbe={"enabled": True})
-        env = self.assert_transport(service, container, "raknet")
+        env = self.assert_transport(service, container, "raknet", startup=True)
         self.assertNotIn("SERVER_UDP_PORTS", env)
         self.assertEqual(service["spec"]["ports"], [{
             "name": "minecraft", "port": 19132, "targetPort": "minecraft",
@@ -106,6 +121,44 @@ class BedrockTransportTests(unittest.TestCase):
         _, _, container = self.manifests(restoreMode=True, startupProbe={"enabled": True})
         for probe in ("livenessProbe", "readinessProbe", "startupProbe"):
             self.assertNotIn(probe, container)
+
+    def test_upgrade_reusing_chart_2_7_defaults(self):
+        # --reuse-values replaces the new chart's defaults with the old values.
+        # A normal helm template -f old-values.yaml would merge in new defaults
+        # and hide missing-map errors in the upgrade path.
+        with tempfile.TemporaryDirectory() as directory:
+            chart = Path(directory) / "minecraft-bedrock"
+            shutil.copytree(CHART, chart)
+            fixture = Path(__file__).parent / "fixtures" / "bedrock-2.7.0-values.yaml"
+            shutil.copyfile(fixture, chart / "values.yaml")
+            for transport in ("nethernet", "raknet"):
+                with self.subTest(transport=transport):
+                    server = {
+                        "transport": transport, "levelName": "existing-world",
+                        "serviceType": "NodePort", "nodePort": 31234,
+                    }
+                    if transport == "nethernet":
+                        server["nethernet"] = {
+                            "udpPortStart": 19140, "udpPortEnd": 19155,
+                            "nodePortStart": 31240, "advertisedAddress": "192.0.2.10",
+                        }
+                    result = self.render(server, chart=chart, persistence={
+                        "dataDir": {"enabled": True},
+                    })
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    documents = [doc for doc in yaml.safe_load_all(result.stdout) if doc]
+                    service = next(doc for doc in documents if doc["kind"] == "Service")
+                    workload = next(doc for doc in documents if doc["kind"] == "Deployment")
+                    container = workload["spec"]["template"]["spec"]["containers"][0]
+                    env = self.assert_transport(service, container, transport)
+                    self.assertEqual(env["LEVEL_NAME"], "existing-world")
+                    self.assertEqual(container["imagePullPolicy"], "IfNotPresent")
+                    pvc = next(doc for doc in documents if doc["kind"] == "PersistentVolumeClaim")
+                    self.assertEqual(pvc["spec"]["accessModes"], ["ReadWriteOnce"])
+                    self.assertEqual(pvc["spec"]["resources"]["requests"]["storage"], "1Gi")
+                    self.assertIn({"name": "datadir", "persistentVolumeClaim": {
+                        "claimName": pvc["metadata"]["name"],
+                    }}, workload["spec"]["template"]["spec"]["volumes"])
 
     def test_statefulset_and_existing_world(self):
         service, workload, container = self.manifests(
@@ -125,6 +178,7 @@ class BedrockTransportTests(unittest.TestCase):
             ({"nethernet": {"udpPortEnd": 65536}}, "udpPortEnd"),
             ({"nethernet": {"udpPortStart": 19140.5}}, "integer"),
             ({"nethernet": {"udpPortStart": 19156}}, "must not exceed"),
+            ({"nethernet": {"nodeportStart": 31240}}, "Additional property nodeportStart"),
             ({"nethernet": {"advertisedAddress": "minecraft.example.com"}}, "advertisedAddress"),
             ({"serviceType": "NodePort"}, "nodePortStart is required"),
             ({"serviceType": "NodePort", "nethernet": {"nodePortStart": 31240}}, "advertisedAddress is required"),
@@ -137,12 +191,36 @@ class BedrockTransportTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(error, result.stderr)
 
+    def test_overlapping_ports_are_rejected(self):
+        cases = [
+            ({"serverPort": 19140}, "must not overlap"),
+            ({"serverPort": 19155}, "must not overlap"),
+            ({"enableSSH": True, "exposedPortSSH": 19140}, "must not overlap"),
+            ({"enableSSH": True, "nethernet": {
+                "udpPortStart": 2222, "udpPortEnd": 2223,
+            }}, "must not overlap"),
+            ({"enableSSH": True, "serverPort": 2222}, "different TCP ports"),
+            ({"enableSSH": True, "exposedPortSSH": 19132}, "different TCP ports"),
+            ({"enableSSH": True, "serviceType": "NodePort", "nodePort": 31234,
+              "nodePortSSH": 31234, "nethernet": {
+                  "nodePortStart": 31240, "advertisedAddress": "192.0.2.10",
+              }}, "different TCP NodePorts"),
+        ]
+        for server, error in cases:
+            with self.subTest(server=server):
+                result = self.render(server)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(error, result.stderr)
+
     def test_env_overrides_cannot_desynchronize_service(self):
-        for key, value in (("TRANSPORT", "raknet"), ("SERVER_UDP_PORTS", "20000-20010")):
+        for key, value in (
+            ("TRANSPORT", "raknet"), ("SERVER_PORT", "19133"),
+            ("SERVER_UDP_PORTS", "20000-20010"),
+        ):
             with self.subTest(key=key):
                 result = self.render(extraEnv={key: value})
                 self.assertNotEqual(result.returncode, 0)
-                self.assertIn("instead of extraEnv.TRANSPORT or extraEnv.SERVER_UDP_PORTS", result.stderr)
+                self.assertIn(f"Configure {key} through minecraftServer, not extraEnv", result.stderr)
 
 
 if __name__ == "__main__":

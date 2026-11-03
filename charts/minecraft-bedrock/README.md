@@ -4,26 +4,26 @@
 
 ## Introduction
 
-This chart creates a single [Minecraft Bedrock Server](https://www.minecraft.net/en-us/download/server/bedrock/) Pod, plus Services for the Minecraft server.
+This chart creates a single [Minecraft Bedrock Server](https://www.minecraft.net/en-us/download/server/bedrock/) Pod and a Service for client connections.
 
 ## Prerequisites
 
 - 512 MB of RAM
-- Kubernetes 1.4+ with Beta APIs enabled
-- PV provisioner support in the underlying infrastructure
+- Kubernetes with `apps/v1` Deployment support
+- A PV provisioner or existing PVC when persistence is enabled
 - `itzg/minecraft-bedrock-server:2026.9.1` or newer, including `latest`, for
   NetherNet properties and the `mc-monitor --protocol` health checks
 
 ## Installing the Chart
 
-To install the chart with the release name `minecraft`, read the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula) run:
+To install the chart with the release name `minecraft-bedrock`, read the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula), then run:
 
 ```shell
 helm install minecraft-bedrock \
   --set minecraftServer.eula=true itzg/minecraft-bedrock
 ```
 
-This command deploys a Minecraft dedicated server with sensible defaults.
+Configure networking and persistence below before using the server.
 
 > **Tip**: List all releases using `helm list`
 
@@ -44,15 +44,15 @@ Refer to [values.yaml](values.yaml) for the full run-down on defaults. These are
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```shell
-helm install --name minecraft-bedrock \
-  --set minecraftServer.eula=true,minecraftServer.Difficulty=hard \
-  itzg/minecraft
+helm install minecraft-bedrock \
+  --set minecraftServer.eula=true,minecraftServer.difficulty=hard \
+  itzg/minecraft-bedrock
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```shell
-helm install --name minecraft -f values.yaml itzg/minecraft
+helm install minecraft-bedrock -f values.yaml itzg/minecraft-bedrock
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -64,10 +64,10 @@ Bedrock Dedicated Server releases. NetherNet uses TCP on `serverPort` for HTTP
 signaling and a separate UDP range for gameplay. Both protocols must reach the
 same server pod. Opening only the signaling port is not sufficient to join.
 
-The chart sets `TRANSPORT` and `SERVER_UDP_PORTS`, exposes matching Service and
+The chart sets `TRANSPORT`, `SERVER_PORT`, and `SERVER_UDP_PORTS`, exposes matching Service and
 container ports, and selects the transport explicitly in readiness, liveness,
 and optional startup probes. Configure these through `minecraftServer`, not
-`extraEnv.TRANSPORT` or `extraEnv.SERVER_UDP_PORTS`, so the networking stays in sync.
+`extraEnv`, so the server, Service, and probes use the same settings.
 
 | Value | Default | Purpose |
 | --- | --- | --- |
@@ -82,6 +82,9 @@ For a NodePort Service, the chart assigns consecutive external UDP ports and
 advertises that external range while the server binds the internal range.
 The configured ports must be available and fall within the cluster's NodePort
 range (normally 30000–32767). The signaling NodePort can differ from `serverPort`.
+The internal UDP range must not overlap the TCP signaling or SSH ports.
+Helm merges port lists by number when upgrading, so overlapping TCP and UDP
+port numbers can produce an incorrect patch.
 
 For example, clients can connect to `192.0.2.10:31234` with these values
 (replace the example address with the reachable address of your node):
@@ -140,17 +143,21 @@ settings are ignored in this mode. A recent container image is still needed
 for the health check's `--protocol` option; pin the Bedrock binary separately
 with `minecraftServer.version`. Current Bedrock versions require NetherNet.
 
-Move any existing transport or UDP port overrides from `extraEnv` into the
-structured values above. When using `helm upgrade --reuse-values`, explicitly
-provide the new `transport` and complete `nethernet` values, because Helm may
-reuse the old chart defaults.
+Move any existing `TRANSPORT`, `SERVER_PORT`, or `SERVER_UDP_PORTS` overrides
+from `extraEnv` into the values above. When using `helm upgrade --reuse-values`,
+explicitly provide `minecraftServer.transport` and, for NetherNet, the complete
+`minecraftServer.nethernet` values. Helm may reuse the old chart defaults.
+When reusing chart 2.7.0 values, an absent `startupProbe` leaves that probe disabled,
+and an absent `persistence.dataDir.accessModes` retains `ReadWriteOnce`.
 
 ## Persistence
 
 The [itzg/minecraft-bedrock-server](https://hub.docker.com/r/itzg/minecraft-bedrock-server/) image stores the saved games and mods under /data.
 
-By default a PersistentVolumeClaim is created and mounted for saves but not mods. In order to disable this functionality
-you can change the values.yaml to disable persistence under the sub-sections under `persistence`.
+Persistence is disabled by default. Set `persistence.dataDir.enabled: true` to
+create a PersistentVolumeClaim, or also set `persistence.dataDir.existingClaim`
+to mount an existing claim. Without persistence, `/data` uses an `emptyDir`
+volume and is lost when the Pod is removed.
 
 > *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
 

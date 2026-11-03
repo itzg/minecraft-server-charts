@@ -71,45 +71,21 @@ spec:
         readinessProbe:
           exec:
             command:
-              - mc-monitor
-              - status-bedrock
-              - --protocol
-              - {{ .Values.minecraftServer.transport }}
-              - --host
-              # force health check against IPv4 port
-              - 127.0.0.1
-              - --port
-              - {{ .Values.minecraftServer.serverPort | quote }}
+              {{- include "minecraft-bedrock.probeCommand" . | nindent 14 }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
         {{- end }}
         {{- if not .Values.restoreMode }}
         livenessProbe:
           exec:
             command:
-              - mc-monitor
-              - status-bedrock
-              - --protocol
-              - {{ .Values.minecraftServer.transport }}
-              - --host
-              # force health check against IPv4 port
-              - 127.0.0.1
-              - --port
-              - {{ .Values.minecraftServer.serverPort | quote }}
+              {{- include "minecraft-bedrock.probeCommand" . | nindent 14 }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
         {{- end }}
-        {{- if and .Values.startupProbe.enabled (not .Values.restoreMode) }}
+        {{- if and (.Values.startupProbe | default dict).enabled (not .Values.restoreMode) }}
         startupProbe:
           exec:
             command:
-              - mc-monitor
-              - status-bedrock
-              - --protocol
-              - {{ .Values.minecraftServer.transport }}
-              - --host
-              # force health check against IPv4 port
-              - 127.0.0.1
-              - --port
-              - {{ .Values.minecraftServer.serverPort | quote }}
+              {{- include "minecraft-bedrock.probeCommand" . | nindent 14 }}
           initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
           failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           periodSeconds: {{ .Values.startupProbe.periodSeconds }}
@@ -174,7 +150,7 @@ spec:
           value: {{ .Values.minecraftServer.transport | quote }}
         {{- if eq .Values.minecraftServer.transport "nethernet" }}
         - name: SERVER_UDP_PORTS
-          value: {{ include "minecraft.serverUdpPorts" . | quote }}
+          value: {{ include "minecraft-bedrock.serverUdpPorts" . | quote }}
         {{- end }}
 
         {{- if .Values.minecraftServer.enableSSH }}

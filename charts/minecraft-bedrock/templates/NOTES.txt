@@ -40,7 +40,7 @@ You can watch for EXTERNAL-IP to populate by running:
 
 NetherNet requires TCP signaling and the full UDP gameplay range.
   TCP signaling: {{ .Values.minecraftServer.serverPort }}{{ if eq .Values.minecraftServer.serviceType "NodePort" }} (use the Service's TCP NodePort externally){{ end }}
-  SERVER_UDP_PORTS: {{ include "minecraft.serverUdpPorts" . }}
+  SERVER_UDP_PORTS: {{ include "minecraft-bedrock.serverUdpPorts" . }}
 Allow both protocols through any firewalls between clients and the server.
 {{- if not .Values.minecraftServer.nethernet.advertisedAddress }}
 Set minecraftServer.nethernet.advertisedAddress before connecting through NAT

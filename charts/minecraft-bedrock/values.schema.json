@@ -7,27 +7,72 @@
       "properties": {
         "transport": {
           "type": "string",
-          "enum": ["nethernet", "raknet"]
-        },
-        "nethernet": {
-          "type": "object",
-          "properties": {
-            "udpPortStart": {"type": "integer", "minimum": 1, "maximum": 65535},
-            "udpPortEnd": {"type": "integer", "minimum": 1, "maximum": 65535},
-            "nodePortStart": {"type": ["integer", "null"], "minimum": 1, "maximum": 65535},
-            "advertisedAddress": {
-              "type": "string",
-              "anyOf": [
-                {"const": ""},
-                {"format": "ipv4"},
-                {"format": "ipv6"}
-              ]
-            }
-          },
-          "required": ["udpPortStart", "udpPortEnd", "advertisedAddress"]
+          "enum": [
+            "nethernet",
+            "raknet"
+          ]
         }
       },
-      "required": ["transport", "nethernet"]
+      "required": [
+        "transport"
+      ],
+      "if": {
+        "properties": {
+          "transport": {
+            "const": "nethernet"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "nethernet": {
+            "type": "object",
+            "properties": {
+              "udpPortStart": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "udpPortEnd": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "nodePortStart": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "advertisedAddress": {
+                "type": "string",
+                "anyOf": [
+                  {
+                    "const": ""
+                  },
+                  {
+                    "format": "ipv4"
+                  },
+                  {
+                    "format": "ipv6"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "udpPortStart",
+              "udpPortEnd",
+              "advertisedAddress"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "nethernet"
+        ]
+      }
     }
   }
 }
