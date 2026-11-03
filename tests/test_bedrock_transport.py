@@ -138,10 +138,8 @@ class BedrockTransportTests(unittest.TestCase):
                         "serviceType": "NodePort", "nodePort": 31234,
                     }
                     if transport == "nethernet":
-                        server["nethernet"] = {
-                            "udpPortStart": 19140, "udpPortEnd": 19155,
-                            "nodePortStart": 31240, "advertisedAddress": "192.0.2.10",
-                        }
+                        example = CHART / "examples" / "nethernet-nodeport-migration.yaml"
+                        server.update(yaml.safe_load(example.read_text())["minecraftServer"])
                     result = self.render(server, chart=chart, persistence={
                         "dataDir": {"enabled": True},
                     })

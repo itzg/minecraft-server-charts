@@ -1,0 +1,10 @@
+# Existing NodePort release: apply with --reuse-values.
+# Keep the existing release name, namespace, signaling port, and world settings.
+# Replace the address and choose an available UDP NodePort range.
+minecraftServer:
+  transport: nethernet
+  nethernet:
+    udpPortStart: 19140
+    udpPortEnd: 19155
+    nodePortStart: 31240
+    advertisedAddress: "192.0.2.10"

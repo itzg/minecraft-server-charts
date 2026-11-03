@@ -1,4 +1,4 @@
-# Minecraft
+# Minecraft Bedrock
 
 [Minecraft](https://minecraft.net/en/) is a game about placing blocks and going on adventures.
 
@@ -16,14 +16,50 @@ This chart creates a single [Minecraft Bedrock Server](https://www.minecraft.net
 
 ## Installing the Chart
 
-To install the chart with the release name `minecraft-bedrock`, read the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula), then run:
+For a new server reachable through a Kubernetes node's LAN address, read the
+[Minecraft EULA](https://account.mojang.com/documents/minecraft_eula), then save
+the following as `values.yaml`. This is also available as
+[examples/nodeport-values.yaml](examples/nodeport-values.yaml).
 
-```shell
-helm install minecraft-bedrock \
-  --set minecraftServer.eula=true itzg/minecraft-bedrock
+```yaml
+minecraftServer:
+  eula: "TRUE"
+  serviceType: NodePort
+  nodePort: 31234
+  nethernet:
+    advertisedAddress: "192.0.2.10"
+    nodePortStart: 31240
+
+persistence:
+  dataDir:
+    enabled: true
+
+extraEnv:
+  ALLOW_LIST_USERS: "YourGamertag:YOUR_XUID"
 ```
 
-Configure networking and persistence below before using the server.
+Replace `192.0.2.10` with a stable node address reachable by your players, and
+replace the allowlist entry with each player's gamertag and XUID. Multiple
+entries are comma-separated. See the image's
+[allowlist documentation](https://github.com/itzg/docker-minecraft-bedrock-server#allowlist).
+The example enables persistent world storage and assumes a default storage
+class is available. TCP NodePort 31234 and UDP NodePorts 31240–31255 must be
+available in your cluster; use different ports if another Service uses them.
+
+```shell
+helm repo add itzg https://itzg.github.io/minecraft-server-charts/
+helm install minecraft-bedrock itzg/minecraft-bedrock -f values.yaml --wait
+```
+
+Connect in Minecraft using the node address and port `31234`. Allow client
+traffic to TCP 31234 and UDP 31240–31255 through any intervening firewalls.
+The chart supplies the internal ports and generates the UDP mapping.
+
+For a cluster with a load balancer, start with
+[examples/loadbalancer-values.yaml](examples/loadbalancer-values.yaml) and the
+[LoadBalancer instructions below](#loadbalancer).
+Existing installations should follow [Upgrading from chart 2.x](#upgrading-from-chart-2x)
+to retain their deployed world and storage settings.
 
 > **Tip**: List all releases using `helm list`
 
@@ -44,9 +80,8 @@ Refer to [values.yaml](values.yaml) for the full run-down on defaults. These are
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```shell
-helm install minecraft-bedrock \
-  --set minecraftServer.eula=true,minecraftServer.difficulty=hard \
-  itzg/minecraft-bedrock
+helm install minecraft-bedrock itzg/minecraft-bedrock \
+  -f values.yaml --set minecraftServer.difficulty=hard
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
@@ -55,7 +90,8 @@ Alternatively, a YAML file that specifies the values for the parameters can be p
 helm install minecraft-bedrock -f values.yaml itzg/minecraft-bedrock
 ```
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+The chart defaults use a ClusterIP Service and disable persistence. The new-server
+examples above explicitly configure external access and persistent storage.
 
 ## Transport and networking
 
@@ -86,18 +122,13 @@ The internal UDP range must not overlap the TCP signaling or SSH ports.
 Helm merges port lists by number when upgrading, so overlapping TCP and UDP
 port numbers can produce an incorrect patch.
 
-For example, clients can connect to `192.0.2.10:31234` with these values
-(replace the example address with the reachable address of your node):
+For a new installation, the networking portion of the NodePort example is:
 
 ```yaml
 minecraftServer:
-  transport: nethernet
   serviceType: NodePort
-  serverPort: 19132
   nodePort: 31234
   nethernet:
-    udpPortStart: 19140
-    udpPortEnd: 19155
     nodePortStart: 31240
     advertisedAddress: "192.0.2.10"
 ```
@@ -106,13 +137,20 @@ This sets `SERVER_UDP_PORTS` to `192.0.2.10:31240-31255:19140-19155`.
 Allow TCP 31234 and UDP 31240–31255 through the host firewall and any routers or
 firewalls between clients and the node. Use a stable address or DHCP reservation.
 
+### LoadBalancer
+
 For a LoadBalancer Service, set `nethernet.advertisedAddress` to the externally
 reachable IP and omit `nethernet.nodePortStart`. The advertised UDP ports then
-match the Service ports. If the load balancer assigns its IP dynamically, wait
-for it to appear and update the release with that address. The load balancer
+match the Service ports. For a reserved IP, configure your load balancer's
+reservation settings separately, including any provider-specific annotations
+under `serviceAnnotations`. Setting `advertisedAddress` does not reserve an IP.
+If the load balancer assigns its IP dynamically, wait for it to appear and update
+the release with that address. The load balancer
 must support a Service containing both TCP and UDP ports; mixed-protocol
 LoadBalancer Services are stable in Kubernetes 1.26 and later, but support also
 depends on the load balancer implementation.
+
+### ClusterIP and connection checks
 
 With ClusterIP and an empty advertised address, the server advertises its pod
 addresses. This is useful only when clients can route to those addresses.
@@ -133,9 +171,43 @@ for transport and address mapping details.
 ### Upgrading from chart 2.x
 
 The default Minecraft Service port changes from UDP to TCP and the chart adds
-UDP gameplay ports. Set the advertised address and, for NodePort, a UDP
-`nodePortStart` before upgrading. Keep your existing release name, persistence
+UDP gameplay ports. Keep your existing release name, namespace, persistence
 settings, and `levelName` to continue using the same world.
+
+For an existing NodePort release, save this as `nethernet-migration.yaml`, or copy
+[examples/nethernet-nodeport-migration.yaml](examples/nethernet-nodeport-migration.yaml).
+Replace the address and choose an available UDP NodePort range:
+
+```yaml
+minecraftServer:
+  transport: nethernet
+  nethernet:
+    udpPortStart: 19140
+    udpPortEnd: 19155
+    nodePortStart: 31240
+    advertisedAddress: "192.0.2.10"
+```
+
+Use the existing release name and namespace in these commands:
+
+```shell
+helm get values my-server -n minecraft -o yaml > before-nethernet.yaml
+helm upgrade my-server itzg/minecraft-bedrock -n minecraft \
+  --reuse-values -f nethernet-migration.yaml --wait --timeout 5m
+```
+
+The saved file contains Helm configuration, not a world backup. The upgrade
+restarts the server and retains its existing values, including the client port.
+Allow TCP on that port and UDP on the new range; the example uses UDP 31240–31255.
+Then join from Minecraft to check the complete connection.
+
+The complete overlay is intentional: `--reuse-values` can retain old chart
+defaults, so it needs the new transport and internal UDP range as well as the
+external address and ports.
+
+For an existing LoadBalancer release, omit `nodePortStart` from the overlay and
+set `advertisedAddress` to the load balancer's reachable IP. Keep `udpPortStart`
+and `udpPortEnd`; clients must reach the same UDP ports on the load balancer.
 
 When joining through an IP address with plain HTTP signaling, Minecraft may show
 a trust dialog on the first NetherNet connection, even if you played on the
@@ -151,10 +223,10 @@ settings are ignored in this mode. A recent container image is still needed
 for the health check's `--protocol` option; pin the Bedrock binary separately
 with `minecraftServer.version`. Current Bedrock versions require NetherNet.
 
-Move any existing `TRANSPORT`, `SERVER_PORT`, or `SERVER_UDP_PORTS` overrides
-from `extraEnv` into the values above. When using `helm upgrade --reuse-values`,
-explicitly provide `minecraftServer.transport` and, for NetherNet, the complete
-`minecraftServer.nethernet` values. Helm may reuse the old chart defaults.
+If you previously set `TRANSPORT`, `SERVER_PORT`, or `SERVER_UDP_PORTS` in
+`extraEnv`, move them to the corresponding `minecraftServer` values. With
+`--reuse-values`, remove each old override explicitly, for example by adding
+`--set extraEnv.TRANSPORT=null` to the upgrade command.
 When reusing chart 2.7.0 values, an absent `startupProbe` leaves that probe disabled,
 and an absent `persistence.dataDir.accessModes` retains `ReadWriteOnce`.
 

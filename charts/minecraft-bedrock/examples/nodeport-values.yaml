@@ -1,0 +1,16 @@
+# New installation: replace the address and player details before installing.
+# The cluster needs a default storage class and these NodePorts must be free.
+minecraftServer:
+  eula: "TRUE"  # Set only after accepting the Minecraft EULA.
+  serviceType: NodePort
+  nodePort: 31234
+  nethernet:
+    advertisedAddress: "192.0.2.10"
+    nodePortStart: 31240
+
+persistence:
+  dataDir:
+    enabled: true
+
+extraEnv:
+  ALLOW_LIST_USERS: "YourGamertag:YOUR_XUID"

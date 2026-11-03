@@ -1,0 +1,16 @@
+# New installation: reserve an IP with your load balancer and replace the
+# address below. Add provider-specific IP reservation settings under
+# serviceAnnotations if required. This file does not reserve the IP itself.
+# Requires mixed TCP/UDP Service support and a default storage class.
+minecraftServer:
+  eula: "TRUE"  # Set only after accepting the Minecraft EULA.
+  serviceType: LoadBalancer
+  nethernet:
+    advertisedAddress: "192.0.2.20"
+
+persistence:
+  dataDir:
+    enabled: true
+
+extraEnv:
+  ALLOW_LIST_USERS: "YourGamertag:YOUR_XUID"
