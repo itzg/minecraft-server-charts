@@ -137,6 +137,14 @@ UDP gameplay ports. Set the advertised address and, for NodePort, a UDP
 `nodePortStart` before upgrading. Keep your existing release name, persistence
 settings, and `levelName` to continue using the same world.
 
+When joining through an IP address with plain HTTP signaling, Minecraft may show
+a trust dialog on the first NetherNet connection, even if you played on the
+server before the migration. Check the displayed server details before accepting.
+The client remembers the server's identity key, so later connections using the
+same key normally do not prompt again. See Mojang's
+[NetherNet identity documentation](https://mojang.github.io/bedrock-protocol-docs/guides/nether-net-onboarding-guide/#how-the-client-anchors-trust-https-vs-plaintext-http)
+for details.
+
 Servers pinned to a Bedrock version that still supports RakNet can retain the
 legacy UDP Service by setting `minecraftServer.transport: raknet`. NetherNet
 settings are ignored in this mode. A recent container image is still needed
