@@ -182,8 +182,22 @@ minecraftServer:
   emitServerTelemetry: false
   # Enable lan visibility.
   enableLanVisibility: false
-  # IPv4 UDP port of server. If using a nodePort, set serverPort and nodePort to the same value (e.g. 30000) so ping time displays.
+  # NetherNet is required by current Bedrock releases. Use raknet for older servers.
+  # Requires an image with mc-monitor --protocol support (2026.9.1 or newer).
+  transport: nethernet
+  # NetherNet TCP signaling port, or RakNet UDP port.
   serverPort: 19132
+  # NetherNet gameplay ports. Ignored when transport is raknet.
+  nethernet:
+    udpPortStart: 19140
+    udpPortEnd: 19155
+    # IP address reachable by clients (not a hostname). Required for NodePort.
+    # For LoadBalancer, set this to the externally reachable IP of the Service.
+    # Leave empty only when clients can route directly to the pod's IP.
+    advertisedAddress: ""
+    # First external UDP NodePort; subsequent ports are allocated consecutively.
+    # Required for serviceType: NodePort. Must fit your cluster's NodePort range.
+    nodePortStart:
   # type of kubernetes service to use
   serviceType: ClusterIP
   ## Set the port used if the serviceType is NodePort

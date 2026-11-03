@@ -1,3 +1,4 @@
+{{- include "minecraft-bedrock.validateTransport" . -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -42,7 +43,19 @@ spec:
     {{- if .Values.minecraftServer.nodePort }}
     nodePort: {{ .Values.minecraftServer.nodePort }}
     {{- end }}
+    protocol: {{ ternary "TCP" "UDP" (eq .Values.minecraftServer.transport "nethernet") }}
+  {{- if eq .Values.minecraftServer.transport "nethernet" }}
+  {{- $nethernet := .Values.minecraftServer.nethernet }}
+  {{- range $port := untilStep (int $nethernet.udpPortStart) (int (add1 $nethernet.udpPortEnd)) 1 }}
+  - name: minecraft-{{ $port }}
+    port: {{ $port }}
+    targetPort: {{ $port }}
     protocol: UDP
+    {{- if eq $.Values.minecraftServer.serviceType "NodePort" }}
+    nodePort: {{ add (int $nethernet.nodePortStart) (sub $port (int $nethernet.udpPortStart)) }}
+    {{- end }}
+  {{- end }}
+  {{- end }}
   {{- if .Values.minecraftServer.enableSSH }}
   - name: minecraft-ssh
     port: {{ default "2222" .Values.minecraftServer.exposedPortSSH }}

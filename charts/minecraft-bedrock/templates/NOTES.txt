@@ -6,37 +6,63 @@
 This deployment will be incomplete until you read the Minecraft EULA linked
 in the README.md, then:
 
-    helm upgrade {{ .Release.Name }} \
-        --set minecraftServer.eula=true stable/minecraft
+    helm upgrade {{ .Release.Name }} itzg/minecraft-bedrock \
+        --namespace {{ .Release.Namespace }} --reuse-values --set minecraftServer.eula=true
 {{- else -}}
 
-Get the IP address of your Minecraft server by running these commands in the
-same shell:
+{{- $server := .Values.minecraftServer -}}
+{{- $nodePort := eq $server.serviceType "NodePort" -}}
+{{- $loadBalancer := eq $server.serviceType "LoadBalancer" -}}
+{{- $nethernet := eq $server.transport "nethernet" -}}
+{{- $clientPort := $server.serverPort -}}
+{{- if $nodePort -}}
+  {{- $clientPort = $server.nodePort -}}
+{{- end -}}
+{{- $address := "" -}}
+{{- if $nethernet -}}
+  {{- $address = $server.nethernet.advertisedAddress -}}
+{{- else if $loadBalancer -}}
+  {{- $address = default "" $server.loadBalancerIP -}}
+{{- end -}}
 
-{{- if contains "NodePort" .Values.minecraftServer.serviceType }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} \
-    -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "minecraft.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} \
-    -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo "You'll need to expose this node through your security groups/firewall"
-  echo "for it to be world-accessible."
-  echo $NODE_IP:$NODE_PORT
+{{- if or $nodePort $loadBalancer }}
+{{- if $address }}
+Minecraft server: {{ $address }}
+{{- else if $nodePort }}
+Minecraft server: a node IP address reachable by your players
+{{- else }}
+Find the load balancer's address in EXTERNAL-IP (allocation may take a few minutes):
+  kubectl get svc --namespace {{ .Release.Namespace }} {{ template "minecraft.fullname" . }} -w
+{{- end }}
+{{- else }}
+This Service is reachable inside the cluster. For external clients, use a
+NodePort or LoadBalancer Service and configure its reachable address.
+kubectl port-forward does not forward UDP gameplay traffic.
+{{- end }}
+{{- if $clientPort }}
+Port: {{ $clientPort }}
+{{- else }}
+Find the allocated client port with:
+  kubectl get svc --namespace {{ .Release.Namespace }} {{ template "minecraft.fullname" . }} \
+    -o jsonpath='{.spec.ports[?(@.name=="minecraft")].nodePort}'
+{{- end }}
 
-{{- else if contains "LoadBalancer" .Values.minecraftServer.serviceType }}
+Allow client traffic to:
+{{- if $nethernet }}
+  TCP {{ if $clientPort }}{{ $clientPort }}{{ else }}on the allocated client port shown above{{ end }}
+{{- if $nodePort }}
+  UDP {{ $server.nethernet.nodePortStart }}-{{ add (int $server.nethernet.nodePortStart) (sub (int $server.nethernet.udpPortEnd) (int $server.nethernet.udpPortStart)) }}
+{{- else }}
+  UDP {{ $server.nethernet.udpPortStart }}-{{ $server.nethernet.udpPortEnd }}
+{{- end }}
 
-!! NOTE: It may take a few minutes for the LoadBalancer IP to be available. !!
-
-You can watch for EXTERNAL-IP to populate by running:
-  kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "minecraft.fullname" . }}
-
-{{- else if contains "ClusterIP" .Values.minecraftServer.serviceType }}
-  export POD_NAME=$(kubectl get pods \
-    --namespace {{ .Release.Namespace }} \
-    -l "component={{ template "minecraft.fullname" . }}" \
-    -o jsonpath="{.items[0].metadata.name}")
-  kubectl port-forward $POD_NAME 25565:25565
-  echo "Point your Minecraft client at 127.0.0.1:22565"
-
+Minecraft may ask you to trust the server on the first NetherNet connection.
+{{- if not $address }}
+Set minecraftServer.nethernet.advertisedAddress before connecting through NAT
+or a load balancer; otherwise the server advertises its pod address.
+{{- end }}
+{{- else }}
+  UDP {{ if $clientPort }}{{ $clientPort }}{{ else }}on the allocated client port shown above{{ end }}
 {{- end }}
 
 {{- if .Values.persistence.dataDir.enabled }}
