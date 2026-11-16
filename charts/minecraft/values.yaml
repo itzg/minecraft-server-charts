@@ -407,6 +407,15 @@ minecraftServer:
     #     loadBalancerSourceRanges: []
     #     externalTrafficPolicy: Cluster
     #     port: 8123
+    #   httproute:
+    #     enabled: false
+    #     annotations: {}
+    #     hostnames:
+    #       - map.local
+    #     parentRefs:
+    #       - name: gateway
+    #         namespace: kube-system
+    #         sectionName: https
     #   ingress:
     #     ingressClassName: nginx
     #     enabled: false
